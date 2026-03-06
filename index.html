@@ -1,20 +1,16 @@
 <!DOCTYPE html>
 <html lang="ru">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Гостевой дом Bonjour | Бердянск | Ваш идеальный отдых у моря</title>
-    <meta name="description"
-        content="Гостевой дом Bonjour в Бердянске. Уют, чистота, домашняя атмосфера и заботливо продуманные номера всего в нескольких минутах от моря. Забронируйте свой отдых!">
-
+    <meta name="description" content="Гостевой дом Bonjour в Бердянске. Уют, чистота, домашняя атмосфера и заботливо продуманные номера всего в нескольких минутах от моря. Забронируйте свой отдых!">
+    
     <!-- Подключение шрифтов -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap"
-        rel="stylesheet">
-
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    
     <!-- Стили -->
     <style>
         /* Typography & Variables */
@@ -23,39 +19,32 @@
             --color-bg-light: #FFFFFF;
             --color-bg-accent: #6B8EAD;
             --color-bg-alt: #F5F0E6;
-
+            
             --color-text-main: #2C3E50;
             --color-text-muted: #5A5A5A;
             --color-text-light: #FDFBF7;
-
+            
             --color-accent-primary: #6B8EAD;
             --color-accent-primary-hover: #5A7B9A;
             --color-accent-secondary: #8A9A7A;
             --color-accent-tertiary: #C27A62;
-
+            
             --font-heading: 'Playfair Display', serif;
             --font-body: 'Inter', sans-serif;
-
+            
             --radius-sm: 8px;
             --radius-md: 16px;
             --radius-lg: 24px;
-
+            
             --shadow-soft: 0 8px 30px rgba(44, 62, 80, 0.05);
             --shadow-card: 0 4px 20px rgba(0, 0, 0, 0.04);
         }
-
-        *,
-        *::before,
-        *::after {
+        *, *::before, *::after {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
         }
-
-        html {
-            scroll-behavior: smooth;
-        }
-
+        html { scroll-behavior: smooth; }
         body {
             font-family: var(--font-body);
             font-weight: 300;
@@ -64,67 +53,22 @@
             line-height: 1.6;
             -webkit-font-smoothing: antialiased;
         }
-
-        h1,
-        h2,
-        h3,
-        h4,
-        .logo__text {
+        h1, h2, h3, h4, .logo__text {
             font-family: var(--font-heading);
             font-weight: 400;
             line-height: 1.2;
         }
-
-        h1 {
-            font-size: clamp(2.5rem, 5vw, 4rem);
-        }
-
-        h2 {
-            font-size: clamp(2rem, 4vw, 3rem);
-            text-align: center;
-        }
-
-        h3 {
-            font-size: 1.5rem;
-        }
-
-        a {
-            text-decoration: none;
-            color: inherit;
-            transition: color 0.3s ease;
-        }
-
-        img {
-            max-width: 100%;
-            height: auto;
-            display: block;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        .section {
-            padding: 100px 0;
-        }
-
-        .text-center {
-            text-align: center;
-        }
-
-        .text-white {
-            color: var(--color-text-light);
-        }
-
-        .bg-light {
-            background-color: var(--color-bg-alt);
-        }
-
-        .bg-accent {
-            background-color: var(--color-bg-accent);
-        }
+        h1 { font-size: clamp(2.5rem, 5vw, 4rem); }
+        h2 { font-size: clamp(2rem, 4vw, 3rem); text-align: center;}
+        h3 { font-size: 1.5rem; }
+        a { text-decoration: none; color: inherit; transition: color 0.3s ease; }
+        img { max-width: 100%; height: auto; display: block; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+        .section { padding: 100px 0; }
+        .text-center { text-align: center; }
+        .text-white { color: var(--color-text-light); }
+        .bg-light { background-color: var(--color-bg-alt); }
+        .bg-accent { background-color: var(--color-bg-accent); }
 
         /* Buttons */
         .btn {
@@ -140,96 +84,5 @@
             border: none;
             font-size: 1rem;
         }
-
-        .btn--primary {
-            background-color: var(--color-accent-primary);
-            color: var(--color-text-light);
-        }
-
-        .btn--primary:hover {
-            background-color: var(--color-accent-primary-hover);
-            transform: translateY(-2px);
-        }
-
-        .btn--secondary {
-            background-color: var(--color-bg-light);
-            color: var(--color-text-main);
-        }
-
-        .btn--secondary:hover {
-            background-color: var(--color-bg-alt);
-            transform: translateY(-2px);
-        }
-
-        .btn--outline {
-            background-color: transparent;
-            border: 1px solid var(--color-accent-primary);
-            color: var(--color-accent-primary);
-        }
-
-        .btn--outline:hover {
-            background-color: var(--color-accent-primary);
-            color: var(--color-text-light);
-        }
-
-        .btn--full {
-            width: 100%;
-        }
-
-        /* Header */
-        .header {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            background-color: rgba(253, 251, 247, 0.95);
-            backdrop-filter: blur(10px);
-            z-index: 1000;
-            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-            transition: padding 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .header__container {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            height: 80px;
-        }
-
-        .logo {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .logo__text {
-            font-size: 1.8rem;
-            font-weight: 600;
-            color: var(--color-accent-tertiary);
-        }
-
-        .logo__sub {
-            font-size: 0.7rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: var(--color-text-muted);
-        }
-
-        .nav {
-            display: flex;
-            gap: 32px;
-        }
-
-        .nav__link {
-            font-size: 0.95rem;
-            font-weight: 400;
-        }
-
-        .nav__link:hover {
-            color: var(--color-accent-tertiary);
-        }
-
-        .burger-menu {
-            display: none;
-            background: none;
-            border: none;
-            cursor: pointer;
+        .btn--primary { background-color: var(--color-accent-primary); color: var(--color-text-light); }
+        .btn--primary:hover { background-color: var(--color-accent-primary-hover); transform: translateY(-2px); }
