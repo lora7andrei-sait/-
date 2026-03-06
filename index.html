@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Гостевой дом Bonjour | Бердянск | Ваш идеальный отдых у моря</title>
+    <meta name="description" content="Гостевой дом Bonjour в Бердянске. Уют, чистота, домашняя атмосфера и заботливо продуманные номера всего в нескольких минутах от моря. Забронируйте свой отдых!">
+    
+    <!-- Подключение шрифтов -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    
+    <!-- Стили -->
+    <style>
+        /* Typography & Variables */
+        :root {
+            --color-bg-main: #FDFBF7; /* Молочный */
+            --color-bg-light: #FFFFFF; /* Белый */
+            --color-bg-accent: #6B8EAD; /* Пыльно-синий для акцентных фонов */
+            --color-bg-alt: #F5F0E6; /* Светло-бежевый для секций */
+            
+            --color-text-main: #2C3E50; /* Темно-серо-синий для заголовков */
+            --color-text-muted: #5A5A5A; /* Приглушенный серый для текста */
+            --color-text-light: #FDFBF7; /* Светлый текст */
+            
+            --color-accent-primary: #6B8EAD; /* Пыльно-синий (кнопки) */
+            --color-accent-primary-hover: #5A7B9A;
+            --color-accent-secondary: #8A9A7A; /* Оливковый (иконки) */
+            --color-accent-tertiary: #C27A62; /* Мягкий терракотовый */
+            
+            --font-heading: 'Playfair Display', serif;
+            --font-body: 'Inter', sans-serif;
+            
+            --radius-sm: 8px;
+            --radius-md: 16px;
+            --radius-lg: 24px;
+            
+            --shadow-soft: 0 8px 30px rgba(44, 62, 80, 0.05);
+            --shadow-card: 0 4px 20px rgba(0, 0, 0, 0.04);
+        }
+        /* Reset & Base */
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        html {
+            scroll-behavior: smooth;
+        }
+        body {
+            font-family: var(--font-body);
+            font-weight: 300;
+            color: var(--color-text-main);
+            background-color: var(--color-bg-main);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+        h1, h2, h3, h4, .logo__text {
+            font-family: var(--font-heading);
+            font-weight: 400;
+            line-height: 1.2;
+        }
+        h1 { font-size: clamp(2.5rem, 5vw, 4rem); }
+        h2 { font-size: clamp(2rem, 4vw, 3rem); text-align: center;}
+        h3 { font-size: 1.5rem; }
+        a {
+            text-decoration: none;
+            color: inherit;
+            transition: color 0.3s ease;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        .section {
+            padding: 100px 0;
+        }
+        .text-center { text-align: center; }
+        .text-white { color: var(--color-text-light); }
+        .bg-light { background-color: var(--color-bg-alt); }
+        .bg-accent { background-color: var(--color-bg-accent); }
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 14px 28px;
+            font-family: var(--font-body);
+            font-weight: 500;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            font-size: 1rem;
+        }
+        .btn--primary {
+            background-color: var(--color-accent-primary);
+            color: var(--color-text-light);
+        }
+        .btn--primary:hover {
+            background-color: var(--color-accent-primary-hover);
+            transform: translateY(-2px);
+        }
+        .btn--secondary {
+            background-color: var(--color-bg-light);
+            color: var(--color-text-main);
+        }
+        .btn--secondary:hover {
+            background-color: var(--color-bg-alt);
+            transform: translateY(-2px);
+        }
+        .btn--outline {
+            background-color: transparent;
+            border: 1px solid var(--color-accent-primary);
+            color: var(--color-accent-primary);
+        }
+        .btn--outline:hover {
+            background-color: var(--color-accent-primary);
+            color: var(--color-text-light);
+        }
+        .btn--full {
+            width: 100%;
+        }
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: rgba(253, 251, 247, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            transition: padding 0.3s ease, box-shadow 0.3s ease;
+        }
+        .header__container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 80px;
+        }
+        .logo {
+            display: flex;
+            flex-direction: column;
+        }
+        .logo__text {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: var(--color-accent-tertiary);
+        }
+        .logo__sub {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--color-text-muted);
+        }
+        .nav {
+            display: flex;
+            gap: 32px;
+        }
+        .nav__link {
+            font-size: 0.95rem;
+            font-weight: 400;
+        }
+        .nav__link:hover {
+            color: var(--color-accent-tertiary);
+        }
+        .burger-menu {
+            display: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            flex-direction: column;
+            gap: 5px;
+        }
+        .burger-menu span {
+            display: block;
+            width: 25px;
+            height: 2px;
+            background-color: var(--color-text-main);
+            transition: 0.3s;
+        }
+        /* Hero */
+        .hero {
+            position: relative;
+            height: 100vh;
+            min-height: 600px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            background: linear-gradient(to top, rgba(253, 251, 247, 1) 0%, rgba(253, 251, 247, 0) 50%),
+                        url('https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') center/cover no-repeat;
+        }
+        .hero__content {
+            position: relative;
+            z-index: 2;
+            max-width: 800px;
+            margin: 0 auto;
+            padding-top: 80px;
+        }
+        .hero__title {
+            color: var(--color-text-main);
+            margin-bottom: 24px;
+        }
+        .hero__subtitle {
+            font-size: 1.2rem;
+            color: var(--color-text-main);
+            font-weight: 400;
+            margin-bottom: 40px;
+        }
+        .hero__actions {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+        }
+        /* About Section */
+        .section__header {
+            margin-bottom: 60px;
+        }
+        .section__desc {
+            max-width: 700px;
+            margin: 16px auto 0;
+            color: var(--color-text-muted);
+            font-size: 1.1rem;
+            text-align: center;
+        }
+        .about__grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+        .about__text p {
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+            color: var(--color-text-muted);
+        }
+        .placeholder-img {
+            background-color: #E2E8F0;
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--color-text-muted);
+            font-family: var(--font-body);
+            font-size: 0.9rem;
+            width: 100%;
+            aspect-ratio: 4/3;
+            overflow: hidden;
+        }
+        .about__image {
+            aspect-ratio: 4/5;
+            background: url('https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80') center/cover;
+            box-shadow: var(--shadow-soft);
+        }
+        /* Rooms */
+        .rooms__grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 32px;
+        }
+        .room-card {
+            background: var(--color-bg-light);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            box-shadow: var(--shadow-card);
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+        }
+        .room-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-soft);
+        }
+        .room-card__img {
+            height: 250px;
+        }
+        .room-card:nth-child(1) .room-card__img { background: url('https://images.unsplash.com/photo-1590490359683-658d3d23f972?auto=format&fit=crop&w=800') center/cover; }
+        .room-card:nth-child(2) .room-card__img { background: url('https://images.unsplash.com/photo-1522771731470-53ffaccecb95?auto=format&fit=crop&w=800') center/cover; }
+        .room-card__content {
+            padding: 32px;
+        }
+        .room-card__title {
+            margin-bottom: 16px;
+            color: var(--color-accent-tertiary);
+        }
+        .room-card__features {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 16px;
+            font-size: 0.9rem;
+            color: var(--color-accent-secondary);
+            flex-wrap: wrap;
+        }
+        .room-card__desc {
+            color: var(--color-text-muted);
+            margin-bottom: 24px;
+            font-size: 0.95rem;
+        }
+        /* Benefits */
+        .benefits__grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+            margin-top: 60px;
+        }
+        .benefit-item {
+            text-align: center;
+            padding: 32px;
+            background: var(--color-bg-light);
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-card);
+        }
+        .benefit-item__icon {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: var(--color-accent-secondary);
+        }
+        .benefit-item__title {
+            margin-bottom: 12px;
+            font-family: var(--font-body);
+            font-weight: 500;
+        }
+        .benefit-item__desc {
+            color: var(--color-text-muted);
+            font-size: 0.95rem;
+        }
+        /* Booking Form */
+        .booking__container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+        .booking__form {
+            background: var(--color-bg-light);
+            padding: 40px;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-soft);
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+            color: var(--color-text-muted);
+        }
+        input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 1px solid #E2E8F0;
+            border-radius: var(--radius-sm);
+            font-family: var(--font-body);
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+            background-color: #FAFAFA;
+        }
+        input:focus {
+            outline: none;
+            border-color: var(--color-accent-primary);
+            background-color: var(--color-bg-light);
+        }
+        .form-policy {
+            margin-top: 16px;
+            font-size: 0.8rem;
+            color: var(--color-text-muted);
+            text-align: center;
+        }
+        /* Footer */
+        .footer {
+            background: var(--color-bg-light);
+            padding-top: 80px;
+            border-top: 1px solid rgba(0,0,0,0.05);
+        }
+        .footer__container {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 60px;
+        }
+        .footer__desc {
+            margin-top: 20px;
+            color: var(--color-text-muted);
+            max-width: 300px;
+        }
+        .footer__links h4, .footer__contacts h4 {
+            margin-bottom: 24px;
+            font-weight: 500;
+        }
+        .footer__links ul {
+            list-style: none;
+        }
+        .footer__links li {
+            margin-bottom: 12px;
+        }
+        .footer__links a {
+            color: var(--color-text-muted);
+        }
+        .footer__contacts p {
+            color: var(--color-text-muted);
+            margin-bottom: 12px;
+        }
+        .socials {
+            display: flex;
+            gap: 16px;
+            margin-top: 20px;
+        }
+        .social-link {
+            color: var(--color-accent-primary);
+            font-weight: 500;
+        }
+        .footer__bottom {
+            background: var(--color-bg-alt);
+            padding: 24px 0;
+            text-align: center;
+            color: var(--color-text-muted);
+            font-size: 0.9rem;
+        }
+        /* Responsive */
+        @media (max-width: 900px) {
+            .about__grid, .booking__container {
+                grid-template-columns: 1fr;
+            }
+            .footer__container {
+                grid-template-columns: 1fr;
+            }
+            .nav, .header__btn {
+                display: none; 
+            }
+            .burger-menu {
+                display: flex;
+            }
+            .hero__actions {
+                flex-direction: column;
+            }
+        }
+        @media (max-width: 600px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container header__container">
+            <div class="logo">
+                <span class="logo__text">Bonjour</span>
+                <span class="logo__sub">гостевой дом</span>
+            </div>
+            <nav class="nav">
+                <a href="#about" class="nav__link">О нас</a>
+                <a href="#rooms" class="nav__link">Номера</a>
+                <a href="#benefits" class="nav__link">Преимущества</a>
+                <a href="#booking" class="nav__link">Бронирование</a>
+                <a href="#contacts" class="nav__link">Контакты</a>
+            </nav>
+            <a href="#booking" class="btn btn--outline header__btn">Уточнить наличие</a>
+            <button class="burger-menu" aria-label="Открыть меню">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </header>
+    <main>
+        <!-- Секция Hero (Главный экран) -->
+        <section class="hero">
+            <div class="container hero__container">
+                <div class="hero__content">
+                    <h1 class="hero__title">Ваш уютный дом у моря</h1>
+                    <p class="hero__subtitle">Атмосфера тёплого прованса, где продумана каждая деталь для вашего безмятежного отдыха в Бердянске.</p>
+                    <div class="hero__actions">
+                        <a href="#rooms" class="btn btn--primary">Смотреть номера</a>
+                        <a href="#booking" class="btn btn--secondary">Забронировать</a>
+                    </div>
+                </div>
+            </div>
+            <div class="hero__overlay"></div>
+        </section>
+        <!-- О нас -->
+        <section id="about" class="section about">
+            <div class="container about__container">
+                <div class="section__header">
+                    <h2 class="section__title">Место, куда хочется возвращаться</h2>
+                    <p class="section__desc">Мы создали «Бонжур» для тех, кто ценит спокойствие, чистоту и эстетику. Вдали от шумных набережных, но всего в нескольких минутах от ласкового моря.</p>
+                </div>
+                <div class="about__grid">
+                    <div class="about__text">
+                        <p>У нас нет суеты больших отелей — только искреннее гостеприимство, запах утреннего кофе и номера, в которых спится как дома.</p>
+                        <p>Наш стиль вдохновлен легким провансом: светлые тона, натуральные материалы, забота в каждой мелочи и тот самый южный воздух, ради которого вы приезжаете.</p>
+                    </div>
+                    <div class="about__image-wrapper">
+                        <!-- Пример изображения -->
+                        <div class="about__image placeholder-img"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Номера -->
+        <section id="rooms" class="section rooms bg-light">
+            <div class="container">
+                <div class="section__header text-center">
+                    <h2 class="section__title">Светлые комнаты для сладких снов</h2>
+                    <p class="section__desc">Выбирайте тот формат отдыха, который подходит именно вам.</p>
+                </div>
+                <div class="rooms__grid">
+                    <!-- Карточка 1 -->
+                    <article class="room-card">
+                        <div class="room-card__img placeholder-img"></div>
+                        <div class="room-card__content">
+                            <h3 class="room-card__title">Стандарт Прованс</h3>
+                            <div class="room-card__features">
+                                <span><i class="icon">🛏</i> 2 места</span>
+                                <span><i class="icon">🚿</i> Своя ванная</span>
+                                <span><i class="icon">❄</i> Кондиционер</span>
+                            </div>
+                            <p class="room-card__desc">Идеально для пары. Двуспальная кровать с ортопедическим матрасом, свежий светлый интерьер и вид на тихий дворик.</p>
+                            <a href="#booking" class="btn btn--outline room-card__btn">Подробнее о номере</a>
+                        </div>
+                    </article>
+                    <!-- Карточка 2 -->
+                    <article class="room-card">
+                        <div class="room-card__img placeholder-img"></div>
+                        <div class="room-card__content">
+                            <h3 class="room-card__title">Семейный Комфорт</h3>
+                            <div class="room-card__features">
+                                <span><i class="icon">🛏</i> 3-4 места</span>
+                                <span><i class="icon">☕</i> Мини-кухня</span>
+                                <span><i class="icon">❄</i> Кондиционер</span>
+                            </div>
+                            <p class="room-card__desc">Просторный номер для тех, кто путешествует с детьми. Здесь достаточно места для игр и спокойного отдыха всей семьи.</p>
+                            <a href="#booking" class="btn btn--outline room-card__btn">Подробнее о номере</a>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+        <!-- Преимущества -->
+        <section id="benefits" class="section benefits">
+            <div class="container">
+                <h2 class="section__title text-center">Забота в каждой детали</h2>
+                <div class="benefits__grid">
+                    <div class="benefit-item">
+                        <div class="benefit-item__icon">🌿</div>
+                        <h4 class="benefit-item__title">Домашняя атмосфера</h4>
+                        <p class="benefit-item__desc">Уютный закрытый дворик для вечерних бесед и утреннего кофе.</p>
+                    </div>
+                    <div class="benefit-item">
+                        <div class="benefit-item__icon">🌊</div>
+                        <h4 class="benefit-item__title">Близость к морю</h4>
+                        <p class="benefit-item__desc">Всего 10-15 минут неспешной прогулки — и вы на пляже.</p>
+                    </div>
+                    <div class="benefit-item">
+                        <div class="benefit-item__icon">✨</div>
+                        <h4 class="benefit-item__title">Чистота и свежесть</h4>
+                        <p class="benefit-item__desc">Безупречное европейское качество уборки для вашего спокойствия.</p>
+                    </div>
+                    <div class="benefit-item">
+                        <div class="benefit-item__icon">👨‍👩‍👧‍👦</div>
+                        <h4 class="benefit-item__title">Для всей семьи</h4>
+                        <p class="benefit-item__desc">Спокойно, безопасно и комфортно даже с самыми маленькими гостями.</p>
+                    </div>
+                    <div class="benefit-item">
+                        <div class="benefit-item__icon">🥐</div>
+                        <h4 class="benefit-item__title">Вкусные завтраки</h4>
+                        <p class="benefit-item__desc">По желанию начинайте день с горячего домашнего завтрака.</p>
+                    </div>
+                    <div class="benefit-item">
+                        <div class="benefit-item__icon">🅿️</div>
+                        <h4 class="benefit-item__title">Удобная парковка</h4>
+                        <p class="benefit-item__desc">Безопасное место для вашего автомобиля на территории.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Бронирование -->
+        <section id="booking" class="section booking bg-accent">
+            <div class="container booking__container">
+                <div class="booking__info">
+                    <h2 class="section__title text-white">Запланируйте свой отдых</h2>
+                    <p class="section__desc text-white">Оставьте заявку, и мы подберем для вас лучший вариант размещения. Отвечаем быстро, с заботой и вниманием к вашим пожеланиям.</p>
+                </div>
+                <form class="booking__form" action="#" method="POST">
+                    <div class="form-group">
+                        <label for="name">Ваше имя</label>
+                        <input type="text" id="name" placeholder="Как к вам обращаться?" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Номер телефона</label>
+                        <input type="tel" id="phone" placeholder="+7 (___) ___-__-__" required>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="dates">Даты заезда / выезда</label>
+                            <input type="text" id="dates" placeholder="Например, 15 - 25 августа">
+                        </div>
+                        <div class="form-group">
+                            <label for="guests">Количество гостей</label>
+                            <input type="number" id="guests" placeholder="Взрослые и дети" min="1">
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn--primary btn--full">Узнать стоимость и наличие</button>
+                    <p class="form-policy">Отправляя заявку, вы соглашаетесь с политикой конфиденциальности.</p>
+                </form>
+            </div>
+        </section>
+    </main>
+    <!-- Подвал -->
+    <footer id="contacts" class="footer">
+        <div class="container footer__container">
+            <div class="footer__brand">
+                <div class="logo">
+                     <span class="logo__text">Bonjour</span>
+                     <span class="logo__sub">гостевой дом</span>
+                </div>
+                <p class="footer__desc">Тот самый прованс на берегу Азовского моря. С любовью и заботой о вашем отдыхе.</p>
+            </div>
+            <div class="footer__links">
+                <h4>Навигация</h4>
+                <ul>
+                    <li><a href="#about">О нас</a></li>
+                    <li><a href="#rooms">Номера</a></li>
+                    <li><a href="#benefits">Преимущества</a></li>
+                    <li><a href="#booking">Забронировать</a></li>
+                </ul>
+            </div>
+            <div class="footer__contacts">
+                <h4>Контакты</h4>
+                <p>📍 г. Бердянск, ул. [Адрес]</p>
+                <p>📞 +7 (XXX) XXX-XX-XX</p>
+                <div class="socials">
+                    <a href="#" class="social-link">WhatsApp</a>
+                    <a href="#" class="social-link">Telegram</a>
+                </div>
+            </div>
+        </div>
+        <div class="footer__bottom">
+            <div class="container">
+                <p>&copy; 2026 Гостевой дом «Бонжур». Все права защищены.</p>
+            </div>
+        </div>
+    </footer>
+    <!-- Скрипты -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const header = document.querySelector('.header');
+            
+            // Плавный скролл к секциям
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    
+                    const targetId = this.getAttribute('href');
+                    if(targetId === '#') return;
+                    
+                    const targetElement = document.querySelector(targetId);
+                    
+                    if (targetElement) {
+                        const headerOffset = 80;
+                        const elementPosition = targetElement.getBoundingClientRect().top;
+                        const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+          
+                        window.scrollTo({
+                            top: offsetPosition,
+                            behavior: "smooth"
+                        });
+                    }
+                });
+            });
+            // Эффект тени для шапки при прокрутке
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 50) {
+                    header.style.boxShadow = '0 4px 20px rgba(0,0,0,0.05)';
+                } else {
+                    header.style.boxShadow = 'none';
+                }
+            });
+            // Мобильное меню (Бургер)
+            const burgerMenu = document.querySelector('.burger-menu');
+            const nav = document.querySelector('.nav');
+            
+            if(burgerMenu) {
+                burgerMenu.addEventListener('click', () => {
+                    nav.style.display = nav.style.display === 'flex' ? 'none' : 'flex';
+                    nav.style.flexDirection = 'column';
+                    nav.style.position = 'absolute';
+                    nav.style.top = '80px';
+                    nav.style.left = '0';
+                    nav.style.width = '100%';
+                    nav.style.background = '#FDFBF7';
+                    nav.style.padding = '20px';
+                    nav.style.borderBottom = '1px solid rgba(0,0,0,0.05)';
+                });
+            }
+        });
+    </script>
+</body>
+</html>
