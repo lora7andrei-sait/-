@@ -15,19 +15,19 @@
     <style>
         /* Typography & Variables */
         :root {
-            --color-bg-main: #FDFBF7; /* Молочный */
-            --color-bg-light: #FFFFFF; /* Белый */
-            --color-bg-accent: #6B8EAD; /* Пыльно-синий для акцентных фонов */
-            --color-bg-alt: #F5F0E6; /* Светло-бежевый для секций */
+            --color-bg-main: #FDFBF7;
+            --color-bg-light: #FFFFFF;
+            --color-bg-accent: #6B8EAD;
+            --color-bg-alt: #F5F0E6;
             
-            --color-text-main: #2C3E50; /* Темно-серо-синий для заголовков */
-            --color-text-muted: #5A5A5A; /* Приглушенный серый для текста */
-            --color-text-light: #FDFBF7; /* Светлый текст */
+            --color-text-main: #2C3E50;
+            --color-text-muted: #5A5A5A;
+            --color-text-light: #FDFBF7;
             
-            --color-accent-primary: #6B8EAD; /* Пыльно-синий (кнопки) */
+            --color-accent-primary: #6B8EAD;
             --color-accent-primary-hover: #5A7B9A;
-            --color-accent-secondary: #8A9A7A; /* Оливковый (иконки) */
-            --color-accent-tertiary: #C27A62; /* Мягкий терракотовый */
+            --color-accent-secondary: #8A9A7A;
+            --color-accent-tertiary: #C27A62;
             
             --font-heading: 'Playfair Display', serif;
             --font-body: 'Inter', sans-serif;
@@ -39,15 +39,12 @@
             --shadow-soft: 0 8px 30px rgba(44, 62, 80, 0.05);
             --shadow-card: 0 4px 20px rgba(0, 0, 0, 0.04);
         }
-        /* Reset & Base */
         *, *::before, *::after {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
         }
-        html {
-            scroll-behavior: smooth;
-        }
+        html { scroll-behavior: smooth; }
         body {
             font-family: var(--font-body);
             font-weight: 300;
@@ -64,28 +61,15 @@
         h1 { font-size: clamp(2.5rem, 5vw, 4rem); }
         h2 { font-size: clamp(2rem, 4vw, 3rem); text-align: center;}
         h3 { font-size: 1.5rem; }
-        a {
-            text-decoration: none;
-            color: inherit;
-            transition: color 0.3s ease;
-        }
-        img {
-            max-width: 100%;
-            height: auto;
-            display: block;
-        }
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-        .section {
-            padding: 100px 0;
-        }
+        a { text-decoration: none; color: inherit; transition: color 0.3s ease; }
+        img { max-width: 100%; height: auto; display: block; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+        .section { padding: 100px 0; }
         .text-center { text-align: center; }
         .text-white { color: var(--color-text-light); }
         .bg-light { background-color: var(--color-bg-alt); }
         .bg-accent { background-color: var(--color-bg-accent); }
+
         /* Buttons */
         .btn {
             display: inline-flex;
@@ -100,39 +84,18 @@
             border: none;
             font-size: 1rem;
         }
-        .btn--primary {
-            background-color: var(--color-accent-primary);
-            color: var(--color-text-light);
-        }
-        .btn--primary:hover {
-            background-color: var(--color-accent-primary-hover);
-            transform: translateY(-2px);
-        }
-        .btn--secondary {
-            background-color: var(--color-bg-light);
-            color: var(--color-text-main);
-        }
-        .btn--secondary:hover {
-            background-color: var(--color-bg-alt);
-            transform: translateY(-2px);
-        }
-        .btn--outline {
-            background-color: transparent;
-            border: 1px solid var(--color-accent-primary);
-            color: var(--color-accent-primary);
-        }
-        .btn--outline:hover {
-            background-color: var(--color-accent-primary);
-            color: var(--color-text-light);
-        }
-        .btn--full {
-            width: 100%;
-        }
+        .btn--primary { background-color: var(--color-accent-primary); color: var(--color-text-light); }
+        .btn--primary:hover { background-color: var(--color-accent-primary-hover); transform: translateY(-2px); }
+        .btn--secondary { background-color: var(--color-bg-light); color: var(--color-text-main); }
+        .btn--secondary:hover { background-color: var(--color-bg-alt); transform: translateY(-2px); }
+        .btn--outline { background-color: transparent; border: 1px solid var(--color-accent-primary); color: var(--color-accent-primary); }
+        .btn--outline:hover { background-color: var(--color-accent-primary); color: var(--color-text-light); }
+        .btn--full { width: 100%; }
+
         /* Header */
         .header {
             position: fixed;
-            top: 0;
-            left: 0;
+            top: 0; left: 0;
             width: 100%;
             background-color: rgba(253, 251, 247, 0.95);
             backdrop-filter: blur(10px);
@@ -140,53 +103,16 @@
             border-bottom: 1px solid rgba(0,0,0,0.05);
             transition: padding 0.3s ease, box-shadow 0.3s ease;
         }
-        .header__container {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            height: 80px;
-        }
-        .logo {
-            display: flex;
-            flex-direction: column;
-        }
-        .logo__text {
-            font-size: 1.8rem;
-            font-weight: 600;
-            color: var(--color-accent-tertiary);
-        }
-        .logo__sub {
-            font-size: 0.7rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: var(--color-text-muted);
-        }
-        .nav {
-            display: flex;
-            gap: 32px;
-        }
-        .nav__link {
-            font-size: 0.95rem;
-            font-weight: 400;
-        }
-        .nav__link:hover {
-            color: var(--color-accent-tertiary);
-        }
-        .burger-menu {
-            display: none;
-            background: none;
-            border: none;
-            cursor: pointer;
-            flex-direction: column;
-            gap: 5px;
-        }
-        .burger-menu span {
-            display: block;
-            width: 25px;
-            height: 2px;
-            background-color: var(--color-text-main);
-            transition: 0.3s;
-        }
+        .header__container { display: flex; align-items: center; justify-content: space-between; height: 80px; }
+        .logo { display: flex; flex-direction: column; }
+        .logo__text { font-size: 1.8rem; font-weight: 600; color: var(--color-accent-tertiary); }
+        .logo__sub { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; color: var(--color-text-muted); }
+        .nav { display: flex; gap: 32px; }
+        .nav__link { font-size: 0.95rem; font-weight: 400; }
+        .nav__link:hover { color: var(--color-accent-tertiary); }
+        .burger-menu { display: none; background: none; border: none; cursor: pointer; flex-direction: column; gap: 5px; }
+        .burger-menu span { display: block; width: 25px; height: 2px; background-color: var(--color-text-main); transition: 0.3s; }
+
         /* Hero */
         .hero {
             position: relative;
@@ -196,7 +122,7 @@
             align-items: center;
             justify-content: center;
             text-align: center;
-            background: linear-gradient(to top, rgba(253, 251, 247, 1) 0%, rgba(253, 251, 247, 0) 50%),
+            background: linear-gradient(to top, rgba(253, 251, 247, 0.7) 0%, rgba(0,0,0,0.3) 50%),
                         url('https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') center/cover no-repeat;
         }
         .hero__content {
@@ -206,43 +132,26 @@
             margin: 0 auto;
             padding-top: 80px;
         }
+        /* ✅ ИЗМЕНЕНИЕ 1: Белый цвет заголовка и подзаголовка hero */
         .hero__title {
-            color: var(--color-text-main);
+            color: #FFFFFF;
             margin-bottom: 24px;
+            text-shadow: 0 2px 12px rgba(0,0,0,0.3);
         }
         .hero__subtitle {
             font-size: 1.2rem;
-            color: var(--color-text-main);
+            color: #FFFFFF;
             font-weight: 400;
             margin-bottom: 40px;
+            text-shadow: 0 1px 8px rgba(0,0,0,0.25);
         }
-        .hero__actions {
-            display: flex;
-            gap: 16px;
-            justify-content: center;
-        }
+        .hero__actions { display: flex; gap: 16px; justify-content: center; }
+
         /* About Section */
-        .section__header {
-            margin-bottom: 60px;
-        }
-        .section__desc {
-            max-width: 700px;
-            margin: 16px auto 0;
-            color: var(--color-text-muted);
-            font-size: 1.1rem;
-            text-align: center;
-        }
-        .about__grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 60px;
-            align-items: center;
-        }
-        .about__text p {
-            margin-bottom: 20px;
-            font-size: 1.1rem;
-            color: var(--color-text-muted);
-        }
+        .section__header { margin-bottom: 60px; }
+        .section__desc { max-width: 700px; margin: 16px auto 0; color: var(--color-text-muted); font-size: 1.1rem; text-align: center; }
+        .about__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
+        .about__text p { margin-bottom: 20px; font-size: 1.1rem; color: var(--color-text-muted); }
         .placeholder-img {
             background-color: #E2E8F0;
             border-radius: var(--radius-md);
@@ -261,12 +170,9 @@
             background: url('https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80') center/cover;
             box-shadow: var(--shadow-soft);
         }
+
         /* Rooms */
-        .rooms__grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 32px;
-        }
+        .rooms__grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 32px; }
         .room-card {
             background: var(--color-bg-light);
             border-radius: var(--radius-md);
@@ -274,91 +180,34 @@
             box-shadow: var(--shadow-card);
             transition: transform 0.4s ease, box-shadow 0.4s ease;
         }
-        .room-card:hover {
-            transform: translateY(-8px);
-            box-shadow: var(--shadow-soft);
-        }
-        .room-card__img {
-            height: 250px;
-        }
+        .room-card:hover { transform: translateY(-8px); box-shadow: var(--shadow-soft); }
+        .room-card__img { height: 250px; }
         .room-card:nth-child(1) .room-card__img { background: url('https://images.unsplash.com/photo-1590490359683-658d3d23f972?auto=format&fit=crop&w=800') center/cover; }
         .room-card:nth-child(2) .room-card__img { background: url('https://images.unsplash.com/photo-1522771731470-53ffaccecb95?auto=format&fit=crop&w=800') center/cover; }
-        .room-card__content {
-            padding: 32px;
-        }
-        .room-card__title {
-            margin-bottom: 16px;
-            color: var(--color-accent-tertiary);
-        }
-        .room-card__features {
-            display: flex;
-            gap: 16px;
-            margin-bottom: 16px;
-            font-size: 0.9rem;
-            color: var(--color-accent-secondary);
-            flex-wrap: wrap;
-        }
-        .room-card__desc {
-            color: var(--color-text-muted);
-            margin-bottom: 24px;
-            font-size: 0.95rem;
-        }
+        .room-card__content { padding: 32px; }
+        .room-card__title { margin-bottom: 16px; color: var(--color-accent-tertiary); }
+        .room-card__features { display: flex; gap: 16px; margin-bottom: 16px; font-size: 0.9rem; color: var(--color-accent-secondary); flex-wrap: wrap; }
+        .room-card__desc { color: var(--color-text-muted); margin-bottom: 24px; font-size: 0.95rem; }
+
         /* Benefits */
-        .benefits__grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 40px;
-            margin-top: 60px;
-        }
-        .benefit-item {
-            text-align: center;
-            padding: 32px;
-            background: var(--color-bg-light);
-            border-radius: var(--radius-md);
-            box-shadow: var(--shadow-card);
-        }
-        .benefit-item__icon {
-            font-size: 2.5rem;
-            margin-bottom: 20px;
-            color: var(--color-accent-secondary);
-        }
-        .benefit-item__title {
-            margin-bottom: 12px;
-            font-family: var(--font-body);
-            font-weight: 500;
-        }
-        .benefit-item__desc {
-            color: var(--color-text-muted);
-            font-size: 0.95rem;
-        }
+        .benefits__grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 40px; margin-top: 60px; }
+        .benefit-item { text-align: center; padding: 32px; background: var(--color-bg-light); border-radius: var(--radius-md); box-shadow: var(--shadow-card); }
+        .benefit-item__icon { font-size: 2.5rem; margin-bottom: 20px; color: var(--color-accent-secondary); }
+        .benefit-item__title { margin-bottom: 12px; font-family: var(--font-body); font-weight: 500; }
+        .benefit-item__desc { color: var(--color-text-muted); font-size: 0.95rem; }
+
         /* Booking Form */
-        .booking__container {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 60px;
-            align-items: center;
-        }
+        .booking__container { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
         .booking__form {
             background: var(--color-bg-light);
             padding: 40px;
             border-radius: var(--radius-lg);
             box-shadow: var(--shadow-soft);
         }
-        .form-group {
-            margin-bottom: 20px;
-        }
-        .form-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-        }
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-size: 0.9rem;
-            color: var(--color-text-muted);
-        }
-        input {
+        .form-group { margin-bottom: 20px; }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        label { display: block; margin-bottom: 8px; font-size: 0.9rem; color: var(--color-text-muted); }
+        input, select {
             width: 100%;
             padding: 14px 16px;
             border: 1px solid #E2E8F0;
@@ -367,90 +216,40 @@
             font-size: 1rem;
             transition: border-color 0.3s ease;
             background-color: #FAFAFA;
+            appearance: none;
         }
-        input:focus {
-            outline: none;
-            border-color: var(--color-accent-primary);
-            background-color: var(--color-bg-light);
-        }
-        .form-policy {
-            margin-top: 16px;
-            font-size: 0.8rem;
-            color: var(--color-text-muted);
-            text-align: center;
-        }
+        input:focus, select:focus { outline: none; border-color: var(--color-accent-primary); background-color: var(--color-bg-light); }
+
+        /* ✅ ИЗМЕНЕНИЕ 2: Стили для валидации формы */
+        input.error { border-color: #e74c3c; }
+        .field-error { color: #e74c3c; font-size: 0.8rem; margin-top: 4px; display: none; }
+        .field-error.visible { display: block; }
+
+        .form-policy { margin-top: 16px; font-size: 0.8rem; color: var(--color-text-muted); text-align: center; }
+
         /* Footer */
-        .footer {
-            background: var(--color-bg-light);
-            padding-top: 80px;
-            border-top: 1px solid rgba(0,0,0,0.05);
-        }
-        .footer__container {
-            display: grid;
-            grid-template-columns: 2fr 1fr 1fr;
-            gap: 40px;
-            margin-bottom: 60px;
-        }
-        .footer__desc {
-            margin-top: 20px;
-            color: var(--color-text-muted);
-            max-width: 300px;
-        }
-        .footer__links h4, .footer__contacts h4 {
-            margin-bottom: 24px;
-            font-weight: 500;
-        }
-        .footer__links ul {
-            list-style: none;
-        }
-        .footer__links li {
-            margin-bottom: 12px;
-        }
-        .footer__links a {
-            color: var(--color-text-muted);
-        }
-        .footer__contacts p {
-            color: var(--color-text-muted);
-            margin-bottom: 12px;
-        }
-        .socials {
-            display: flex;
-            gap: 16px;
-            margin-top: 20px;
-        }
-        .social-link {
-            color: var(--color-accent-primary);
-            font-weight: 500;
-        }
-        .footer__bottom {
-            background: var(--color-bg-alt);
-            padding: 24px 0;
-            text-align: center;
-            color: var(--color-text-muted);
-            font-size: 0.9rem;
-        }
+        .footer { background: var(--color-bg-light); padding-top: 80px; border-top: 1px solid rgba(0,0,0,0.05); }
+        .footer__container { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 40px; margin-bottom: 60px; }
+        .footer__desc { margin-top: 20px; color: var(--color-text-muted); max-width: 300px; }
+        .footer__links h4, .footer__contacts h4 { margin-bottom: 24px; font-weight: 500; }
+        .footer__links ul { list-style: none; }
+        .footer__links li { margin-bottom: 12px; }
+        .footer__links a { color: var(--color-text-muted); }
+        .footer__contacts p { color: var(--color-text-muted); margin-bottom: 12px; }
+        .socials { display: flex; gap: 16px; margin-top: 20px; }
+        .social-link { color: var(--color-accent-primary); font-weight: 500; }
+        .footer__bottom { background: var(--color-bg-alt); padding: 24px 0; text-align: center; color: var(--color-text-muted); font-size: 0.9rem; }
+
         /* Responsive */
         @media (max-width: 900px) {
-            .about__grid, .booking__container {
-                grid-template-columns: 1fr;
-            }
-            .footer__container {
-                grid-template-columns: 1fr;
-            }
-            .nav, .header__btn {
-                display: none; 
-            }
-            .burger-menu {
-                display: flex;
-            }
-            .hero__actions {
-                flex-direction: column;
-            }
+            .about__grid, .booking__container { grid-template-columns: 1fr; }
+            .footer__container { grid-template-columns: 1fr; }
+            .nav, .header__btn { display: none; }
+            .burger-menu { display: flex; }
+            .hero__actions { flex-direction: column; }
         }
         @media (max-width: 600px) {
-            .form-row {
-                grid-template-columns: 1fr;
-            }
+            .form-row { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -474,8 +273,9 @@
             </button>
         </div>
     </header>
+
     <main>
-        <!-- Секция Hero (Главный экран) -->
+        <!-- Hero -->
         <section class="hero">
             <div class="container hero__container">
                 <div class="hero__content">
@@ -487,8 +287,8 @@
                     </div>
                 </div>
             </div>
-            <div class="hero__overlay"></div>
         </section>
+
         <!-- О нас -->
         <section id="about" class="section about">
             <div class="container about__container">
@@ -502,12 +302,12 @@
                         <p>Наш стиль вдохновлен легким провансом: светлые тона, натуральные материалы, забота в каждой мелочи и тот самый южный воздух, ради которого вы приезжаете.</p>
                     </div>
                     <div class="about__image-wrapper">
-                        <!-- Пример изображения -->
                         <div class="about__image placeholder-img"></div>
                     </div>
                 </div>
             </div>
         </section>
+
         <!-- Номера -->
         <section id="rooms" class="section rooms bg-light">
             <div class="container">
@@ -516,29 +316,27 @@
                     <p class="section__desc">Выбирайте тот формат отдыха, который подходит именно вам.</p>
                 </div>
                 <div class="rooms__grid">
-                    <!-- Карточка 1 -->
                     <article class="room-card">
                         <div class="room-card__img placeholder-img"></div>
                         <div class="room-card__content">
                             <h3 class="room-card__title">Стандарт Прованс</h3>
                             <div class="room-card__features">
-                                <span><i class="icon">🛏</i> 2 места</span>
-                                <span><i class="icon">🚿</i> Своя ванная</span>
-                                <span><i class="icon">❄</i> Кондиционер</span>
+                                <span>🛏 2 места</span>
+                                <span>🚿 Своя ванная</span>
+                                <span>❄ Кондиционер</span>
                             </div>
                             <p class="room-card__desc">Идеально для пары. Двуспальная кровать с ортопедическим матрасом, свежий светлый интерьер и вид на тихий дворик.</p>
                             <a href="#booking" class="btn btn--outline room-card__btn">Подробнее о номере</a>
                         </div>
                     </article>
-                    <!-- Карточка 2 -->
                     <article class="room-card">
                         <div class="room-card__img placeholder-img"></div>
                         <div class="room-card__content">
                             <h3 class="room-card__title">Семейный Комфорт</h3>
                             <div class="room-card__features">
-                                <span><i class="icon">🛏</i> 3-4 места</span>
-                                <span><i class="icon">☕</i> Мини-кухня</span>
-                                <span><i class="icon">❄</i> Кондиционер</span>
+                                <span>🛏 3-4 места</span>
+                                <span>☕ Мини-кухня</span>
+                                <span>❄ Кондиционер</span>
                             </div>
                             <p class="room-card__desc">Просторный номер для тех, кто путешествует с детьми. Здесь достаточно места для игр и спокойного отдыха всей семьи.</p>
                             <a href="#booking" class="btn btn--outline room-card__btn">Подробнее о номере</a>
@@ -547,6 +345,7 @@
                 </div>
             </div>
         </section>
+
         <!-- Преимущества -->
         <section id="benefits" class="section benefits">
             <div class="container">
@@ -585,6 +384,7 @@
                 </div>
             </div>
         </section>
+
         <!-- Бронирование -->
         <section id="booking" class="section booking bg-accent">
             <div class="container booking__container">
@@ -592,23 +392,27 @@
                     <h2 class="section__title text-white">Запланируйте свой отдых</h2>
                     <p class="section__desc text-white">Оставьте заявку, и мы подберем для вас лучший вариант размещения. Отвечаем быстро, с заботой и вниманием к вашим пожеланиям.</p>
                 </div>
-                <form class="booking__form" action="#" method="POST">
+
+                <!-- ✅ ИЗМЕНЕНИЕ 2: Форма с валидацией и редиректом на страницу благодарности -->
+                <form class="booking__form" id="bookingForm" novalidate>
                     <div class="form-group">
                         <label for="name">Ваше имя</label>
-                        <input type="text" id="name" placeholder="Как к вам обращаться?" required>
+                        <input type="text" id="name" name="name" placeholder="Как к вам обращаться?" required>
+                        <span class="field-error" id="nameError">Пожалуйста, введите ваше имя</span>
                     </div>
                     <div class="form-group">
                         <label for="phone">Номер телефона</label>
-                        <input type="tel" id="phone" placeholder="+7 (___) ___-__-__" required>
+                        <input type="tel" id="phone" name="phone" placeholder="+7 (___) ___-__-__" required>
+                        <span class="field-error" id="phoneError">Пожалуйста, введите номер телефона</span>
                     </div>
                     <div class="form-row">
                         <div class="form-group">
                             <label for="dates">Даты заезда / выезда</label>
-                            <input type="text" id="dates" placeholder="Например, 15 - 25 августа">
+                            <input type="text" id="dates" name="dates" placeholder="Например, 15 - 25 августа">
                         </div>
                         <div class="form-group">
                             <label for="guests">Количество гостей</label>
-                            <input type="number" id="guests" placeholder="Взрослые и дети" min="1">
+                            <input type="number" id="guests" name="guests" placeholder="Взрослые и дети" min="1">
                         </div>
                     </div>
                     <button type="submit" class="btn btn--primary btn--full">Узнать стоимость и наличие</button>
@@ -617,13 +421,14 @@
             </div>
         </section>
     </main>
+
     <!-- Подвал -->
     <footer id="contacts" class="footer">
         <div class="container footer__container">
             <div class="footer__brand">
                 <div class="logo">
-                     <span class="logo__text">Bonjour</span>
-                     <span class="logo__sub">гостевой дом</span>
+                    <span class="logo__text">Bonjour</span>
+                    <span class="logo__sub">гостевой дом</span>
                 </div>
                 <p class="footer__desc">Тот самый прованс на берегу Азовского моря. С любовью и заботой о вашем отдыхе.</p>
             </div>
@@ -652,48 +457,39 @@
             </div>
         </div>
     </footer>
-    <!-- Скрипты -->
+
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const header = document.querySelector('.header');
-            
-            // Плавный скролл к секциям
+
+            // Плавный скролл
             document.querySelectorAll('a[href^="#"]').forEach(anchor => {
                 anchor.addEventListener('click', function (e) {
                     e.preventDefault();
-                    
                     const targetId = this.getAttribute('href');
-                    if(targetId === '#') return;
-                    
+                    if (targetId === '#') return;
                     const targetElement = document.querySelector(targetId);
-                    
                     if (targetElement) {
                         const headerOffset = 80;
                         const elementPosition = targetElement.getBoundingClientRect().top;
                         const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
-          
-                        window.scrollTo({
-                            top: offsetPosition,
-                            behavior: "smooth"
-                        });
+                        window.scrollTo({ top: offsetPosition, behavior: "smooth" });
                     }
                 });
             });
-            // Эффект тени для шапки при прокрутке
+
+            // Тень хедера при скролле
             window.addEventListener('scroll', () => {
-                if (window.scrollY > 50) {
-                    header.style.boxShadow = '0 4px 20px rgba(0,0,0,0.05)';
-                } else {
-                    header.style.boxShadow = 'none';
-                }
+                header.style.boxShadow = window.scrollY > 50 ? '0 4px 20px rgba(0,0,0,0.05)' : 'none';
             });
-            // Мобильное меню (Бургер)
+
+            // Бургер-меню
             const burgerMenu = document.querySelector('.burger-menu');
             const nav = document.querySelector('.nav');
-            
-            if(burgerMenu) {
+            if (burgerMenu) {
                 burgerMenu.addEventListener('click', () => {
-                    nav.style.display = nav.style.display === 'flex' ? 'none' : 'flex';
+                    const isOpen = nav.style.display === 'flex';
+                    nav.style.display = isOpen ? 'none' : 'flex';
                     nav.style.flexDirection = 'column';
                     nav.style.position = 'absolute';
                     nav.style.top = '80px';
@@ -702,6 +498,45 @@
                     nav.style.background = '#FDFBF7';
                     nav.style.padding = '20px';
                     nav.style.borderBottom = '1px solid rgba(0,0,0,0.05)';
+                });
+            }
+
+            // ✅ Валидация и отправка формы
+            const bookingForm = document.getElementById('bookingForm');
+            if (bookingForm) {
+                bookingForm.addEventListener('submit', function (e) {
+                    e.preventDefault();
+
+                    const name = document.getElementById('name');
+                    const phone = document.getElementById('phone');
+                    const nameError = document.getElementById('nameError');
+                    const phoneError = document.getElementById('phoneError');
+                    let isValid = true;
+
+                    // Сброс ошибок
+                    name.classList.remove('error');
+                    phone.classList.remove('error');
+                    nameError.classList.remove('visible');
+                    phoneError.classList.remove('visible');
+
+                    // Проверка имени
+                    if (!name.value.trim()) {
+                        name.classList.add('error');
+                        nameError.classList.add('visible');
+                        isValid = false;
+                    }
+
+                    // Проверка телефона
+                    if (!phone.value.trim()) {
+                        phone.classList.add('error');
+                        phoneError.classList.add('visible');
+                        isValid = false;
+                    }
+
+                    // Если всё ок — переход на страницу благодарности
+                    if (isValid) {
+                        window.location.href = 'spasibo.html';
+                    }
                 });
             }
         });
