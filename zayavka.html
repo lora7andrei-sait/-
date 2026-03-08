@@ -668,7 +668,7 @@
                             '📅 <b>Даты:</b> ' + dates,
                             '👥 <b>Гостей:</b> ' + guests,
                             '',
-                            '📅 <i>' + new Date().toLocaleString('ru-RU') + '</i>'
+                            '📌 <i>' + new Date().toLocaleString('ru-RU') + '</i>'
                         ].join('\n');
 
                         fetch('https://api.telegram.org/bot' + TELEGRAM_BOT_TOKEN + '/sendMessage', {
