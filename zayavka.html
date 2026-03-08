@@ -5,61 +5,36 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Гостевой дом Bonjour | Бердянск | Ваш идеальный отдых у моря</title>
     <meta name="description" content="Гостевой дом Bonjour в Бердянске. Уют, чистота, домашняя атмосфера и заботливо продуманные номера всего в нескольких минутах от моря. Забронируйте свой отдых!">
-    
-    <!-- Подключение шрифтов -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
-    
-    <!-- Стили -->
     <style>
-        /* Typography & Variables */
         :root {
             --color-bg-main: #FDFBF7;
             --color-bg-light: #FFFFFF;
             --color-bg-accent: #6B8EAD;
             --color-bg-alt: #F5F0E6;
-            
             --color-text-main: #2C3E50;
             --color-text-muted: #5A5A5A;
             --color-text-light: #FDFBF7;
-            
             --color-accent-primary: #6B8EAD;
             --color-accent-primary-hover: #5A7B9A;
             --color-accent-secondary: #8A9A7A;
             --color-accent-tertiary: #C27A62;
-            
             --font-heading: 'Playfair Display', serif;
             --font-body: 'Inter', sans-serif;
-            
             --radius-sm: 8px;
             --radius-md: 16px;
             --radius-lg: 24px;
-            
             --shadow-soft: 0 8px 30px rgba(44, 62, 80, 0.05);
             --shadow-card: 0 4px 20px rgba(0, 0, 0, 0.04);
         }
-        *, *::before, *::after {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
         html { scroll-behavior: smooth; }
-        body {
-            font-family: var(--font-body);
-            font-weight: 300;
-            color: var(--color-text-main);
-            background-color: var(--color-bg-main);
-            line-height: 1.6;
-            -webkit-font-smoothing: antialiased;
-        }
-        h1, h2, h3, h4, .logo__text {
-            font-family: var(--font-heading);
-            font-weight: 400;
-            line-height: 1.2;
-        }
+        body { font-family: var(--font-body); font-weight: 300; color: var(--color-text-main); background-color: var(--color-bg-main); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+        h1, h2, h3, h4, .logo__text { font-family: var(--font-heading); font-weight: 400; line-height: 1.2; }
         h1 { font-size: clamp(2.5rem, 5vw, 4rem); }
-        h2 { font-size: clamp(2rem, 4vw, 3rem); text-align: center;}
+        h2 { font-size: clamp(2rem, 4vw, 3rem); text-align: center; }
         h3 { font-size: 1.5rem; }
         a { text-decoration: none; color: inherit; transition: color 0.3s ease; }
         img { max-width: 100%; height: auto; display: block; }
@@ -69,21 +44,8 @@
         .text-white { color: var(--color-text-light); }
         .bg-light { background-color: var(--color-bg-alt); }
         .bg-accent { background-color: var(--color-bg-accent); }
-
         /* Buttons */
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            padding: 14px 28px;
-            font-family: var(--font-body);
-            font-weight: 500;
-            border-radius: var(--radius-sm);
-            cursor: pointer;
-            transition: all 0.3s ease;
-            border: none;
-            font-size: 1rem;
-        }
+        .btn { display: inline-flex; align-items: center; justify-content: center; padding: 14px 28px; font-family: var(--font-body); font-weight: 500; border-radius: var(--radius-sm); cursor: pointer; transition: all 0.3s ease; border: none; font-size: 1rem; }
         .btn--primary { background-color: var(--color-accent-primary); color: var(--color-text-light); }
         .btn--primary:hover { background-color: var(--color-accent-primary-hover); transform: translateY(-2px); }
         .btn--secondary { background-color: var(--color-bg-light); color: var(--color-text-main); }
@@ -91,18 +53,8 @@
         .btn--outline { background-color: transparent; border: 1px solid var(--color-accent-primary); color: var(--color-accent-primary); }
         .btn--outline:hover { background-color: var(--color-accent-primary); color: var(--color-text-light); }
         .btn--full { width: 100%; }
-
         /* Header */
-        .header {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%;
-            background-color: rgba(253, 251, 247, 0.95);
-            backdrop-filter: blur(10px);
-            z-index: 1000;
-            border-bottom: 1px solid rgba(0,0,0,0.05);
-            transition: padding 0.3s ease, box-shadow 0.3s ease;
-        }
+        .header { position: fixed; top: 0; left: 0; width: 100%; background-color: rgba(253, 251, 247, 0.95); backdrop-filter: blur(10px); z-index: 1000; border-bottom: 1px solid rgba(0, 0, 0, 0.05); transition: padding 0.3s ease, box-shadow 0.3s ease; }
         .header__container { display: flex; align-items: center; justify-content: space-between; height: 80px; }
         .logo { display: flex; flex-direction: column; }
         .logo__text { font-size: 1.8rem; font-weight: 600; color: var(--color-accent-tertiary); }
@@ -112,74 +64,22 @@
         .nav__link:hover { color: var(--color-accent-tertiary); }
         .burger-menu { display: none; background: none; border: none; cursor: pointer; flex-direction: column; gap: 5px; }
         .burger-menu span { display: block; width: 25px; height: 2px; background-color: var(--color-text-main); transition: 0.3s; }
-
         /* Hero */
-        .hero {
-            position: relative;
-            height: 100vh;
-            min-height: 600px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            background: linear-gradient(to top, rgba(253, 251, 247, 0.7) 0%, rgba(0,0,0,0.3) 50%),
-                        url('https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') center/cover no-repeat;
-        }
-        .hero__content {
-            position: relative;
-            z-index: 2;
-            max-width: 800px;
-            margin: 0 auto;
-            padding-top: 80px;
-        }
-        /* ✅ ИЗМЕНЕНИЕ 1: Белый цвет заголовка и подзаголовка hero */
-        .hero__title {
-            color: #FFFFFF;
-            margin-bottom: 24px;
-            text-shadow: 0 2px 12px rgba(0,0,0,0.3);
-        }
-        .hero__subtitle {
-            font-size: 1.2rem;
-            color: #FFFFFF;
-            font-weight: 400;
-            margin-bottom: 40px;
-            text-shadow: 0 1px 8px rgba(0,0,0,0.25);
-        }
+        .hero { position: relative; height: 100vh; min-height: 600px; display: flex; align-items: center; justify-content: center; text-align: center; background: linear-gradient(to top, rgba(253, 251, 247, 0.7) 0%, rgba(0, 0, 0, 0.3) 50%), url('https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') center/cover no-repeat; }
+        .hero__content { position: relative; z-index: 2; max-width: 800px; margin: 0 auto; padding-top: 80px; }
+        .hero__title { color: #FFFFFF; margin-bottom: 24px; text-shadow: 0 2px 12px rgba(0, 0, 0, 0.3); }
+        .hero__subtitle { font-size: 1.2rem; color: #FFFFFF; font-weight: 400; margin-bottom: 40px; text-shadow: 0 1px 8px rgba(0, 0, 0, 0.25); }
         .hero__actions { display: flex; gap: 16px; justify-content: center; }
-
-        /* About Section */
+        /* About */
         .section__header { margin-bottom: 60px; }
         .section__desc { max-width: 700px; margin: 16px auto 0; color: var(--color-text-muted); font-size: 1.1rem; text-align: center; }
         .about__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
         .about__text p { margin-bottom: 20px; font-size: 1.1rem; color: var(--color-text-muted); }
-        .placeholder-img {
-            background-color: #E2E8F0;
-            border-radius: var(--radius-md);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--color-text-muted);
-            font-family: var(--font-body);
-            font-size: 0.9rem;
-            width: 100%;
-            aspect-ratio: 4/3;
-            overflow: hidden;
-        }
-        .about__image {
-            aspect-ratio: 4/5;
-            background: url('https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80') center/cover;
-            box-shadow: var(--shadow-soft);
-        }
-
+        .placeholder-img { background-color: #E2E8F0; border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; color: var(--color-text-muted); font-family: var(--font-body); font-size: 0.9rem; width: 100%; aspect-ratio: 4/3; overflow: hidden; }
+        .about__image { aspect-ratio: 4/5; background: url('https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80') center/cover; box-shadow: var(--shadow-soft); }
         /* Rooms */
         .rooms__grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 32px; }
-        .room-card {
-            background: var(--color-bg-light);
-            border-radius: var(--radius-md);
-            overflow: hidden;
-            box-shadow: var(--shadow-card);
-            transition: transform 0.4s ease, box-shadow 0.4s ease;
-        }
+        .room-card { background: var(--color-bg-light); border-radius: var(--radius-md); overflow: hidden; box-shadow: var(--shadow-card); transition: transform 0.4s ease, box-shadow 0.4s ease; }
         .room-card:hover { transform: translateY(-8px); box-shadow: var(--shadow-soft); }
         .room-card__img { height: 250px; }
         .room-card:nth-child(1) .room-card__img { background: url('https://berdyansk-sity.ru/ssl/u/74/345346372111f09c24b9d4f740f43b/-/8.jpg') center/cover; }
@@ -189,47 +89,26 @@
         .room-card__title { margin-bottom: 16px; color: var(--color-accent-tertiary); }
         .room-card__features { display: flex; gap: 16px; margin-bottom: 16px; font-size: 0.9rem; color: var(--color-accent-secondary); flex-wrap: wrap; }
         .room-card__desc { color: var(--color-text-muted); margin-bottom: 24px; font-size: 0.95rem; }
-
         /* Benefits */
         .benefits__grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 40px; margin-top: 60px; }
         .benefit-item { text-align: center; padding: 32px; background: var(--color-bg-light); border-radius: var(--radius-md); box-shadow: var(--shadow-card); }
         .benefit-item__icon { font-size: 2.5rem; margin-bottom: 20px; color: var(--color-accent-secondary); }
         .benefit-item__title { margin-bottom: 12px; font-family: var(--font-body); font-weight: 500; }
         .benefit-item__desc { color: var(--color-text-muted); font-size: 0.95rem; }
-
-        /* Booking Form */
+        /* Booking */
         .booking__container { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
-        .booking__form {
-            background: var(--color-bg-light);
-            padding: 40px;
-            border-radius: var(--radius-lg);
-            box-shadow: var(--shadow-soft);
-        }
+        .booking__form { background: var(--color-bg-light); padding: 40px; border-radius: var(--radius-lg); box-shadow: var(--shadow-soft); }
         .form-group { margin-bottom: 20px; }
         .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
         label { display: block; margin-bottom: 8px; font-size: 0.9rem; color: var(--color-text-muted); }
-        input, select {
-            width: 100%;
-            padding: 14px 16px;
-            border: 1px solid #E2E8F0;
-            border-radius: var(--radius-sm);
-            font-family: var(--font-body);
-            font-size: 1rem;
-            transition: border-color 0.3s ease;
-            background-color: #FAFAFA;
-            appearance: none;
-        }
+        input, select { width: 100%; padding: 14px 16px; border: 1px solid #E2E8F0; border-radius: var(--radius-sm); font-family: var(--font-body); font-size: 1rem; transition: border-color 0.3s ease; background-color: #FAFAFA; appearance: none; }
         input:focus, select:focus { outline: none; border-color: var(--color-accent-primary); background-color: var(--color-bg-light); }
-
-        /* ✅ ИЗМЕНЕНИЕ 2: Стили для валидации формы */
         input.error { border-color: #e74c3c; }
         .field-error { color: #e74c3c; font-size: 0.8rem; margin-top: 4px; display: none; }
         .field-error.visible { display: block; }
-
         .form-policy { margin-top: 16px; font-size: 0.8rem; color: var(--color-text-muted); text-align: center; }
-
         /* Footer */
-        .footer { background: var(--color-bg-light); padding-top: 80px; border-top: 1px solid rgba(0,0,0,0.05); }
+        .footer { background: var(--color-bg-light); padding-top: 80px; border-top: 1px solid rgba(0, 0, 0, 0.05); }
         .footer__container { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 40px; margin-bottom: 60px; }
         .footer__desc { margin-top: 20px; color: var(--color-text-muted); max-width: 300px; }
         .footer__links h4, .footer__contacts h4 { margin-bottom: 24px; font-weight: 500; }
@@ -240,87 +119,24 @@
         .socials { display: flex; gap: 16px; margin-top: 20px; }
         .social-link { color: var(--color-accent-primary); font-weight: 500; }
         .footer__bottom { background: var(--color-bg-alt); padding: 24px 0; text-align: center; color: var(--color-text-muted); font-size: 0.9rem; }
-
         /* Modal */
-        .modal-overlay {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(44, 62, 80, 0.55);
-            backdrop-filter: blur(4px);
-            z-index: 9999;
-            align-items: center;
-            justify-content: center;
-        }
+        .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(44, 62, 80, 0.55); backdrop-filter: blur(4px); z-index: 9999; align-items: center; justify-content: center; }
         .modal-overlay.active { display: flex; }
-        .modal {
-            background: var(--color-bg-main);
-            border-radius: var(--radius-lg);
-            padding: 48px 40px;
-            max-width: 480px;
-            width: calc(100% - 40px);
-            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
-            animation: modalIn 0.3s ease;
-            position: relative;
-        }
-        @keyframes modalIn {
-            from { opacity: 0; transform: translateY(20px) scale(0.97); }
-            to   { opacity: 1; transform: translateY(0) scale(1); }
-        }
-        .modal__close {
-            position: absolute;
-            top: 16px; right: 20px;
-            background: none; border: none;
-            font-size: 1.6rem;
-            color: var(--color-text-muted);
-            cursor: pointer;
-            line-height: 1;
-            transition: color 0.2s;
-        }
+        .modal { background: var(--color-bg-main); border-radius: var(--radius-lg); padding: 48px 40px; max-width: 480px; width: calc(100% - 40px); box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15); animation: modalDropIn 0.4s cubic-bezier(0.16, 1, 0.3, 1); position: relative; }
+        @keyframes modalDropIn { from { opacity: 0; transform: translateY(-60px) scale(0.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
+        .modal__close { position: absolute; top: 16px; right: 20px; background: none; border: none; font-size: 1.6rem; color: var(--color-text-muted); cursor: pointer; line-height: 1; transition: color 0.2s; }
         .modal__close:hover { color: var(--color-text-main); }
         .modal__icon { font-size: 2.5rem; text-align: center; margin-bottom: 12px; }
-        .modal__title {
-            font-family: var(--font-heading);
-            font-size: 1.7rem;
-            color: var(--color-accent-tertiary);
-            text-align: center;
-            margin-bottom: 8px;
-        }
-        .modal__subtitle {
-            text-align: center;
-            color: var(--color-text-muted);
-            font-size: 0.95rem;
-            margin-bottom: 32px;
-        }
-        .modal__table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        .modal__table tr {
-            border-bottom: 1px solid #EEE;
-        }
+        .modal__title { font-family: var(--font-heading); font-size: 1.7rem; color: var(--color-accent-tertiary); text-align: center; margin-bottom: 8px; }
+        .modal__subtitle { text-align: center; color: var(--color-text-muted); font-size: 0.95rem; margin-bottom: 32px; }
+        .modal__table { width: 100%; border-collapse: collapse; }
+        .modal__table th { font-weight: 500; color: var(--color-text-muted); font-size: 0.9rem; border-bottom: 1px solid #E2E8F0; padding-bottom: 12px; }
+        .modal__table tr { border-bottom: 1px solid #EEE; }
         .modal__table tr:last-child { border-bottom: none; }
-        .modal__table td {
-            padding: 16px 8px;
-            font-size: 1rem;
-            color: var(--color-text-main);
-        }
-        .modal__table td:first-child { font-weight: 400; }
-        .modal__table td:last-child {
-            text-align: right;
-            font-family: var(--font-heading);
-            font-size: 1.2rem;
-            color: var(--color-accent-primary);
-            white-space: nowrap;
-        }
+        .modal__table td { padding: 16px 8px; font-size: 1rem; color: var(--color-text-main); }
+        .modal__table td:last-child { text-align: right; font-family: var(--font-heading); font-size: 1.2rem; color: var(--color-accent-primary); white-space: nowrap; }
         .modal__table .room-icon { margin-right: 10px; }
-        .modal__footer {
-            margin-top: 28px;
-            text-align: center;
-            font-size: 0.85rem;
-            color: var(--color-text-muted);
-        }
-
+        .modal__footer { margin-top: 28px; text-align: center; font-size: 0.85rem; color: var(--color-text-muted); }
         /* Responsive */
         @media (max-width: 900px) {
             .about__grid, .booking__container { grid-template-columns: 1fr; }
@@ -329,9 +145,7 @@
             .burger-menu { display: flex; }
             .hero__actions { flex-direction: column; }
         }
-        @media (max-width: 600px) {
-            .form-row { grid-template-columns: 1fr; }
-        }
+        @media (max-width: 600px) { .form-row { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
@@ -486,8 +300,6 @@
                     <h2 class="section__title text-white">Запланируйте свой отдых</h2>
                     <p class="section__desc text-white">Оставьте заявку, и мы подберем для вас лучший вариант размещения. Отвечаем быстро, с заботой и вниманием к вашим пожеланиям.</p>
                 </div>
-
-                <!-- ✅ ИЗМЕНЕНИЕ 2: Форма с валидацией и редиректом на страницу благодарности -->
                 <form class="booking__form" id="bookingForm" action="javascript:void(0)" novalidate>
                     <div class="form-group">
                         <label for="name">Ваше имя</label>
@@ -519,23 +331,31 @@
     <!-- Modal с ценами -->
     <div class="modal-overlay" id="priceModal">
         <div class="modal">
-            <button class="modal__close" id="modalClose" aria-label="Закрыть">×</button>
+            <button class="modal__close" id="modalClose" aria-label="Закрыть">&times;</button>
             <div class="modal__icon">🏡</div>
             <h3 class="modal__title">Стоимость номеров</h3>
             <p class="modal__subtitle">Актуальные цены на сезон 2026</p>
             <table class="modal__table">
-                <tr>
-                    <td><span class="room-icon">🛏</span><a href="nomer_2.html" style="color:inherit; text-decoration:underline; text-underline-offset:3px;">2-х местные номера</a></td>
-                    <td>3 000 руб.</td>
-                </tr>
-                <tr>
-                    <td><span class="room-icon">🛏</span><a href="nomer_3.html" style="color:inherit; text-decoration:underline; text-underline-offset:3px;">3-х местные номера</a></td>
-                    <td>3 500 руб.</td>
-                </tr>
-                <tr>
-                    <td><span class="room-icon">🛏</span><a href="nomer_4.html" style="color:inherit; text-decoration:underline; text-underline-offset:3px;">4-х местные номера</a></td>
-                    <td>4 000 руб.</td>
-                </tr>
+                <thead>
+                    <tr>
+                        <th style="text-align: left;">Номер</th>
+                        <th style="text-align: right;">Цена</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><span class="room-icon">🛏</span><a href="dvuhmestniy.html" style="text-decoration: underline; text-underline-offset: 3px;">2-х местные</a></td>
+                        <td>3 000 руб.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="room-icon">🛏</span><a href="trehmestniy.html" style="text-decoration: underline; text-underline-offset: 3px;">3-х местные</a></td>
+                        <td>3 500 руб.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="room-icon">🛏</span><a href="chetirehmestniy.html" style="text-decoration: underline; text-underline-offset: 3px;">4-х местные</a></td>
+                        <td>4 000 руб.</td>
+                    </tr>
+                </tbody>
             </table>
             <p class="modal__footer">Для бронирования свяжитесь с нами по телефону<br>или напишите в WhatsApp / Telegram</p>
         </div>
@@ -563,10 +383,10 @@
             <div class="footer__contacts">
                 <h4>Контакты</h4>
                 <p>📍 г. Бердянск, ул. [Адрес]</p>
-                <p>📞 +7 (XXX) XXX-XX-XX</p>
+                <p>📞 +7 (990) 009-31-88</p>
                 <div class="socials">
-                    <a href="#" class="social-link">WhatsApp</a>
-                    <a href="#" class="social-link">Telegram</a>
+                    <a href="https://wa.me/79900093188" class="social-link">WhatsApp</a>
+                    <a href="https://t.me/79900093188" class="social-link">Telegram</a>
                 </div>
             </div>
         </div>
@@ -578,46 +398,53 @@
     </footer>
 
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            // ✅ Убираем хэш из URL при загрузке страницы — предотвращает автопрыжок
+        if ('scrollRestoration' in history) {
+            history.scrollRestoration = 'manual';
+            window.scrollTo(0, 0);
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+
             if (window.location.hash) {
-                history.replaceState(null, '', window.location.pathname);
-                window.scrollTo(0, 0);
+                setTimeout(function() {
+                    window.scrollTo(0, 0);
+                    history.replaceState(null, '', window.location.pathname);
+                }, 10);
             }
 
-            const header = document.querySelector('.header');
+            var header = document.querySelector('.header');
 
             // Плавный скролл
-            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-                anchor.addEventListener('click', function (e) {
-                    const targetId = this.getAttribute('href');
+            document.querySelectorAll('a[href^="#"]').forEach(function(anchor) {
+                anchor.addEventListener('click', function(e) {
+                    var targetId = this.getAttribute('href');
                     if (!targetId || targetId === '#') {
                         e.preventDefault();
                         return;
                     }
-                    const targetElement = document.querySelector(targetId);
+                    var targetElement = document.querySelector(targetId);
                     if (targetElement) {
                         e.preventDefault();
-                        const headerOffset = 80;
-                        const elementPosition = targetElement.getBoundingClientRect().top;
-                        const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
-                        window.scrollTo({ top: offsetPosition, behavior: "smooth" });
+                        var headerOffset = 80;
+                        var elementPosition = targetElement.getBoundingClientRect().top;
+                        var offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+                        window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
                         history.replaceState(null, '', window.location.pathname);
                     }
                 });
             });
 
             // Тень хедера при скролле
-            window.addEventListener('scroll', () => {
+            window.addEventListener('scroll', function() {
                 header.style.boxShadow = window.scrollY > 50 ? '0 4px 20px rgba(0,0,0,0.05)' : 'none';
             });
 
             // Бургер-меню
-            const burgerMenu = document.querySelector('.burger-menu');
-            const nav = document.querySelector('.nav');
+            var burgerMenu = document.querySelector('.burger-menu');
+            var nav = document.querySelector('.nav');
             if (burgerMenu) {
-                burgerMenu.addEventListener('click', () => {
-                    const isOpen = nav.style.display === 'flex';
+                burgerMenu.addEventListener('click', function() {
+                    var isOpen = nav.style.display === 'flex';
                     nav.style.display = isOpen ? 'none' : 'flex';
                     nav.style.flexDirection = 'column';
                     nav.style.position = 'absolute';
@@ -630,87 +457,94 @@
                 });
             }
 
-            // ✅ Валидация и отправка формы
-            const bookingForm = document.getElementById('bookingForm');
+            // Форма бронирования
+            var bookingForm = document.getElementById('bookingForm');
             if (bookingForm) {
-                bookingForm.addEventListener('submit', function (e) {
+                bookingForm.addEventListener('submit', function(e) {
                     e.preventDefault();
                     e.stopPropagation();
 
-                    const name = document.getElementById('name');
-                    const phone = document.getElementById('phone');
-                    const nameError = document.getElementById('nameError');
-                    const phoneError = document.getElementById('phoneError');
-                    let isValid = true;
+                    var nameInput = document.getElementById('name');
+                    var phoneInput = document.getElementById('phone');
+                    var nameError = document.getElementById('nameError');
+                    var phoneError = document.getElementById('phoneError');
+                    var isValid = true;
 
                     // Сброс ошибок
-                    name.classList.remove('error');
-                    phone.classList.remove('error');
+                    nameInput.classList.remove('error');
+                    phoneInput.classList.remove('error');
                     nameError.classList.remove('visible');
                     phoneError.classList.remove('visible');
 
                     // Проверка имени
-                    if (!name.value.trim()) {
-                        name.classList.add('error');
+                    if (!nameInput.value.trim()) {
+                        nameInput.classList.add('error');
                         nameError.classList.add('visible');
                         isValid = false;
                     }
 
                     // Проверка телефона
-                    if (!phone.value.trim()) {
-                        phone.classList.add('error');
+                    if (!phoneInput.value.trim()) {
+                        phoneInput.classList.add('error');
                         phoneError.classList.add('visible');
                         isValid = false;
                     }
 
-                    // Если всё ок — показываем модальное окно и отправляем в Telegram
                     if (isValid) {
+                        // Показываем модальное окно
                         document.getElementById('priceModal').classList.add('active');
 
-                        // Отправка данных в Telegram
-                        const TELEGRAM_BOT_TOKEN = '8004043910:AAGhP67iPubcPEcvq-cH-NQV0J7QOdVpfI0';
-                        const TELEGRAM_CHAT_ID   = '773956172';
+                        // Отправка в Telegram
+                        var BOT_TOKEN = '8004043910:AAGhP67iPubcPEcvq-cH-NQV0J7QOdVpfI0';
+                        var CHAT_ID = '773956172';
 
-                        const dates  = document.getElementById('dates').value.trim()  || 'не указаны';
-                        const guests = document.getElementById('guests').value.trim() || 'не указано';
+                        var dates = document.getElementById('dates').value.trim() || 'не указаны';
+                        var guests = document.getElementById('guests').value.trim() || 'не указано';
 
-                        const message = [
-                            '🏡 <b>НОВАЯ ЗАЯВКА — Гостевой дом Bonjour</b>',
-                            '',
-                            '👤 <b>Имя:</b> ' + name.value.trim(),
-                            '📞 <b>Телефон:</b> ' + phone.value.trim(),
-                            '📅 <b>Даты:</b> ' + dates,
-                            '👥 <b>Гостей:</b> ' + guests,
-                            '',
-                            '📌 <i>' + new Date().toLocaleString('ru-RU') + '</i>'
-                        ].join('\n');
+                        var msg = '🏡 <b>НОВАЯ ЗАЯВКА — Гостевой дом Bonjour</b>\n\n'
+                            + '👤 <b>Имя:</b> ' + nameInput.value.trim() + '\n'
+                            + '📞 <b>Телефон:</b> ' + phoneInput.value.trim() + '\n'
+                            + '📅 <b>Даты:</b> ' + dates + '\n'
+                            + '👥 <b>Гостей:</b> ' + guests + '\n\n'
+                            + '📌 <i>' + new Date().toLocaleString('ru-RU') + '</i>';
 
-                        fetch('https://api.telegram.org/bot' + TELEGRAM_BOT_TOKEN + '/sendMessage', {
+                        fetch('https://api.telegram.org/bot' + BOT_TOKEN + '/sendMessage', {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify({
-                                chat_id: TELEGRAM_CHAT_ID,
-                                text: message,
+                                chat_id: CHAT_ID,
+                                text: msg,
                                 parse_mode: 'HTML'
                             })
                         }).catch(function(err) {
-                            console.warn('Telegram send error:', err);
+                            console.warn('Telegram error:', err);
                         });
                     }
                 });
             }
+
             // Закрытие модального окна
-            const modal = document.getElementById('priceModal');
-            const modalClose = document.getElementById('modalClose');
+            var modal = document.getElementById('priceModal');
+            var modalClose = document.getElementById('modalClose');
+
             if (modalClose) {
-                modalClose.addEventListener('click', () => modal.classList.remove('active'));
+                modalClose.addEventListener('click', function() {
+                    modal.classList.remove('active');
+                });
             }
-            modal.addEventListener('click', (e) => {
-                if (e.target === modal) modal.classList.remove('active');
+
+            modal.addEventListener('click', function(e) {
+                if (e.target === modal) {
+                    modal.classList.remove('active');
+                }
             });
-            document.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape') modal.classList.remove('active');
+
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    modal.classList.remove('active');
+                }
             });
         });
+    </script>
 </body>
 </html>
