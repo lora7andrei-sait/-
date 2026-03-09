@@ -3,547 +3,526 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Гостевой дом Bonjour | Бердянск | Ваш идеальный отдых у моря</title>
-    <meta name="description" content="Гостевой дом Bonjour в Бердянске. Уют, чистота, домашняя атмосфера и заботливо продуманные номера всего в нескольких минутах от моря. Забронируйте свой отдых!">
+    <title>2-местный номер | Гостевой дом Bonjour | Бердянск</title>
+    <meta name="description" content="2-местные номера в гостевом доме Bonjour в Бердянске. Уют, чистота, кондиционер, Smart-TV, душевая. От 3000 руб/сутки.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
     <style>
         :root {
-            --color-bg-main: #FDFBF7;
-            --color-bg-light: #FFFFFF;
-            --color-bg-accent: #6B8EAD;
-            --color-bg-alt: #F5F0E6;
-            --color-text-main: #2C3E50;
-            --color-text-muted: #5A5A5A;
-            --color-text-light: #FDFBF7;
-            --color-accent-primary: #6B8EAD;
-            --color-accent-primary-hover: #5A7B9A;
-            --color-accent-secondary: #8A9A7A;
-            --color-accent-tertiary: #C27A62;
-            --font-heading: 'Playfair Display', serif;
-            --font-body: 'Inter', sans-serif;
-            --radius-sm: 8px;
-            --radius-md: 16px;
-            --radius-lg: 24px;
-            --shadow-soft: 0 8px 30px rgba(44, 62, 80, 0.05);
-            --shadow-card: 0 4px 20px rgba(0, 0, 0, 0.04);
+            --cream:   #FDFAF4;
+            --warm:    #F5EFE0;
+            --brick:   #C27A62;
+            --brick-d: #A0604A;
+            --slate:   #3D4B5C;
+            --muted:   #7A7060;
+            --white:   #FFFFFF;
+            --shadow:  0 12px 48px rgba(61,75,92,0.10);
         }
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
         html { scroll-behavior: smooth; }
-        body { font-family: var(--font-body); font-weight: 300; color: var(--color-text-main); background-color: var(--color-bg-main); line-height: 1.6; -webkit-font-smoothing: antialiased; }
-        h1, h2, h3, h4, .logo__text { font-family: var(--font-heading); font-weight: 400; line-height: 1.2; }
-        h1 { font-size: clamp(2.5rem, 5vw, 4rem); }
-        h2 { font-size: clamp(2rem, 4vw, 3rem); text-align: center; }
-        h3 { font-size: 1.5rem; }
-        a { text-decoration: none; color: inherit; transition: color 0.3s ease; }
-        img { max-width: 100%; height: auto; display: block; }
-        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
-        .section { padding: 100px 0; }
-        .text-center { text-align: center; }
-        .text-white { color: var(--color-text-light); }
-        .bg-light { background-color: var(--color-bg-alt); }
-        .bg-accent { background-color: var(--color-bg-accent); }
-        /* Buttons */
-        .btn { display: inline-flex; align-items: center; justify-content: center; padding: 14px 28px; font-family: var(--font-body); font-weight: 500; border-radius: var(--radius-sm); cursor: pointer; transition: all 0.3s ease; border: none; font-size: 1rem; }
-        .btn--primary { background-color: var(--color-accent-primary); color: var(--color-text-light); }
-        .btn--primary:hover { background-color: var(--color-accent-primary-hover); transform: translateY(-2px); }
-        .btn--secondary { background-color: var(--color-bg-light); color: var(--color-text-main); }
-        .btn--secondary:hover { background-color: var(--color-bg-alt); transform: translateY(-2px); }
-        .btn--outline { background-color: transparent; border: 1px solid var(--color-accent-primary); color: var(--color-accent-primary); }
-        .btn--outline:hover { background-color: var(--color-accent-primary); color: var(--color-text-light); }
-        .btn--full { width: 100%; }
-        /* Header */
-        .header { position: fixed; top: 0; left: 0; width: 100%; background-color: rgba(253, 251, 247, 0.95); backdrop-filter: blur(10px); z-index: 1000; border-bottom: 1px solid rgba(0, 0, 0, 0.05); transition: padding 0.3s ease, box-shadow 0.3s ease; }
-        .header__container { display: flex; align-items: center; justify-content: space-between; height: 80px; }
-        .logo { display: flex; flex-direction: column; }
-        .logo__text { font-size: 1.8rem; font-weight: 600; color: var(--color-accent-tertiary); }
-        .logo__sub { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; color: var(--color-text-muted); }
-        .nav { display: flex; gap: 32px; }
-        .nav__link { font-size: 0.95rem; font-weight: 400; }
-        .nav__link:hover { color: var(--color-accent-tertiary); }
-        .burger-menu { display: none; background: none; border: none; cursor: pointer; flex-direction: column; gap: 5px; }
-        .burger-menu span { display: block; width: 25px; height: 2px; background-color: var(--color-text-main); transition: 0.3s; }
-        /* Hero */
-        .hero { position: relative; height: 100vh; min-height: 600px; display: flex; align-items: center; justify-content: center; text-align: center; background: linear-gradient(to top, rgba(253, 251, 247, 0.7) 0%, rgba(0, 0, 0, 0.3) 50%), url('https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') center/cover no-repeat; }
-        .hero__content { position: relative; z-index: 2; max-width: 800px; margin: 0 auto; padding-top: 80px; }
-        .hero__title { color: #FFFFFF; margin-bottom: 24px; text-shadow: 0 2px 12px rgba(0, 0, 0, 0.3); }
-        .hero__subtitle { font-size: 1.2rem; color: #FFFFFF; font-weight: 400; margin-bottom: 40px; text-shadow: 0 1px 8px rgba(0, 0, 0, 0.25); }
-        .hero__actions { display: flex; gap: 16px; justify-content: center; }
-        /* About */
-        .section__header { margin-bottom: 60px; }
-        .section__desc { max-width: 700px; margin: 16px auto 0; color: var(--color-text-muted); font-size: 1.1rem; text-align: center; }
-        .about__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
-        .about__text p { margin-bottom: 20px; font-size: 1.1rem; color: var(--color-text-muted); }
-        .placeholder-img { background-color: #E2E8F0; border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; color: var(--color-text-muted); font-family: var(--font-body); font-size: 0.9rem; width: 100%; aspect-ratio: 4/3; overflow: hidden; }
-        .about__image { aspect-ratio: 4/5; background: url('https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80') center/cover; box-shadow: var(--shadow-soft); }
-        /* Rooms */
-        .rooms__grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 32px; }
-        .room-card { background: var(--color-bg-light); border-radius: var(--radius-md); overflow: hidden; box-shadow: var(--shadow-card); transition: transform 0.4s ease, box-shadow 0.4s ease; }
-        .room-card:hover { transform: translateY(-8px); box-shadow: var(--shadow-soft); }
-        .room-card__img { height: 250px; }
-        .room-card:nth-child(1) .room-card__img { background: url('https://berdyansk-sity.ru/ssl/u/74/345346372111f09c24b9d4f740f43b/-/8.jpg') center/cover; }
-        .room-card:nth-child(2) .room-card__img { background: url('https://berdyansk-sity.ru/ssl/u/66/6af3ae372711f0b695c28536dcc179/-/13.jpg') center/cover; }
-        .room-card:nth-child(3) .room-card__img { background: url('https://berdyansk-sity.ru/ssl/u/b0/99f664372711f08e04b829c541e8a1/-/L2ltYWdlcy9ob3RlbHMvODc5MTEvMTAuanBn.jpg') center/cover; }
-        .room-card__content { padding: 32px; }
-        .room-card__title { margin-bottom: 16px; color: var(--color-accent-tertiary); }
-        .room-card__features { display: flex; gap: 16px; margin-bottom: 16px; font-size: 0.9rem; color: var(--color-accent-secondary); flex-wrap: wrap; }
-        .room-card__desc { color: var(--color-text-muted); margin-bottom: 24px; font-size: 0.95rem; }
-        /* Benefits */
-        .benefits__grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 40px; margin-top: 60px; }
-        .benefit-item { text-align: center; padding: 32px; background: var(--color-bg-light); border-radius: var(--radius-md); box-shadow: var(--shadow-card); }
-        .benefit-item__icon { font-size: 2.5rem; margin-bottom: 20px; color: var(--color-accent-secondary); }
-        .benefit-item__title { margin-bottom: 12px; font-family: var(--font-body); font-weight: 500; }
-        .benefit-item__desc { color: var(--color-text-muted); font-size: 0.95rem; }
-        /* Booking */
-        .booking__container { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
-        .booking__form { background: var(--color-bg-light); padding: 40px; border-radius: var(--radius-lg); box-shadow: var(--shadow-soft); }
-        .form-group { margin-bottom: 20px; }
-        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-        label { display: block; margin-bottom: 8px; font-size: 0.9rem; color: var(--color-text-muted); }
-        input, select { width: 100%; padding: 14px 16px; border: 1px solid #E2E8F0; border-radius: var(--radius-sm); font-family: var(--font-body); font-size: 1rem; transition: border-color 0.3s ease; background-color: #FAFAFA; appearance: none; }
-        input:focus, select:focus { outline: none; border-color: var(--color-accent-primary); background-color: var(--color-bg-light); }
-        input.error { border-color: #e74c3c; }
-        .field-error { color: #e74c3c; font-size: 0.8rem; margin-top: 4px; display: none; }
-        .field-error.visible { display: block; }
-        .form-policy { margin-top: 16px; font-size: 0.8rem; color: var(--color-text-muted); text-align: center; }
-        /* Footer */
-        .footer { background: var(--color-bg-light); padding-top: 80px; border-top: 1px solid rgba(0, 0, 0, 0.05); }
-        .footer__container { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 40px; margin-bottom: 60px; }
-        .footer__desc { margin-top: 20px; color: var(--color-text-muted); max-width: 300px; }
-        .footer__links h4, .footer__contacts h4 { margin-bottom: 24px; font-weight: 500; }
-        .footer__links ul { list-style: none; }
-        .footer__links li { margin-bottom: 12px; }
-        .footer__links a { color: var(--color-text-muted); }
-        .footer__contacts p { color: var(--color-text-muted); margin-bottom: 12px; }
-        .socials { display: flex; gap: 16px; margin-top: 20px; }
-        .social-link { color: var(--color-accent-primary); font-weight: 500; }
-        .footer__bottom { background: var(--color-bg-alt); padding: 24px 0; text-align: center; color: var(--color-text-muted); font-size: 0.9rem; }
-        /* Modal */
-        .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(44, 62, 80, 0.55); backdrop-filter: blur(4px); z-index: 9999; align-items: center; justify-content: center; }
-        .modal-overlay.active { display: flex; }
-        .modal { background: var(--color-bg-main); border-radius: var(--radius-lg); padding: 48px 40px; max-width: 480px; width: calc(100% - 40px); box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15); animation: modalDropIn 0.4s cubic-bezier(0.16, 1, 0.3, 1); position: relative; }
-        @keyframes modalDropIn { from { opacity: 0; transform: translateY(-60px) scale(0.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
-        .modal__close { position: absolute; top: 16px; right: 20px; background: none; border: none; font-size: 1.6rem; color: var(--color-text-muted); cursor: pointer; line-height: 1; transition: color 0.2s; }
-        .modal__close:hover { color: var(--color-text-main); }
-        .modal__icon { font-size: 2.5rem; text-align: center; margin-bottom: 12px; }
-        .modal__title { font-family: var(--font-heading); font-size: 1.7rem; color: var(--color-accent-tertiary); text-align: center; margin-bottom: 8px; }
-        .modal__subtitle { text-align: center; color: var(--color-text-muted); font-size: 0.95rem; margin-bottom: 32px; }
-        .modal__table { width: 100%; border-collapse: collapse; }
-        .modal__table th { font-weight: 500; color: var(--color-text-muted); font-size: 0.9rem; border-bottom: 1px solid #E2E8F0; padding-bottom: 12px; }
-        .modal__table tr { border-bottom: 1px solid #EEE; }
-        .modal__table tr:last-child { border-bottom: none; }
-        .modal__table td { padding: 16px 8px; font-size: 1rem; color: var(--color-text-main); }
-        .modal__table td:last-child { text-align: right; font-family: var(--font-heading); font-size: 1.2rem; color: var(--color-accent-primary); white-space: nowrap; }
-        .modal__table .room-icon { margin-right: 10px; }
-        .modal__footer { margin-top: 28px; text-align: center; font-size: 0.85rem; color: var(--color-text-muted); }
-        /* Responsive */
-        @media (max-width: 900px) {
-            .about__grid, .booking__container { grid-template-columns: 1fr; }
-            .footer__container { grid-template-columns: 1fr; }
-            .nav, .header__btn { display: none; }
-            .burger-menu { display: flex; }
-            .hero__actions { flex-direction: column; }
+        body {
+            font-family: 'Jost', sans-serif;
+            font-weight: 300;
+            background: var(--cream);
+            color: var(--slate);
+            -webkit-font-smoothing: antialiased;
         }
-        @media (max-width: 600px) { .form-row { grid-template-columns: 1fr; } }
+
+        /* ── TOP BAR ── */
+        .topbar {
+            position: fixed; top: 0; left: 0; width: 100%; z-index: 100;
+            background: rgba(253,250,244,0.92);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(194,122,98,0.15);
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0 40px; height: 68px;
+        }
+        .topbar__logo {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.6rem; font-weight: 600;
+            color: var(--brick); letter-spacing: 0.02em;
+            text-decoration: none;
+        }
+        .topbar__logo span {
+            display: block; font-size: 0.6rem; font-family: 'Jost', sans-serif;
+            font-weight: 400; letter-spacing: 3px; text-transform: uppercase;
+            color: var(--muted); margin-top: -4px;
+        }
+        .topbar__back {
+            font-size: 0.85rem; letter-spacing: 1.5px; text-transform: uppercase;
+            color: var(--muted); text-decoration: none; font-weight: 400;
+            display: flex; align-items: center; gap: 8px;
+            transition: color 0.3s;
+        }
+        .topbar__back:hover { color: var(--brick); }
+        .topbar__back::before { content: "←"; font-size: 1rem; }
+
+        /* ── HERO ── */
+        .hero {
+            height: 100vh; min-height: 620px;
+            display: grid; grid-template-columns: 1fr 1fr;
+            padding-top: 68px;
+        }
+        /* ВАЖНО: здесь подставляется ГЛАВНОЕ ФОТО */
+        .hero__left {
+            background: url("img/main.jpg") center/cover no-repeat;
+            position: relative;
+        }
+        .hero__left::after {
+            content: '';
+            position: absolute; inset: 0;
+            background: linear-gradient(135deg, rgba(61,75,92,0.3) 0%, transparent 60%);
+        }
+        .hero__right {
+            background: var(--slate);
+            display: flex; flex-direction: column;
+            justify-content: center; padding: 60px 64px;
+        }
+        .hero__tag {
+            font-size: 0.75rem; letter-spacing: 3px; text-transform: uppercase;
+            color: var(--brick); margin-bottom: 20px; font-weight: 400;
+        }
+        .hero__title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(2.8rem, 5vw, 4.2rem);
+            font-weight: 300; line-height: 1.1;
+            color: var(--white); margin-bottom: 28px;
+        }
+        .hero__title em {
+            font-style: italic; color: var(--brick);
+        }
+        .hero__desc {
+            color: rgba(255,255,255,0.6); font-size: 1rem;
+            line-height: 1.7; margin-bottom: 48px; max-width: 380px;
+        }
+        .hero__price-box {
+            border-top: 1px solid rgba(255,255,255,0.12);
+            padding-top: 32px; display: flex; align-items: flex-end; gap: 24px;
+            flex-wrap: wrap;
+        }
+        .hero__price-label { font-size: 0.78rem; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.4); }
+        .hero__price-val {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 3rem; font-weight: 300; line-height: 1;
+            color: var(--white);
+        }
+        .hero__price-val sup { font-size: 1.2rem; vertical-align: super; }
+        .hero__price-note { font-size: 0.82rem; color: rgba(255,255,255,0.4); line-height: 1.5; max-width: 200px; }
+        .hero__cta {
+            margin-top: 36px;
+            display: inline-flex; align-items: center; gap: 10px;
+            padding: 16px 36px;
+            background: var(--brick); color: var(--white);
+            font-family: 'Jost', sans-serif; font-weight: 400;
+            font-size: 0.9rem; letter-spacing: 1px; text-transform: uppercase;
+            text-decoration: none; transition: background 0.3s, transform 0.3s;
+            border-radius: 3px; width: fit-content;
+        }
+        .hero__cta:hover { background: var(--brick-d); transform: translateY(-2px); }
+
+        /* ── AMENITIES STRIP ── */
+        .amenities {
+            background: var(--brick);
+            padding: 28px 40px;
+            display: flex; justify-content: center;
+            gap: 40px; flex-wrap: wrap;
+        }
+        .amenities__item {
+            display: flex; align-items: center; gap: 10px;
+            color: var(--white); font-size: 0.88rem; font-weight: 400;
+            letter-spacing: 0.5px;
+        }
+        .amenities__item .ic { font-size: 1.1rem; }
+
+        /* ── GALLERY ── */
+        .gallery {
+            padding: 100px 40px;
+            max-width: 1400px; margin: 0 auto;
+        }
+        .gallery__header {
+            display: flex; align-items: flex-end; justify-content: space-between;
+            margin-bottom: 56px;
+        }
+        .section-label {
+            font-size: 0.75rem; letter-spacing: 3px; text-transform: uppercase;
+            color: var(--brick); margin-bottom: 12px; display: block;
+        }
+        .section-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(2rem, 3.5vw, 3rem); font-weight: 300;
+            color: var(--slate); line-height: 1.1;
+        }
+        .gallery__grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            grid-template-rows: auto;
+            gap: 16px;
+        }
+        .gallery__item {
+            overflow: hidden; border-radius: 4px; cursor: pointer;
+            position: relative;
+        }
+        .gallery__item::after {
+            content: ''; position: absolute; inset: 0;
+            background: rgba(61,75,92,0);
+            transition: background 0.4s;
+        }
+        .gallery__item:hover::after { background: rgba(61,75,92,0.15); }
+        .gallery__item img {
+            width: 100%; height: 100%; object-fit: cover;
+            transition: transform 0.6s ease;
+            display: block;
+        }
+        .gallery__item:hover img { transform: scale(1.04); }
+
+        .gi-1 { grid-column: 1 / 7; grid-row: 1; height: 420px; }
+        .gi-2 { grid-column: 7 / 10; grid-row: 1; height: 420px; }
+        .gi-3 { grid-column: 10 / 13; grid-row: 1; height: 420px; }
+        .gi-4 { grid-column: 1 / 5; grid-row: 2; height: 360px; }
+        .gi-5 { grid-column: 5 / 9; grid-row: 2; height: 360px; }
+        .gi-6 { grid-column: 9 / 13; grid-row: 2; height: 360px; }
+
+        /* ── EQUIPMENT ── */
+        .equipment {
+            background: var(--warm);
+            padding: 100px 40px;
+        }
+        .equipment__inner {
+            max-width: 1200px; margin: 0 auto;
+            display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center;
+        }
+        .equipment__img {
+            border-radius: 4px; overflow: hidden;
+            box-shadow: var(--shadow);
+            aspect-ratio: 4/3;
+        }
+        .equipment__img img { width: 100%; height: 100%; object-fit: cover; }
+        .equipment__content { padding: 20px 0; }
+        .equipment__list {
+            list-style: none; margin-top: 40px;
+            display: grid; grid-template-columns: 1fr 1fr; gap: 0;
+        }
+        .equipment__list li {
+            padding: 18px 0; border-bottom: 1px solid rgba(61,75,92,0.1);
+            display: flex; align-items: center; gap: 14px;
+            font-size: 0.95rem; color: var(--slate);
+        }
+        .equipment__list li:last-child { border-bottom: none; }
+        .eq-dot {
+            width: 6px; height: 6px; border-radius: 50%;
+            background: var(--brick); flex-shrink: 0;
+        }
+
+        /* ── BOOKING CTA ── */
+        .cta-section {
+            padding: 100px 40px;
+            text-align: center;
+        }
+        .cta-section__inner { max-width: 700px; margin: 0 auto; }
+        .cta-section__title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(2.4rem, 4vw, 3.6rem); font-weight: 300;
+            color: var(--slate); margin: 16px 0 12px; line-height: 1.1;
+        }
+        .cta-section__title em { font-style: italic; color: var(--brick); }
+        .cta-section__warn {
+            background: rgba(194,122,98,0.1);
+            border-left: 3px solid var(--brick);
+            padding: 16px 20px; border-radius: 0 4px 4px 0;
+            margin: 28px 0 40px; text-align: left;
+            font-size: 0.9rem; color: var(--muted); line-height: 1.6;
+        }
+        .cta-section__phone {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2.6rem; font-weight: 300;
+            color: var(--slate); text-decoration: none;
+            display: block; margin-bottom: 8px;
+            transition: color 0.3s;
+        }
+        .cta-section__phone:hover { color: var(--brick); }
+        .cta-section__phone-label {
+            font-size: 0.78rem; letter-spacing: 2.5px; text-transform: uppercase;
+            color: var(--muted); margin-bottom: 40px; display: block;
+        }
+        .cta-buttons {
+            display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;
+        }
+        .btn-wa {
+            padding: 16px 36px; border-radius: 3px; font-weight: 400;
+            font-size: 0.9rem; letter-spacing: 1px; text-transform: uppercase;
+            text-decoration: none; transition: all 0.3s; display: inline-flex;
+            align-items: center; gap: 10px;
+        }
+        .btn-wa--fill {
+            background: #25D366; color: white;
+        }
+        .btn-wa--fill:hover { background: #1ebb58; transform: translateY(-2px); }
+        .btn-wa--tg {
+            background: #0088cc; color: white;
+        }
+        .btn-wa--tg:hover { background: #006fad; transform: translateY(-2px); }
+        .btn-wa--back {
+            background: transparent; border: 1px solid var(--brick);
+            color: var(--brick);
+        }
+        .btn-wa--back:hover { background: var(--brick); color: white; transform: translateY(-2px); }
+
+        /* ── FOOTER ── */
+        .footer {
+            background: var(--slate); padding: 40px;
+            text-align: center;
+        }
+        .footer__logo {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.8rem; color: var(--white); font-weight: 300;
+            opacity: 0.7;
+        }
+        .footer__text {
+            margin-top: 10px; font-size: 0.82rem;
+            color: rgba(255,255,255,0.35); letter-spacing: 1px;
+        }
+
+        /* ── LIGHTBOX ── */
+        .lb {
+            display: none; position: fixed; inset: 0; z-index: 9999;
+            background: rgba(10,10,10,0.95); align-items: center; justify-content: center;
+        }
+        .lb.open { display: flex; }
+        .lb__img {
+            max-width: 90vw; max-height: 90vh;
+            object-fit: contain; border-radius: 2px;
+            animation: lbIn 0.3s ease;
+        }
+        @keyframes lbIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to   { opacity: 1; transform: scale(1); }
+        }
+        .lb__close {
+            position: fixed; top: 24px; right: 28px;
+            color: white; font-size: 2rem; cursor: pointer;
+            background: none; border: none; opacity: 0.7;
+            transition: opacity 0.2s;
+        }
+        .lb__close:hover { opacity: 1; }
+        .lb__nav {
+            position: fixed; top: 50%; transform: translateY(-50%);
+            background: rgba(255,255,255,0.1); border: none; color: white;
+            font-size: 2rem; padding: 16px 20px; cursor: pointer;
+            transition: background 0.2s; border-radius: 2px;
+        }
+        .lb__nav:hover { background: rgba(255,255,255,0.2); }
+        .lb__prev { left: 20px; }
+        .lb__next { right: 20px; }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 900px) {
+            .hero { grid-template-columns: 1fr; height: auto; }
+            .hero__left { height: 50vw; min-height: 260px; }
+            .hero__right { padding: 48px 28px; }
+            .equipment__inner { grid-template-columns: 1fr; gap: 40px; }
+            .gallery { padding: 60px 20px; }
+            .gallery__grid {
+                grid-template-columns: 1fr 1fr;
+                grid-template-rows: auto;
+            }
+            .gi-1,.gi-2,.gi-3,.gi-4,.gi-5,.gi-6 {
+                grid-column: auto; grid-row: auto; height: 220px;
+            }
+            .amenities { gap: 20px; padding: 20px; }
+            .topbar { padding: 0 20px; }
+            .equipment { padding: 60px 20px; }
+            .cta-section { padding: 60px 20px; }
+            .equipment__list { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 500px) {
+            .gallery__grid { grid-template-columns: 1fr; }
+            .gi-1,.gi-2,.gi-3,.gi-4,.gi-5,.gi-6 { height: 260px; }
+        }
     </style>
 </head>
 <body>
-    <header class="header">
-        <div class="container header__container">
-            <div class="logo">
-                <span class="logo__text">Bonjour</span>
-                <span class="logo__sub">гостевой дом</span>
-            </div>
-            <nav class="nav">
-                <a href="#about" class="nav__link">О нас</a>
-                <a href="#rooms" class="nav__link">Номера</a>
-                <a href="#benefits" class="nav__link">Преимущества</a>
-                <a href="#booking" class="nav__link">Бронирование</a>
-                <a href="#contacts" class="nav__link">Контакты</a>
-            </nav>
-            <a href="#booking" class="btn btn--outline header__btn">Уточнить наличие</a>
-            <button class="burger-menu" aria-label="Открыть меню">
-                <span></span><span></span><span></span>
-            </button>
-        </div>
+
+    <!-- Top Bar -->
+    <header class="topbar">
+        <a href="index.html" class="topbar__logo">
+            Bonjour
+            <span>Гостевой дом</span>
+        </a>
+        <a href="index.html" class="topbar__back">На главную</a>
     </header>
 
-    <main>
-        <!-- Hero -->
-        <section class="hero">
-            <div class="container hero__container">
-                <div class="hero__content">
-                    <h1 class="hero__title">Ваш уютный дом у моря</h1>
-                    <p class="hero__subtitle">Атмосфера тёплого прованса, где продумана каждая деталь для вашего безмятежного отдыха в Бердянске.</p>
-                    <div class="hero__actions">
-                        <a href="#rooms" class="btn btn--primary">Смотреть номера</a>
-                        <a href="#booking" class="btn btn--secondary">Забронировать</a>
-                    </div>
+    <!-- Hero -->
+    <section class="hero">
+        <div class="hero__left"></div>
+        <div class="hero__right">
+            <p class="hero__tag">Гостевой дом Bonjour · Бердянск</p>
+            <h1 class="hero__title">2-местный<br><em>номер</em></h1>
+            <p class="hero__desc">Уютное пространство для двоих — авторский интерьер, кирпичные акценты, балкон и всё необходимое для комфортного отдыха у моря.</p>
+            <div class="hero__price-box">
+                <div>
+                    <p class="hero__price-label">Стоимость от</p>
+                    <p class="hero__price-val"><sup>₽</sup>3 000</p>
                 </div>
+                <p class="hero__price-note">Цена меняется в зависимости от сезона и кол-ва дней</p>
             </div>
-        </section>
-
-        <!-- О нас -->
-        <section id="about" class="section about">
-            <div class="container about__container">
-                <div class="section__header">
-                    <h2 class="section__title">Место, куда хочется возвращаться</h2>
-                    <p class="section__desc">Мы создали «Бонжур» для тех, кто ценит спокойствие, чистоту и эстетику. Вдали от шумных набережных, но всего в нескольких минутах от ласкового моря.</p>
-                </div>
-                <div class="about__grid">
-                    <div class="about__text">
-                        <p>У нас нет суеты больших отелей — только искреннее гостеприимство, запах утреннего кофе и номера, в которых спится как дома.</p>
-                        <p>Наш стиль вдохновлен легким провансом: светлые тона, натуральные материалы, забота в каждой мелочи и тот самый южный воздух, ради которого вы приезжаете.</p>
-                    </div>
-                    <div class="about__image-wrapper">
-                        <div class="about__image placeholder-img"></div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Номера -->
-        <section id="rooms" class="section rooms bg-light">
-            <div class="container">
-                <div class="section__header text-center">
-                    <h2 class="section__title">Светлые комнаты для сладких снов</h2>
-                    <p class="section__desc">Выбирайте тот формат отдыха, который подходит именно вам.</p>
-                </div>
-                <div class="rooms__grid">
-                    <article class="room-card">
-                        <div class="room-card__img placeholder-img"></div>
-                        <div class="room-card__content">
-                            <h3 class="room-card__title">Стандарт</h3>
-                            <div class="room-card__features">
-                                <span>🛏 2 места</span>
-                                <span>🚿 Своя ванная</span>
-                                <span>❄ Кондиционер</span>
-                            </div>
-                            <p class="room-card__desc">Идеально для пары. Двуспальная кровать с ортопедическим матрасом, свежий светлый интерьер и вид на тихий дворик.</p>
-                            <a href="dvuhmestniy.html" class="btn btn--outline room-card__btn">Подробнее о номере</a>
-                        </div>
-                    </article>
-                    <article class="room-card">
-                        <div class="room-card__img placeholder-img"></div>
-                        <div class="room-card__content">
-                            <h3 class="room-card__title">Семейный Комфорт</h3>
-                            <div class="room-card__features">
-                                <span>🛏 3 места</span>
-                                <span>🚿 Своя ванная</span>
-                                <span>❄ Кондиционер</span>
-                            </div>
-                            <p class="room-card__desc">Просторный номер для тех, кто путешествует с детьми. Здесь достаточно места для игр и спокойного отдыха всей семьи.</p>
-                            <a href="trehmestniy.html" class="btn btn--outline room-card__btn">Подробнее о номере</a>
-                        </div>
-                    </article>
-                    <article class="room-card">
-                        <div class="room-card__img placeholder-img"></div>
-                        <div class="room-card__content">
-                            <h3 class="room-card__title">Семейный Комфорт +</h3>
-                            <div class="room-card__features">
-                                <span>🛏 3 места</span>
-                                <span>☕ Мини-кухня</span>
-                                <span>❄ Кондиционер</span>
-                            </div>
-                            <p class="room-card__desc">Уютный 4-местный номер для комфортного отдыха семьи или компании. Пространства, чтобы каждый чувствовал себя удобно и спокойно.</p>
-                            <a href="chetirehmestniy.html" class="btn btn--outline room-card__btn">Подробнее о номере</a>
-                        </div>
-                    </article>
-                </div>
-            </div>
-        </section>
-
-        <!-- Преимущества -->
-        <section id="benefits" class="section benefits">
-            <div class="container">
-                <h2 class="section__title text-center">Забота в каждой детали</h2>
-                <div class="benefits__grid">
-                    <div class="benefit-item">
-                        <div class="benefit-item__icon">🌿</div>
-                        <h4 class="benefit-item__title">Домашняя атмосфера</h4>
-                        <p class="benefit-item__desc">Уютный закрытый дворик для вечерних бесед и утреннего кофе.</p>
-                    </div>
-                    <div class="benefit-item">
-                        <div class="benefit-item__icon">🌊</div>
-                        <h4 class="benefit-item__title">Близость к морю</h4>
-                        <p class="benefit-item__desc">Всего 10-15 минут неспешной прогулки — и вы на пляже.</p>
-                    </div>
-                    <div class="benefit-item">
-                        <div class="benefit-item__icon">✨</div>
-                        <h4 class="benefit-item__title">Чистота и свежесть</h4>
-                        <p class="benefit-item__desc">Безупречное европейское качество уборки для вашего спокойствия.</p>
-                    </div>
-                    <div class="benefit-item">
-                        <div class="benefit-item__icon">👨‍👩‍👧‍👦</div>
-                        <h4 class="benefit-item__title">Для всей семьи</h4>
-                        <p class="benefit-item__desc">Спокойно, безопасно и комфортно даже с самыми маленькими гостями.</p>
-                    </div>
-                    <div class="benefit-item">
-                        <div class="benefit-item__icon">🥐</div>
-                        <h4 class="benefit-item__title">Вкусные завтраки</h4>
-                        <p class="benefit-item__desc">По желанию начинайте день с горячего домашнего завтрака.</p>
-                    </div>
-                    <div class="benefit-item">
-                        <div class="benefit-item__icon">🅿️</div>
-                        <h4 class="benefit-item__title">Удобная парковка</h4>
-                        <p class="benefit-item__desc">Безопасное место для вашего автомобиля на территории.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Бронирование -->
-        <section id="booking" class="section booking bg-accent">
-            <div class="container booking__container">
-                <div class="booking__info">
-                    <h2 class="section__title text-white">Запланируйте свой отдых</h2>
-                    <p class="section__desc text-white">Оставьте заявку, и мы подберем для вас лучший вариант размещения. Отвечаем быстро, с заботой и вниманием к вашим пожеланиям.</p>
-                </div>
-                <form class="booking__form" id="bookingForm" action="javascript:void(0)" novalidate>
-                    <div class="form-group">
-                        <label for="name">Ваше имя</label>
-                        <input type="text" id="name" name="name" placeholder="Как к вам обращаться?" required>
-                        <span class="field-error" id="nameError">Пожалуйста, введите ваше имя</span>
-                    </div>
-                    <div class="form-group">
-                        <label for="phone">Номер телефона</label>
-                        <input type="tel" id="phone" name="phone" placeholder="+7 (___) ___-__-__" required>
-                        <span class="field-error" id="phoneError">Пожалуйста, введите номер телефона</span>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="dates">Даты заезда / выезда</label>
-                            <input type="text" id="dates" name="dates" placeholder="Например, 15 - 25 августа">
-                        </div>
-                        <div class="form-group">
-                            <label for="guests">Количество гостей</label>
-                            <input type="number" id="guests" name="guests" placeholder="Взрослые и дети" min="1">
-                        </div>
-                    </div>
-                    <button type="submit" class="btn btn--primary btn--full">Узнать стоимость и наличие</button>
-                    <p class="form-policy">Отправляя заявку, вы соглашаетесь с политикой конфиденциальности.</p>
-                </form>
-            </div>
-        </section>
-    </main>
-
-    <!-- Modal с ценами -->
-    <div class="modal-overlay" id="priceModal">
-        <div class="modal">
-            <button class="modal__close" id="modalClose" aria-label="Закрыть">&times;</button>
-            <div class="modal__icon">🏡</div>
-            <h3 class="modal__title">Стоимость номеров</h3>
-            <p class="modal__subtitle">Актуальные цены на сезон 2026</p>
-            <table class="modal__table">
-                <thead>
-                    <tr>
-                        <th style="text-align: left;">Номер</th>
-                        <th style="text-align: right;">Цена</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td><span class="room-icon">🛏</span><a href="dvuhmestniy.html" style="text-decoration: underline; text-underline-offset: 3px;">2-х местные</a></td>
-                        <td>3 000 руб.</td>
-                    </tr>
-                    <tr>
-                        <td><span class="room-icon">🛏</span><a href="trehmestniy.html" style="text-decoration: underline; text-underline-offset: 3px;">3-х местные</a></td>
-                        <td>3 500 руб.</td>
-                    </tr>
-                    <tr>
-                        <td><span class="room-icon">🛏</span><a href="chetirehmestniy.html" style="text-decoration: underline; text-underline-offset: 3px;">4-х местные</a></td>
-                        <td>4 000 руб.</td>
-                    </tr>
-                </tbody>
-            </table>
-            <p class="modal__footer">Для бронирования свяжитесь с нами по телефону<br>или напишите в WhatsApp / Telegram</p>
+            <a href="tel:+79900093188" class="hero__cta">📞 Позвонить и забронировать</a>
         </div>
+    </section>
+
+    <!-- Amenities Strip -->
+    <div class="amenities">
+        <div class="amenities__item"><span class="ic">🛏</span> Двуспальная кровать</div>
+        <div class="amenities__item"><span class="ic">❄️</span> Кондиционер</div>
+        <div class="amenities__item"><span class="ic">📺</span> Smart-TV</div>
+        <div class="amenities__item"><span class="ic">🚿</span> Душевая комната</div>
+        <div class="amenities__item"><span class="ic">🧊</span> Мини-холодильник</div>
+        <div class="amenities__item"><span class="ic">☕</span> Чайник и посуда</div>
     </div>
 
-    <!-- Подвал -->
-    <footer id="contacts" class="footer">
-        <div class="container footer__container">
-            <div class="footer__brand">
-                <div class="logo">
-                    <span class="logo__text">Bonjour</span>
-                    <span class="logo__sub">гостевой дом</span>
-                </div>
-                <p class="footer__desc">Тот самый прованс на берегу Азовского моря. С любовью и заботой о вашем отдыхе.</p>
+    <!-- Gallery -->
+    <section class="gallery">
+        <div class="gallery__header">
+            <div>
+                <span class="section-label">Фотографии</span>
+                <h2 class="section-title">Настоящий<br>уют в деталях</h2>
             </div>
-            <div class="footer__links">
-                <h4>Навигация</h4>
-                <ul>
-                    <li><a href="#about">О нас</a></li>
-                    <li><a href="#rooms">Номера</a></li>
-                    <li><a href="#benefits">Преимущества</a></li>
-                    <li><a href="#booking">Забронировать</a></li>
+        </div>
+        <div class="gallery__grid">
+            <!-- ВАЖНО: здесь вставляются фото для галереи -->
+            <!-- Можно менять src="..." на свои пути к картинкам -->
+            <div class="gallery__item gi-1" data-idx="0">
+                <img src="img/gallery1.jpg" alt="Фото комната 1">
+            </div>
+            <div class="gallery__item gi-2" data-idx="1">
+                <img src="img/gallery2.jpg" alt="Фото санузел 1">
+            </div>
+            <div class="gallery__item gi-3" data-idx="2">
+                <img src="img/gallery3.jpg" alt="Фото санузел 2">
+            </div>
+            <div class="gallery__item gi-4" data-idx="3">
+                <img src="img/main.jpg" alt="Фото комната 2">
+            </div>
+        </div>
+    </section>
+
+    <!-- Equipment (Оснащение) -->
+    <section class="equipment">
+        <div class="equipment__inner">
+            <div class="equipment__img">
+                <img src="img/gallery1.jpg" alt="Интерьер">
+            </div>
+            <div class="equipment__content">
+                <span class="section-label">Оснащение</span>
+                <h2 class="section-title" style="margin-bottom: 24px;">Всё для вашего<br>комфорта</h2>
+                <p style="color: var(--muted); line-height: 1.6;">
+                    Каждый элемент интерьера продуман так, чтобы вы могли полностью расслабиться 
+                    и забыть о бытовых мелочах. Наслаждайтесь отдыхом, а об остальном мы уже позаботились.
+                </p>
+                <ul class="equipment__list">
+                    <li><div class="eq-dot"></div> Ортопедический матрас</li>
+                    <li><div class="eq-dot"></div> Постельное белье премиум</li>
+                    <li><div class="eq-dot"></div> Набор полотенец на каждого гостя</li>
+                    <li><div class="eq-dot"></div> Фен в ванной комнате</li>
+                    <li><div class="eq-dot"></div> Индивидуальный кондиционер</li>
+                    <li><div class="eq-dot"></div> Сушилка для белья на балконе</li>
                 </ul>
             </div>
-            <div class="footer__contacts">
-                <h4>Контакты</h4>
-                <p>📍 г. Бердянск, ул. [Адрес]</p>
-                <p>📞 +7 (990) 009-31-88</p>
-                <div class="socials">
-                    <a href="https://wa.me/79900093188" class="social-link">WhatsApp</a>
-                    <a href="https://t.me/79900093188" class="social-link">Telegram</a>
-                </div>
+        </div>
+    </section>
+
+    <!-- Booking CTA -->
+    <section class="cta-section">
+        <div class="cta-section__inner">
+            <h2 class="cta-section__title">Хотите <em>забронировать</em> номер?</h2>
+            <p style="color: var(--muted); margin-bottom: 20px;">
+                Свяжитесь с нами удобным для вас способом. Мы ответим на все вопросы 
+                и подберем лучшие даты для вашего отдыха.
+            </p>
+            <div class="cta-section__warn">
+                <strong>Обратите внимание:</strong> Бронирование номеров осуществляется только 
+                после предоплаты за первые сутки проживания.
+            </div>
+            <span class="cta-section__phone-label">Звоните в любое время</span>
+            <a href="tel:+79900093188" class="cta-section__phone">+7 (990) 009-31-88</a>
+            
+            <div class="cta-buttons" style="margin-top: 40px;">
+                <a href="https://wa.me/79900093188" class="btn-wa btn-wa--fill">
+                    💬 Написать в WhatsApp
+                </a>
+                <a href="https://t.me/bgrdhk" class="btn-wa btn-wa--tg">
+                    ✈️ Написать в Telegram
+                </a>
+                <a href="index.html" class="btn-wa btn-wa--back">
+                    Перейти на главную
+                </a>
             </div>
         </div>
-        <div class="footer__bottom">
-            <div class="container">
-                <p>&copy; 2026 Гостевой дом «Бонжур». Все права защищены.</p>
-            </div>
-        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer__logo">Bonjour</div>
+        <p class="footer__text">© 2024 Гостевой дом Bonjour. Г. Бердянск, ул. Чубаря</p>
     </footer>
 
+    <!-- Lightbox (для просмотра фото на полный экран) -->
+    <div class="lb" id="lightbox">
+        <button class="lb__close" id="lbClose">×</button>
+        <button class="lb__nav lb__prev" id="lbPrev">‹</button>
+        <img src="" alt="" class="lb__img" id="lbImg">
+        <button class="lb__nav lb__next" id="lbNext">›</button>
+    </div>
+
+    <!-- Скрипт для галереи (увеличение по клику) -->
     <script>
-        if ('scrollRestoration' in history) {
-            history.scrollRestoration = 'manual';
-            window.scrollTo(0, 0);
+        const galleryItems = document.querySelectorAll('.gallery__item img');
+        const lb = document.getElementById('lightbox');
+        const lbImg = document.getElementById('lbImg');
+        const lbClose = document.getElementById('lbClose');
+        const lbPrev = document.getElementById('lbPrev');
+        const lbNext = document.getElementById('lbNext');
+
+        let currentIdx = 0;
+        let imagesList = [];
+
+        galleryItems.forEach((img, idx) => {
+            imagesList.push(img.src);
+            img.parentElement.addEventListener('click', () => {
+                currentIdx = idx;
+                openLightbox(img.src);
+            });
+        });
+
+        function openLightbox(src) {
+            lbImg.src = src;
+            lb.classList.add('open');
+            document.body.style.overflow = 'hidden';
         }
 
-        document.addEventListener('DOMContentLoaded', function() {
+        function closeLightbox() {
+            lb.classList.remove('open');
+            document.body.style.overflow = '';
+        }
 
-            if (window.location.hash) {
-                setTimeout(function() {
-                    window.scrollTo(0, 0);
-                    history.replaceState(null, '', window.location.pathname);
-                }, 10);
+        function showNext() {
+            currentIdx = (currentIdx + 1) % imagesList.length;
+            lbImg.src = imagesList[currentIdx];
+        }
+
+        function showPrev() {
+            currentIdx = (currentIdx - 1 + imagesList.length) % imagesList.length;
+            lbImg.src = imagesList[currentIdx];
+        }
+
+        lbClose.addEventListener('click', closeLightbox);
+        lbNext.addEventListener('click', showNext);
+        lbPrev.addEventListener('click', showPrev);
+
+        lb.addEventListener('click', (e) => {
+            if (e.target === lb) {
+                closeLightbox();
             }
-
-            var header = document.querySelector('.header');
-
-            // Плавный скролл
-            document.querySelectorAll('a[href^="#"]').forEach(function(anchor) {
-                anchor.addEventListener('click', function(e) {
-                    var targetId = this.getAttribute('href');
-                    if (!targetId || targetId === '#') {
-                        e.preventDefault();
-                        return;
-                    }
-                    var targetElement = document.querySelector(targetId);
-                    if (targetElement) {
-                        e.preventDefault();
-                        var headerOffset = 80;
-                        var elementPosition = targetElement.getBoundingClientRect().top;
-                        var offsetPosition = elementPosition + window.pageYOffset - headerOffset;
-                        window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
-                        history.replaceState(null, '', window.location.pathname);
-                    }
-                });
-            });
-
-            // Тень хедера при скролле
-            window.addEventListener('scroll', function() {
-                header.style.boxShadow = window.scrollY > 50 ? '0 4px 20px rgba(0,0,0,0.05)' : 'none';
-            });
-
-            // Бургер-меню
-            var burgerMenu = document.querySelector('.burger-menu');
-            var nav = document.querySelector('.nav');
-            if (burgerMenu) {
-                burgerMenu.addEventListener('click', function() {
-                    var isOpen = nav.style.display === 'flex';
-                    nav.style.display = isOpen ? 'none' : 'flex';
-                    nav.style.flexDirection = 'column';
-                    nav.style.position = 'absolute';
-                    nav.style.top = '80px';
-                    nav.style.left = '0';
-                    nav.style.width = '100%';
-                    nav.style.background = '#FDFBF7';
-                    nav.style.padding = '20px';
-                    nav.style.borderBottom = '1px solid rgba(0,0,0,0.05)';
-                });
-            }
-
-            // Форма бронирования
-            var bookingForm = document.getElementById('bookingForm');
-            if (bookingForm) {
-                bookingForm.addEventListener('submit', function(e) {
-                    e.preventDefault();
-                    e.stopPropagation();
-
-                    var nameInput = document.getElementById('name');
-                    var phoneInput = document.getElementById('phone');
-                    var nameError = document.getElementById('nameError');
-                    var phoneError = document.getElementById('phoneError');
-                    var isValid = true;
-
-                    // Сброс ошибок
-                    nameInput.classList.remove('error');
-                    phoneInput.classList.remove('error');
-                    nameError.classList.remove('visible');
-                    phoneError.classList.remove('visible');
-
-                    // Проверка имени
-                    if (!nameInput.value.trim()) {
-                        nameInput.classList.add('error');
-                        nameError.classList.add('visible');
-                        isValid = false;
-                    }
-
-                    // Проверка телефона
-                    if (!phoneInput.value.trim()) {
-                        phoneInput.classList.add('error');
-                        phoneError.classList.add('visible');
-                        isValid = false;
-                    }
-
-                    if (isValid) {
-                        // Показываем модальное окно
-                        document.getElementById('priceModal').classList.add('active');
-
-                        // Отправка в Telegram
-                        var BOT_TOKEN = '8004043910:AAGhP67iPubcPEcvq-cH-NQV0J7QOdVpfI0';
-                        var CHAT_ID = '773956172';
-
-                        var dates = document.getElementById('dates').value.trim() || 'не указаны';
-                        var guests = document.getElementById('guests').value.trim() || 'не указано';
-
-                        var msg = '🏡 <b>НОВАЯ ЗАЯВКА — Гостевой дом Bonjour</b>\n\n'
-                            + '👤 <b>Имя:</b> ' + nameInput.value.trim() + '\n'
-                            + '📞 <b>Телефон:</b> ' + phoneInput.value.trim() + '\n'
-                            + '📅 <b>Даты:</b> ' + dates + '\n'
-                            + '👥 <b>Гостей:</b> ' + guests + '\n\n'
-                            + '📌 <i>' + new Date().toLocaleString('ru-RU') + '</i>';
-
-                        fetch('https://api.telegram.org/bot' + BOT_TOKEN + '/sendMessage', {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({
-                                chat_id: CHAT_ID,
-                                text: msg,
-                                parse_mode: 'HTML'
-                            })
-                        }).catch(function(err) {
-                            console.warn('Telegram error:', err);
-                        });
-                    }
-                });
-            }
-
-            // Закрытие модального окна
-            var modal = document.getElementById('priceModal');
-            var modalClose = document.getElementById('modalClose');
-
-            if (modalClose) {
-                modalClose.addEventListener('click', function() {
-                    modal.classList.remove('active');
-                });
-            }
-
-            modal.addEventListener('click', function(e) {
-                if (e.target === modal) {
-                    modal.classList.remove('active');
-                }
-            });
-
-            document.addEventListener('keydown', function(e) {
-                if (e.key === 'Escape') {
-                    modal.classList.remove('active');
-                }
-            });
         });
     </script>
 </body>
