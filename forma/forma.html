@@ -1,1 +1,190 @@
-1220371
+    <!-- ============================================== -->
+    <!-- НАЧАЛО БЛОКА БРОНИРОВАНИЯ (Копировать отсюда) -->
+    <!-- ============================================== -->
+    <div class="booking-widget">
+        <!-- Бронирование -->
+        <section id="booking" class="section booking bg-accent">
+            <div class="container booking__container">
+                <div class="booking__info">
+                    <h2 class="section__title text-white">Запланируйте свой отдых</h2>
+                    <p class="section__desc text-white">Оставьте заявку, и мы подберем для вас лучший вариант
+                        размещения. Отвечаем быстро, с заботой и вниманием к вашим пожеланиям.</p>
+                </div>
+                <form class="booking__form" id="widgetBookingForm" action="javascript:void(0)" novalidate>
+
+                    <!-- !!! ВАЖНО: СКРЫТОЕ ПОЛЕ ДЛЯ ССЫЛКИ НА ТЕКУЩУЮ СТРАНИЦУ !!! -->
+                    <!-- Измените атрибут value на нужную ссылку вручную при вставке на каждую страницу -->
+                    <input type="hidden" id="pageSourceUrl" name="pageSourceUrl" value="УКАЖИТЕ_ССЫЛКУ_ЗДЕСЬ">
+
+                    <div class="form-group">
+                        <label for="widgetName">Ваше имя</label>
+                        <input type="text" id="widgetName" name="name" placeholder="Как к вам обращаться?" required>
+                        <span class="field-error" id="widgetNameError">Пожалуйста, введите ваше имя</span>
+                    </div>
+                    <div class="form-group">
+                        <label for="widgetPhone">Номер телефона</label>
+                        <input type="tel" id="widgetPhone" name="phone" placeholder="+7 (___) ___-__-__" required>
+                        <span class="field-error" id="widgetPhoneError">Пожалуйста, введите номер телефона</span>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="widgetDates">Даты заезда / выезда</label>
+                            <input type="text" id="widgetDates" name="dates" placeholder="Например, 15 - 25 августа">
+                        </div>
+                        <div class="form-group">
+                            <label for="widgetGuests">Количество гостей</label>
+                            <input type="number" id="widgetGuests" name="guests" placeholder="Взрослые и дети" min="1">
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn--primary btn--full">Узнать стоимость и наличие</button>
+                    <p class="form-policy">Отправляя заявку, вы соглашаетесь с политикой конфиденциальности.</p>
+                </form>
+            </div>
+        </section>
+
+        <!-- Modal с ценами -->
+        <div class="modal-overlay" id="widgetPriceModal">
+            <div class="modal">
+                <button class="modal__close" id="widgetModalClose" aria-label="Закрыть">&times;</button>
+                <div class="modal__icon">🏡</div>
+                <h3 class="modal__title">Стоимость номеров</h3>
+                <p class="modal__subtitle">Актуальные цены на сезон 2026</p>
+                <table class="modal__table">
+                    <thead>
+                        <tr>
+                            <th style="text-align: left;">Номер</th>
+                            <th style="text-align: right;">Цена</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span class="room-icon">🛏</span><a href="dvuhmestniy.html"
+                                    style="text-decoration: underline; text-underline-offset: 3px;">2-х местные</a></td>
+                            <td>3 000 руб.</td>
+                        </tr>
+                        <tr>
+                            <td><span class="room-icon">🛏</span><a href="trehmestniy.html"
+                                    style="text-decoration: underline; text-underline-offset: 3px;">3-х местные</a></td>
+                            <td>3 500 руб.</td>
+                        </tr>
+                        <tr>
+                            <td><span class="room-icon">🛏</span><a href="chetirehmestniy.html"
+                                    style="text-decoration: underline; text-underline-offset: 3px;">4-х местные</a></td>
+                            <td>4 000 руб.</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p class="modal__footer">Для бронирования свяжитесь с нами по телефону<br>или напишите в WhatsApp /
+                    Telegram</p>
+            </div>
+        </div>
+
+        <!-- Скрипт для работы формы и модального окна -->
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                var bookingForm = document.getElementById('widgetBookingForm');
+                if (bookingForm) {
+                    bookingForm.addEventListener('submit', function (e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+
+                        var nameInput = document.getElementById('widgetName');
+                        var phoneInput = document.getElementById('widgetPhone');
+                        var nameError = document.getElementById('widgetNameError');
+                        var phoneError = document.getElementById('widgetPhoneError');
+                        var isValid = true;
+
+                        // Сброс ошибок
+                        nameInput.classList.remove('error');
+                        phoneInput.classList.remove('error');
+                        nameError.classList.remove('visible');
+                        phoneError.classList.remove('visible');
+
+                        // Проверка имени
+                        if (!nameInput.value.trim()) {
+                            nameInput.classList.add('error');
+                            nameError.classList.add('visible');
+                            isValid = false;
+                        }
+
+                        // Проверка телефона
+                        if (!phoneInput.value.trim()) {
+                            phoneInput.classList.add('error');
+                            phoneError.classList.add('visible');
+                            isValid = false;
+                        }
+
+                        if (isValid) {
+                            // Показываем модальное окно
+                            var priceModal = document.getElementById('widgetPriceModal');
+                            if (priceModal) priceModal.classList.add('active');
+
+                            // Получаем ссылку на исходную страницу из скрытого поля
+                            var pageSourceUrlInput = document.getElementById('pageSourceUrl');
+                            var pageUrl = (pageSourceUrlInput && pageSourceUrlInput.value.trim() !== 'https://berdyansk-zhilye.ru/morskaya-21' && pageSourceUrlInput.value.trim() !== '')
+                                ? pageSourceUrlInput.value.trim()
+                                : window.location.href; // если не заполнено, берет текущую ссылку браузера
+
+                            // Отправка в Telegram
+                            var BOT_TOKEN = '8004043910:AAGhP67iPubcPEcvq-cH-NQV0J7QOdVpfI0';
+                            var CHAT_ID = '773956172';
+
+                            var dates = document.getElementById('widgetDates').value.trim() || 'не указаны';
+                            var guests = document.getElementById('widgetGuests').value.trim() || 'не указано';
+
+                            var msg = '🏡 <b>НОВАЯ ЗАЯВКА — Гостевой дом Bonjour / Центр</b>\n\n'
+                                + '👤 <b>Имя:</b> ' + nameInput.value.trim() + '\n'
+                                + '📞 <b>Телефон:</b> ' + phoneInput.value.trim() + '\n'
+                                + '📅 <b>Даты:</b> ' + dates + '\n'
+                                + '👥 <b>Гостей:</b> ' + guests + '\n'
+                                + '🔗 <b>Страница:</b> ' + pageUrl + '\n\n'
+                                + '📌 <i>' + new Date().toLocaleString('ru-RU') + '</i>';
+
+                            fetch('https://api.telegram.org/bot' + BOT_TOKEN + '/sendMessage', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({
+                                    chat_id: CHAT_ID,
+                                    text: msg,
+                                    parse_mode: 'HTML'
+                                })
+                            }).catch(function (err) {
+                                console.warn('Telegram error:', err);
+                            });
+                        }
+                    });
+                }
+
+                // Закрытие модального окна
+                var modal = document.getElementById('widgetPriceModal');
+                var modalClose = document.getElementById('widgetModalClose');
+
+                if (modalClose && modal) {
+                    modalClose.addEventListener('click', function () {
+                        modal.classList.remove('active');
+                    });
+                }
+
+                if (modal) {
+                    modal.addEventListener('click', function (e) {
+                        if (e.target === modal) {
+                            modal.classList.remove('active');
+                        }
+                    });
+                }
+
+                document.addEventListener('keydown', function (e) {
+                    if (e.key === 'Escape' && modal) {
+                        modal.classList.remove('active');
+                    }
+                });
+            });
+        </script>
+    </div>
+    <!-- ============================================== -->
+    <!-- КОНЕЦ БЛОКА БРОНИРОВАНИЯ                       -->
+    <!-- ============================================== -->
+
+</body>
+
+</html>
