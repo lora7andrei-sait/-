@@ -3,12 +3,11 @@
 <head>
     <meta charset="utf-8"/>
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-    <title>Управление объектами | Панель</title>
+    <title>Генератор Карточки Объекта | Панель</title>
     <!-- Подключение Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <!-- Современный шрифт Plus Jakarta Sans -->
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
-    
     <!-- Подключение JSZip для генерации архивов -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
     
@@ -52,17 +51,19 @@
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
         ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
         
-        .listing-card { 
-            animation: slideIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-            transition: all 0.3s ease; 
+        .fade-in { 
+            animation: fadeIn 0.5s ease forwards;
         }
-        .listing-card:hover { 
-            transform: translateY(-3px); 
-            box-shadow: 0 12px 30px -10px rgba(20, 184, 166, 0.2); 
-            border-color: #ccfbf1;
+        .slide-up {
+            animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateY(15px); }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
     </style>
@@ -73,8 +74,8 @@
     <!-- Шапка платформы -->
     <header class="mb-8 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-            <h1 class="text-3xl md:text-4xl font-bold text-slate-900 tracking-tight">Объекты</h1>
-            <p class="text-slate-500 mt-1 text-sm md:text-base">Управление объявлениями и регистрация новых</p>
+            <h1 class="text-3xl md:text-4xl font-bold text-slate-900 tracking-tight">Генератор страницы</h1>
+            <p class="text-slate-500 mt-1 text-sm md:text-base">Внесите данные о жилье и получите готовую карточку-превью</p>
         </div>
         <div class="flex items-center gap-3 bg-white px-4 py-2 rounded-full shadow-sm border border-slate-100">
             <div class="w-8 h-8 rounded-full bg-brand-100 flex items-center justify-center text-brand-600 font-bold text-sm">
@@ -86,19 +87,18 @@
 
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start">
         
-        <!-- ЛЕВАЯ КОЛОНКА: ФОРМА -->
-        <main class="lg:col-span-7 glass-panel shadow-glass rounded-[2rem] overflow-hidden">
-            <div class="p-6 md:p-8 border-b border-white/50 bg-white/40 flex justify-between items-center">
+        <!-- === ЛЕВАЯ КОЛОНКА: ФОРМА === -->
+        <main class="lg:col-span-6 glass-panel shadow-glass rounded-[2rem] overflow-hidden">
+            <div class="p-6 border-b border-white/50 bg-white/40 flex justify-between items-center">
                 <div>
-                    <h2 class="text-xl font-bold text-slate-800">Новое объявление</h2>
-                    <p class="text-slate-500 text-sm mt-1">Внесите данные о жилье</p>
+                    <h2 class="text-xl font-bold text-slate-800">Редактор данных</h2>
                 </div>
                 <div class="flex items-center gap-2">
                     <span class="relative flex h-3 w-3">
                       <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-400 opacity-75"></span>
                       <span class="relative inline-flex rounded-full h-3 w-3 bg-brand-500"></span>
                     </span>
-                    <span class="text-xs font-semibold text-brand-600 uppercase tracking-wide">Запись</span>
+                    <span class="text-xs font-semibold text-brand-600 uppercase tracking-wide">Заполнение</span>
                 </div>
             </div>
 
@@ -113,8 +113,8 @@
                     
                     <div class="grid grid-cols-2 md:grid-cols-6 gap-4 border-b border-slate-200/50 pb-6">
                         <div class="col-span-2 md:col-span-6">
-                            <label class="block text-sm font-semibold text-slate-600 mb-2">Название объекта</label>
-                            <input required name="title" type="text" placeholder="Например: Уютная студия у моря" 
+                            <label class="block text-sm font-semibold text-slate-600 mb-2">Заголовок страницы</label>
+                            <input required name="title" type="text" placeholder="Например: Уютная студия с видом на море" 
                                    class="w-full px-4 py-3.5 rounded-xl border-slate-200 bg-white/60 focus:bg-white focus:border-brand-500 focus:ring-brand-500 transition-all shadow-sm"/>
                         </div>
                         
@@ -138,7 +138,7 @@
                         </div>
                     </div>
 
-                    <div class="grid grid-cols-2 md:grid-cols-6 gap-4 pt-4">
+                    <div class="grid grid-cols-2 md:grid-cols-6 gap-4 pt-4 border-b border-slate-200/50 pb-6">
                         <div class="col-span-1 md:col-span-2">
                             <label class="block text-sm font-semibold text-slate-600 mb-2">Макс. гостей</label>
                             <input required name="guests" type="number" min="1" placeholder="2" 
@@ -146,7 +146,7 @@
                         </div>
                         
                         <div class="col-span-1 md:col-span-2">
-                            <label class="block text-sm font-semibold text-slate-600 mb-2">Комнат всего</label>
+                            <label class="block text-sm font-semibold text-slate-600 mb-2">Комнаты</label>
                             <input required name="rooms" type="number" min="1" placeholder="2" 
                                    class="w-full px-4 py-3.5 rounded-xl border-slate-200 bg-white/60 focus:bg-white focus:border-brand-500 transition-all shadow-sm"/>
                         </div>
@@ -162,6 +162,15 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- ОПИСАНИЕ ОБЪЕКТА -->
+                    <div class="grid grid-cols-1 gap-4 pt-4">
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-600 mb-2">Полное текстовое описание</label>
+                            <textarea required name="description" rows="5" placeholder="Опишите все удобства, расположение, бытовую технику, спальные места и другие плюсы жилья..." 
+                                   class="w-full px-4 py-3.5 rounded-xl border-slate-200 bg-white/60 focus:bg-white focus:border-brand-500 focus:ring-brand-500 transition-all shadow-sm resize-none"></textarea>
+                        </div>
+                    </div>
                 </section>
 
                 <!-- Фотографии -->
@@ -172,15 +181,13 @@
                             <h3 class="text-lg font-bold text-slate-800">Медиа файлы</h3>
                         </div>
                     </div>
-                    <div id="drop-zone" class="relative group cursor-pointer border-2 border-dashed border-slate-300 bg-white/40 rounded-2xl p-8 transition-all hover:bg-brand-50/50 hover:border-brand-400 text-center shadow-sm">
-                        <!-- accept="image/*" ограничивает выбор только до картинок -->
+                    <div id="drop-zone" class="relative group cursor-pointer border-2 border-dashed border-slate-300 bg-white/40 rounded-2xl p-8 transition-all hover:bg-brand-50/50 hover:border-brand-400 text-center shadow-sm relative overflow-hidden">
                         <input id="photo-input" type="file" multiple accept="image/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"/>
-                        <div class="flex flex-col items-center">
-                            <div class="w-16 h-16 bg-white shadow-sm rounded-full flex items-center justify-center mb-4 text-slate-400 group-hover:text-brand-500 group-hover:scale-110 transition-transform duration-300">
-                                <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"></path></svg>
+                        <div class="flex flex-col items-center pointer-events-none">
+                            <div class="w-14 h-14 bg-white shadow-sm rounded-full flex items-center justify-center mb-4 text-slate-400 group-hover:text-brand-500 transition-colors">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"></path></svg>
                             </div>
-                            <p id="upload-text" class="text-sm font-semibold text-slate-700">Перетащите фото сюда или нажмите</p>
-                            <p class="text-xs text-slate-400 mt-2 font-medium">JPEG, PNG картинки</p>
+                            <p id="upload-text" class="text-sm font-semibold text-slate-700">Нажмите для выбора фото</p>
                         </div>
                     </div>
                 </section>
@@ -189,11 +196,11 @@
                 <section>
                     <div class="flex items-center space-x-3 mb-5">
                         <div class="w-1.5 h-6 bg-brand-500 rounded-full"></div>
-                        <h3 class="text-lg font-bold text-slate-800">Контакты для брони</h3>
+                        <h3 class="text-lg font-bold text-slate-800">Контакты на карточке</h3>
                     </div>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                            <input required name="contact_name" type="text" placeholder="Имя владельца/агента" 
+                            <input required name="contact_name" type="text" placeholder="Имя (Агент/Владелец)" 
                                    class="w-full px-4 py-3.5 rounded-xl border-slate-200 bg-white/60 focus:bg-white focus:border-brand-500 transition-all shadow-sm"/>
                         </div>
                         <div>
@@ -205,374 +212,70 @@
 
                 <div class="pt-4 border-t border-slate-200/60">
                     <button id="submit-btn" type="submit" class="w-full bg-slate-900 hover:bg-brand-600 active:scale-[0.99] text-white font-bold py-4 rounded-xl transition-all duration-300 text-lg flex justify-center items-center gap-2 shadow-lg hover:shadow-brand-500/25">
-                        <span id="submit-text">Сохранить в базу объектов</span>
+                        <span id="submit-text">Сгенерировать страницу</span>
                         <svg id="submit-icon" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3"></path></svg>
                     </button>
                 </div>
             </form>
         </main>
 
-        <!-- ПРАВАЯ КОЛОНКА: БАЗА ОБЪЕКТОВ -->
-        <aside class="lg:col-span-5 h-[800px] flex flex-col glass-panel shadow-glass rounded-[2rem] p-6 lg:p-8 relative border-t-4 border-t-slate-800">
+        <!-- === ПРАВАЯ КОЛОНКА: ШАБЛОН ПРЕДПРОСМОТРА СТРАНИЦЫ === -->
+        <aside class="lg:col-span-6 h-[850px] flex flex-col glass-panel shadow-glass rounded-[2rem] p-6 lg:p-8 relative border-t-4 border-t-slate-800">
             
-            <div class="flex items-center justify-between mb-8 gap-4 flex-wrap">
+            <div class="flex items-center justify-between mb-6 gap-4 flex-wrap">
                 <div>
-                    <h2 class="text-xl font-bold text-slate-900">База объектов</h2>
-                    <p class="text-slate-500 text-sm mt-1">Организация по папкам</p>
+                    <h2 class="text-xl font-bold text-slate-900">Карточка-шаблон</h2>
+                    <p class="text-slate-500 text-sm mt-1">Вид страницы вашего объекта</p>
                 </div>
                 
-                <div class="flex items-center gap-2">
-                    <!-- Защищенная Кнопка Выгрузки -->
-                    <button id="download-btn" class="flex items-center gap-2 bg-slate-800 hover:bg-brand-500 text-white font-semibold px-4 py-2.5 rounded-xl text-sm transition-colors shadow-sm cursor-pointer border border-transparent">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-                        <span class="hidden sm:inline" id="download-text">Скачать базу</span>
-                    </button>
-
-                    <!-- Счетчик -->
-                    <div class="bg-slate-100 border border-slate-200 text-slate-700 font-bold px-3 py-2.5 rounded-xl text-sm shadow-inner flex items-center gap-2">
-                        <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path></svg>
-                        <span id="listings-count">0</span>
-                    </div>
-                </div>
+                <!-- ЗАЩИЩЕННАЯ КНОПКА СКАЧИВАНИЯ (ПОЯВЛЯЕТСЯ ТОЛЬКО ПОСЛЕ ЗАПОЛНЕНИЯ) -->
+                <button id="download-btn" class="hidden items-center gap-2 bg-slate-800 hover:bg-brand-500 text-white font-semibold px-4 py-2.5 rounded-xl text-sm transition-colors shadow-sm cursor-pointer border border-transparent fade-in">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                    <span class="hidden sm:inline" id="download-text">Скачать страницу с медиа</span>
+                </button>
             </div>
 
-            <!-- Контейнер объектов -->
-            <div id="listings-container" class="flex-1 overflow-y-auto pr-2 space-y-4 pb-10" style="scrollbar-width: thin;">
-                
-                <!-- Заглушка, если пусто -->
-                <div id="empty-state" class="h-full flex flex-col items-center justify-center text-center px-4">
-                    <div class="w-24 h-24 bg-white/60 rounded-full flex items-center justify-center mb-6 shadow-sm border border-slate-100">
-                        <svg class="w-10 h-10 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 002-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
-                    </div>
-                    <h3 class="font-bold text-slate-700 text-lg">Папка пуста</h3>
-                    <p class="text-sm text-slate-500 mt-2 leading-relaxed">Внесите данные слева, чтобы начать формировать выгрузку.</p>
+            <!-- ПУСТОЕ СОСТОЯНИЕ (ДО ЗАПОЛНЕНИЯ) -->
+            <div id="empty-state" class="flex-1 flex flex-col items-center justify-center text-center px-4">
+                <div class="w-24 h-24 bg-white/60 rounded-full flex items-center justify-center mb-6 shadow-sm border border-slate-100">
+                    <svg class="w-10 h-10 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122"></path></svg>
                 </div>
-
+                <h3 class="font-bold text-slate-700 text-lg">Заполните форму слева</h3>
+                <p class="text-sm text-slate-500 mt-2 leading-relaxed max-w-sm">После нажатия кнопки «Сгенерировать», здесь красиво отобразится страница с описанием и фотографиями, готовая к выгрузке.</p>
             </div>
 
-            <div class="absolute bottom-0 left-0 w-full h-12 bg-gradient-to-t from-white/90 to-transparent rounded-b-[2rem] pointer-events-none"></div>
-        </aside>
-
-    </div>
-</div>
-
-<script>
-    const form = document.getElementById('registration-form');
-    const photoInput = document.getElementById('photo-input');
-    const dropZone = document.getElementById('drop-zone');
-    const uploadText = document.getElementById('upload-text');
-    const container = document.getElementById('listings-container');
-    const emptyState = document.getElementById('empty-state');
-    const submitBtn = document.getElementById('submit-btn');
-    const countBadge = document.getElementById('listings-count');
-    const downloadBtn = document.getElementById('download-btn');
-
-    // Хранилище объектов (в памяти браузера)
-    let listings = JSON.parse(localStorage.getItem('my_properties') || '[]');
-
-    // Функция сжатия картинок (чтобы не переполнить LocalStorage)
-    function compressImage(file, maxSize = 1000, quality = 0.7) {
-        return new Promise((resolve, reject) => {
-            const reader = new FileReader();
-            reader.readAsDataURL(file);
-            reader.onload = (event) => {
-                const img = new Image();
-                img.src = event.target.result;
-                img.onload = () => {
-                    let width = img.width;
-                    let height = img.height;
-
-                    // Меняем размер пропорционально
-                    if (width > height) {
-                        if (width > maxSize) {
-                            height = Math.round(height * (maxSize / width));
-                            width = maxSize;
-                        }
-                    } else {
-                        if (height > maxSize) {
-                            width = Math.round(width * (maxSize / height));
-                            height = maxSize;
-                        }
-                    }
-
-                    const canvas = document.createElement('canvas');
-                    canvas.width = width;
-                    canvas.height = height;
-                    const ctx = canvas.getContext('2d');
-                    ctx.drawImage(img, 0, 0, width, height);
-
-                    // Конвертируем обратно в изображение JPEG (Base64)
-                    const dataUrl = canvas.toDataURL('image/jpeg', quality);
-                    resolve(dataUrl);
-                };
-                img.onerror = reject;
-            };
-            reader.onerror = reject;
-        });
-    }
-
-    // Визуал при выборе фото
-    photoInput.addEventListener('change', (e) => {
-        if(e.target.files.length > 0) {
-            dropZone.classList.add('border-brand-500', 'bg-brand-50/70');
-            uploadText.innerText = `Подготовлено фото: ${e.target.files.length}`;
-            uploadText.classList.add('text-brand-600');
-        }
-    });
-
-    // Отрисовка карточек
-    function renderListings() {
-        if(listings.length === 0) {
-            emptyState.style.display = 'flex';
-            container.innerHTML = '';
-            container.appendChild(emptyState);
-            countBadge.innerText = '0';
-            return;
-        }
-
-        emptyState.style.display = 'none';
-        container.innerHTML = '';
-        countBadge.innerText = listings.length;
-
-        listings.forEach((item) => {
-            const card = document.createElement('div');
-            card.className = 'listing-card bg-white p-4 sm:p-5 rounded-2xl border border-slate-100 flex gap-4 sm:gap-5 relative group shadow-card pointer-events-auto';
-            const hue = (item.id * 89) % 360; 
-            
-            // Если есть фото, показываем миниатюру первого
-            let photoMarkup = `
-                <div class="w-20 h-20 sm:w-24 sm:h-24 rounded-xl flex-shrink-0 shadow-inner flex flex-col justify-center items-center" style="background: linear-gradient(135deg, hsl(${hue}, 80%, 90%), hsl(${hue}, 60%, 75%))">
-                    <svg class="w-6 h-6 text-black/20 mb-1" fill="currentColor" viewBox="0 0 24 24"><path d="M19.5 21a3 3 0 003-3v-4.5a3 3 0 00-3-3h-15a3 3 0 00-3 3V18a3 3 0 003 3h15zM1.5 10.146V6a3 3 0 013-3h5.379a2.25 2.25 0 011.59.659l2.122 2.121c.14.141.331.22.53.22H19.5a3 3 0 013 3v1.146A4.483 4.483 0 0019.5 9h-15a4.483 4.483 0 00-3 1.146z"></path></svg>
-                    <span class="text-[10px] font-bold text-black/30 bg-white/20 px-2 rounded-md">${item.rooms} комн.</span>
-                </div>
-            `;
-            
-            if(item.photos && item.photos.length > 0) {
-                photoMarkup = `
-                    <div class="w-20 h-20 sm:w-24 sm:h-24 rounded-xl flex-shrink-0 shadow-inner overflow-hidden relative border border-slate-100">
-                        <img src="${item.photos[0]}" class="w-full h-full object-cover" />
-                        <div class="absolute bottom-1 right-1 bg-black/60 backdrop-blur text-white text-[9px] font-bold px-1.5 py-0.5 rounded">
-                            <svg class="w-3 h-3 inline pb-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
-                            ${item.photos.length}
-                        </div>
-                    </div>
-                `;
-            }
-
-            card.innerHTML = `
-                <div class="absolute top-0 bottom-0 left-0 w-1.5 bg-brand-500 rounded-l-2xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                ${photoMarkup}
+            <!-- ШАБЛОН СТРАНИЦЫ (Скрыт по умолчанию) -->
+            <div id="preview-panel" class="hidden flex-1 overflow-y-auto pr-2 pb-10 space-y-6 slide-up" style="scrollbar-width: thin;">
                 
-                <div class="flex-1 min-w-0 py-0.5 flex flex-col justify-between">
-                    <div>
-                        <div class="flex justify-between items-start mb-1">
-                            <h4 class="font-bold text-slate-800 text-sm sm:text-base truncate pr-2">${item.title}</h4>
-                            <span class="text-xs sm:text-sm font-bold text-brand-700 bg-brand-50 border border-brand-100 px-2 sm:px-2.5 py-0.5 rounded-lg whitespace-nowrap">
-                                ${item.price} ₽
-                            </span>
-                        </div>
-                        <p class="text-[11px] sm:text-xs text-slate-500 font-medium leading-tight mt-1">
-                            ${item.type} • ${item.guests} гостя<br/>
-                            Этаж: ${item.floor}/${item.total_floors}
-                        </p>
+                <!-- Главное фото / Обложка -->
+                <div id="prev-main-img" class="w-full h-56 sm:h-64 rounded-2xl bg-slate-200 bg-cover bg-center shadow-sm flex items-center justify-center relative overflow-hidden border border-slate-100">
+                    <div id="prev-no-img" class="text-slate-400 flex flex-col items-center">
+                        <svg class="w-10 h-10 mb-2 opacity-50" fill="currentColor" viewBox="0 0 24 24"><path d="M19.5 21a3 3 0 003-3v-4.5a3 3 0 00-3-3h-15a3 3 0 00-3 3V18a3 3 0 003 3h15zM1.5 10.146V6a3 3 0 013-3h5.379a2.25 2.25 0 011.59.659l2.122 2.121c.14.141.331.22.53.22H19.5a3 3 0 013 3v1.146A4.483 4.483 0 0019.5 9h-15a4.483 4.483 0 00-3 1.146z"></path></svg>
+                        <span class="text-xs font-bold uppercase tracking-wider">Без фото</span>
                     </div>
-                    
-                    <div class="flex items-center justify-between mt-2 sm:mt-0">
-                        <span class="text-[10px] sm:text-xs font-bold text-slate-400 bg-slate-50 border border-slate-100 px-2 py-1 rounded-md">ID: ${item.id}</span>
-                        <button onclick="deleteListing(${item.id})" class="text-[11px] sm:text-xs text-red-500 hover:text-red-600 font-bold opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-50 px-2.5 py-1.5 rounded-md">
-                            Удалить
-                        </button>
+                    <div id="prev-gallery-count" class="absolute bottom-3 right-3 bg-black/60 backdrop-blur text-white text-xs font-bold px-3 py-1.5 rounded-lg hidden flex items-center gap-1.5">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                        <span id="prev-photo-count"></span> фото
                     </div>
                 </div>
-            `;
-            container.appendChild(card);
-        });
-    }
 
-    // Удаление объекта
-    window.deleteListing = function(id) {
-        listings = listings.filter(l => l.id !== id);
-        localStorage.setItem('my_properties', JSON.stringify(listings));
-        renderListings();
-    }
+                <!-- Заголовок и цена -->
+                <div class="flex flex-col sm:flex-row justify-between items-start gap-4 border-b border-slate-200 pb-5">
+                    <div class="flex-1">
+                        <p id="prev-type" class="text-brand-600 font-bold text-[11px] uppercase tracking-wider bg-brand-50 inline-block px-2 py-1 rounded mb-2"></p>
+                        <h3 id="prev-title" class="text-2xl md:text-3xl font-extrabold text-slate-900 leading-tight"></h3>
+                    </div>
+                    <div class="bg-slate-900 px-4 py-2.5 rounded-xl text-center shadow-md shrink-0 w-full sm:w-auto">
+                        <span class="text-white font-extrabold text-2xl" id="prev-price"></span>
+                        <span class="block text-slate-400 text-[10px] font-bold uppercase tracking-wide mt-0.5">Руб / Сутки</span>
+                    </div>
+                </div>
 
-    // Сабмит формы
-    form.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        
-        const originalContent = submitBtn.innerHTML;
-        submitBtn.innerHTML = '<svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Обработка фото...';
-        submitBtn.disabled = true;
-
-        try {
-            const formData = new FormData(form);
-            
-            // Чтение и сжатие фото
-            const photosArray = [];
-            if (photoInput.files.length > 0) {
-                for (let i = 0; i < photoInput.files.length; i++) {
-                    const file = photoInput.files[i];
-                    if(file.type.startsWith('image/')) {
-                        const base64 = await compressImage(file);
-                        photosArray.push(base64);
-                    }
-                }
-            }
-            
-            const newObject = {
-                id: Math.floor(100000 + Math.random() * 900000),
-                title: formData.get('title'),
-                type: formData.get('type'),
-                guests: formData.get('guests'),
-                rooms: formData.get('rooms'),
-                floor: formData.get('floor'),
-                total_floors: formData.get('total_floors'),
-                contact_name: formData.get('contact_name'),
-                phone: formData.get('phone'),
-                price: Number(formData.get('price')).toLocaleString('ru-RU'),
-                photos: photosArray // сохраняем массив картинок
-            };
-
-            listings.unshift(newObject);
-            
-            // Если слишком много фото, localStorage может не вместить, ставим try/catch
-            try {
-                localStorage.setItem('my_properties', JSON.stringify(listings));
-            } catch (err) {
-                alert('Лимит памяти браузера исчерпан! Скачайте архив, удалите старые объекты и попробуйте снова.');
-                listings.shift(); // удаляем то, что не влезло
-                submitBtn.innerHTML = originalContent;
-                submitBtn.disabled = false;
-                return;
-            }
-            
-            // Очистка формы
-            form.reset();
-            dropZone.classList.remove('border-brand-500', 'bg-brand-50/70');
-            uploadText.innerText = 'Перетащите фото сюда или нажмите';
-            uploadText.classList.remove('text-brand-600');
-            
-            renderListings();
-
-            // Индикация успеха
-            submitBtn.innerHTML = '<svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Объявление добавлено!';
-            submitBtn.classList.replace('bg-slate-900', 'bg-brand-500');
-            submitBtn.classList.replace('hover:bg-brand-600', 'hover:bg-brand-400');
-            
-            setTimeout(() => {
-                submitBtn.innerHTML = originalContent;
-                submitBtn.classList.replace('bg-brand-500', 'bg-slate-900');
-                submitBtn.classList.replace('hover:bg-brand-400', 'hover:bg-brand-600');
-                submitBtn.disabled = false;
-            }, 2000);
-
-        } catch (error) {
-            console.error(error);
-            alert("Ошибка при обработке формы.");
-            submitBtn.innerHTML = originalContent;
-            submitBtn.disabled = false;
-        }
-    });
-
-    // ==========================================
-    // ЛОГИКА ЗАЩИЩЕННОЙ ВЫГРУЗКИ (ARCHIVE .ZIP)
-    // ==========================================
-    downloadBtn.addEventListener('click', () => {
-        if(listings.length === 0) {
-            alert('Сначала добавьте хотя бы один объект!');
-            return;
-        }
-
-        const pwd = prompt('Введите пароль для скачивания полной базы (Текст + Фото):');
-        
-        if (pwd === 'Andy777') {
-            
-            const btnText = document.getElementById('download-text');
-            const origText = btnText.innerText;
-            btnText.innerText = 'Архивация...';
-            downloadBtn.disabled = true;
-
-            setTimeout(() => {
-                // Создаем ZIP архив
-                const zip = new JSZip();
-                
-                // Главный файл-отчет
-                let report = '=======================================\n';
-                report += '  ОБЩИЙ ОТЧЕТ БАЗЫ ОБЪЕКТОВ (С ФОТО)\n';
-                report += '=======================================\n';
-                report += `Дата: ${new Date().toLocaleDateString('ru-RU')} ${new Date().toLocaleTimeString('ru-RU')}\n`;
-                report += `Всего объектов: ${listings.length}\n\n`;
-
-                listings.forEach((item, index) => {
-                    // Создаем папку под каждый объект (очищаем название от запрещенных знаков)
-                    const safeTitle = item.title.replace(/[\/\\:*?"<>|]/g, "_");
-                    const folderName = `${index + 1}. [ID-${item.id}] ${safeTitle}`;
-                    
-                    // Создаем папку в ZIP
-                    const folder = zip.folder(folderName);
-                    
-                    // Формируем текстовый файл внутри этой папки
-                    let objReport = `ИНФОРМАЦИЯ ОБ ОБЪЕКТЕ\n======================\n`;
-                    objReport += `ID: ${item.id}\n`;
-                    objReport += `Название: ${item.title}\n`;
-                    objReport += `Категория: ${item.type}\n`;
-                    objReport += `Цена: ${item.price} руб/сутки\n`;
-                    objReport += `----------------------\n`;
-                    objReport += `ХАРАКТЕРИСТИКИ:\n`;
-                    objReport += `Комнат: ${item.rooms}\n`;
-                    objReport += `Макс. гостей: ${item.guests}\n`;
-                    objReport += `Этаж: ${item.floor} из ${item.total_floors}\n`;
-                    objReport += `----------------------\n`;
-                    objReport += `ВЛАДЕЛЕЦ/КОНТАКТЫ:\n`;
-                    objReport += `Имя: ${item.contact_name}\n`;
-                    objReport += `Телефон: ${item.phone}\n\n`;
-                    objReport += `Приложенных фото: ${item.photos ? item.photos.length : 0}\n`;
-                    
-                    // Кладем текст в папку
-                    folder.file("Данные_объекта.txt", objReport);
-                    
-                    // Добавляем фотографии в эту же папку
-                    if (item.photos && item.photos.length > 0) {
-                        item.photos.forEach((base64Url, pIndex) => {
-                            // Формат base64Url: "data:image/jpeg;base64,/9j/4AAQ..."
-                            // JSZip нужен только сам код, без префикса
-                            const base64Data = base64Url.split(',')[1];
-                            folder.file(`Фото_${pIndex + 1}.jpg`, base64Data, {base64: true});
-                        });
-                    }
-
-                    // Пишем краткое саммари в общий отчет
-                    report += `[ ОБЪЕКТ #${index + 1} | ID: ${item.id} ] - ${item.title} (${item.price} руб)\n`;
-                });
-                
-                // Кладем общий отчет в корень архива
-                zip.file("Общий_список_объектов.txt", report);
-
-                // Запускаем генерацию и скачивание ZIP
-                zip.generateAsync({type:"blob"}).then(function(content) {
-                    const url = URL.createObjectURL(content);
-                    const a = document.createElement('a');
-                    a.href = url;
-                    a.download = `База_Объектов_${new Date().toISOString().split('T')[0]}.zip`; 
-                    document.body.appendChild(a);
-                    a.click();
-                    document.body.removeChild(a);
-                    URL.revokeObjectURL(url);
-                    
-                    btnText.innerText = origText;
-                    downloadBtn.disabled = false;
-                    alert('Авторизация успешна! ZIP-Архив скачан.');
-                });
-
-            }, 500); // небольшая задержка чтобы UI успел перерисовать кнопку на "Архивация..."
-
-        } else if (pwd !== null) {
-            alert('Доступ запрещен: Неверный пароль!');
-        }
-    });
-
-    // Старт
-    renderListings();
-</script>
-</body>
-</html>
+                <!-- Плашки характеристик -->
+                <div class="flex flex-wrap gap-2">
+                    <div class="px-3 py-2 bg-white border border-slate-100 shadow-sm text-slate-700 text-sm font-semibold rounded-xl flex items-center gap-2">
+                        <svg class="w-4 h-4 text-brand-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                        <span id="prev-guests"></span> Мест
+                    </div>
+                    <div class="px-3 py-2 bg-white border border-slate-100 shadow-sm text-slate-700 text-sm font-semibold rounded-xl flex items-center gap-2">
+                        <svg class="w-4 h-4 text-brand-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 
