@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Генератор Карточки Объекта</title>
+
+    <!-- Подключение шрифтов -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    
+    <!-- Подключение Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            900: '#0c4a6e',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- JSZip -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+
+    <style>
+        /* Анимация появления */
+        .slide-up {
+            animation: slideUp 0.4s ease-out forwards;
+        }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Стили скроллбара */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans h-screen flex flex-col overflow-hidden">
+
+<!-- Шапка -->
+<header class="bg-white border-b border-slate-200 px-6 py-4 flex justify-between items-center shrink-0 z-10 shadow-sm relative">
+    <div class="flex items-center gap-3">
+        <div class="w-10 h-10 bg-brand-500 text-white rounded-xl flex items-center justify-center font-bold text-xl shadow-md">B</div>
+        <h1 class="text-xl font-bold tracking-tight text-slate-900">Добавление объявления</h1>
+    </div>
+    <div class="flex items-center gap-3 sm:gap-4">
+        <button type="button" id="clear-btn" class="hidden items-center gap-1.5 bg-red-50 hover:bg-red-100 text-red-600 px-4 py-2 rounded-xl font-semibold transition-all text-sm sm:text-base border border-red-100 shadow-sm leading-none h-[40px]">
+            <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+            <span class="hidden sm:inline">Удалить</span>
+        </button>
+        <!-- Кнопка скачивания появится только после генерации -->
+        <button type="button" id="download-btn" class="hidden items-center gap-2 bg-slate-900 hover:bg-slate-800 text-white px-5 py-2.5 rounded-xl font-semibold transition-all shadow-md group border border-slate-900 leading-none h-[40px]">
+            <svg class="w-5 h-5 text-brand-400 group-hover:text-brand-300 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+            <span id="download-text">Скачать ZIP</span>
+        </button>
+    </div>
+</header>
+
+<!-- Основной контент -->
+<div class="flex-1 flex overflow-hidden">
+    
+    <!-- ЛЕВАЯ ЧАСТЬ: ФОРМА -->
+    <div class="w-full lg:w-1/2 xl:w-[500px] bg-white border-r border-slate-200 overflow-y-auto shrink-0 relative flex flex-col">
+        <form id="registration-form" class="p-6 space-y-6">
+            
+            <div>
+                <h2 class="text-2xl font-bold font-serif text-slate-900 mb-1">Новый объект</h2>
+                <p class="text-sm text-slate-500">Заполните данные для создания карточки объекта</p>
+            </div>
+
+            <!-- Базовые данные -->
+            <div class="space-y-4 bg-slate-50 p-5 rounded-2xl border border-slate-100">
+                <h3 class="text-sm font-bold uppercase tracking-wider text-slate-400">Основное</h3>
+                
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-1">Название (Заголовок)</label>
+                    <input type="text" name="title" required placeholder="Например: Уютный 4-местный номер у моря" 
+                           class="w-full px-4 py-2.5 bg-white border border-slate-300 rounded-xl focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-all">
+                </div>
+                
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">ID объекта</label>
+                        <input type="text" name="object_id" placeholder="Например: 1001" 
+                               class="w-full px-4 py-2.5 bg-white border border-slate-300 rounded-xl focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-all">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">Категория</label>
+                        <select name="type" required class="w-full px-4 py-2.5 bg-white border border-slate-300 rounded-xl focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-all appearance-none">
+                            <option value="Гостевой дом">Гостевой дом</option>
+                            <option value="Номер">Номер</option>
+                            <option value="Квартира">Квартира</option>
+                            <option value="Коттедж">Коттедж</option>
+                            <option value="Апартаменты">Апартаменты</option>
+                        </select>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-1">Цена за сутки (₽)</label>
+                    <input type="number" name="price" required placeholder="3000" 
+                           class="w-full px-4 py-2.5 bg-white border border-slate-300 rounded-xl focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-all">
+                </div>
+            </div>
+
+            <!-- Характеристики -->
+            <div class="space-y-4 bg-slate-50 p-5 rounded-2xl border border-slate-100">
+                <h3 class="text-sm font-bold uppercase tracking-wider text-slate-400">Характеристики</h3>
+                
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">Кол-во мест</label>
+                        <input type="number" name="guests" required placeholder="2-4" 
+                               class="w-full px-4 py-2.5 bg-white border border-slate-300 rounded-xl focus:ring-2 focus:ring-brand-500 outline-none transition-all">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">Количество комнат</label>
+                        <input type="number" name="rooms" required placeholder="1" 
+                               class="w-full px-4 py-2.5 bg-white border border-slate-300 rounded-xl focus:ring-2 focus:ring-brand-500 outline-none transition-all">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">Этаж</label>
+                        <input type="number" name="floor" required placeholder="1" 
+                               class="w-full px-4 py-2.5 bg-white border border-slate-300 rounded-xl focus:ring-2 focus:ring-brand-500 outline-none transition-all">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">Всего этажей</label>
+                        <input type="number" name="total_floors" required placeholder="2" 
+                               class="w-full px-4 py-2.5 bg-white border border-slate-300 rounded-xl focus:ring-2 focus:ring-brand-500 outline-none transition-all">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Описание -->
+            <div>
+                <label class="block text-sm font-medium text-slate-700 mb-1">Описание объекта</label>
+                <textarea name="description" rows="4" required placeholder="Подробно опишите все преимущества..."
+                          class="w-full px-4 py-3 bg-white border border-slate-300 rounded-xl focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-all resize-none"></textarea>
+            </div>
+
+            <!-- Контакты -->
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-1">Контактное лицо</label>
+                    <input type="text" name="contact_name" required placeholder="Анна" 
+                           class="w-full px-4 py-2.5 bg-white border border-slate-300 rounded-xl focus:ring-2 focus:ring-brand-500 outline-none transition-all">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-1">Телефон</label>
+                    <input type="tel" name="phone" required placeholder="+7 (900) 000-00-00" 
+                           class="w-full px-4 py-2.5 bg-white border border-slate-300 rounded-xl focus:ring-2 focus:ring-brand-500 outline-none transition-all">
+                </div>
+            </div>
+
+            <!-- Фотографии -->
+            <div class="space-y-2">
+                <label class="block text-sm font-medium text-slate-700">Фотографии</label>
+                <label id="drop-zone" for="photo-input" class="relative flex flex-col items-center justify-center p-6 border-2 border-dashed border-slate-300 bg-slate-50 rounded-2xl cursor-pointer hover:bg-slate-100 transition-colors group">
+                    <input type="file" id="photo-input" name="photos" multiple accept="image/*" class="sr-only">
+                    <div class="p-3 bg-white rounded-full shadow-sm mb-3 group-hover:scale-110 transition-transform">
+                        <svg class="w-6 h-6 text-brand-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                    </div>
+                    <span id="upload-text" class="text-sm font-medium text-slate-600 text-center">Нажмите, чтобы загрузить<br><span class="text-xs text-slate-400 font-normal mt-1 block">Можно выбрать несколько (JPEG, PNG)</span></span>
+                </label>
+            </div>
+
+            <!-- Кнопка генерации -->
+            <div class="pt-4 mt-2 border-t border-slate-200">
+                <button type="submit" id="submit-btn" class="w-full bg-brand-500 hover:bg-brand-600 text-white py-3.5 rounded-xl font-bold text-lg transition-all shadow-md flex items-center justify-center gap-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                    <span id="submit-text">Сгенерировать карточку</span>
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- ПРАВАЯ ЧАСТЬ: ПРЕВЬЮ -->
+    <div class="hidden lg:flex flex-1 flex-col bg-slate-100 relative overflow-hidden">
+        
+        <!-- Заголовок панели -->
+        <div class="px-8 py-5 flex items-center justify-between border-b border-slate-200/60 bg-slate-100/50 backdrop-blur z-10">
+            <h2 class="text-sm font-bold tracking-widest uppercase text-slate-400">Предпросмотр</h2>
+            <button type="button" id="save-to-tg-btn" class="hidden items-center gap-2 bg-brand-500 hover:bg-brand-600 text-white px-4 py-2 rounded-xl font-bold transition-all shadow-sm text-sm border border-brand-600">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"></path></svg>
+                <span id="save-tg-text">Сохранить</span>
+            </button>
+        </div>
+
+        <div class="flex-1 overflow-y-auto px-8 py-6 relative" style="scrollbar-width: thin;">
+            <div class="max-w-2xl mx-auto h-full flex flex-col">
+                
+                <!-- Экран "пусто" -->
+                <div id="empty-state" class="flex-1 flex flex-col items-center justify-center text-center px-4 slide-up">
+                    <div class="w-24 h-24 bg-white rounded-3xl shadow-sm flex items-center justify-center mb-6">
+                        <svg class="w-10 h-10 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-700 mb-2">Создайте карточку</h3>
+                    <p class="text-slate-500 max-w-sm">Заполните форму слева и нажмите «Сгенерировать», чтобы увидеть результат</p>
+                </div>
+
+                <!-- САМО ПРЕВЬЮ -->
+                <aside id="preview-panel" class="hidden flex-1 overflow-y-auto pb-10 space-y-6 slide-up w-full">
+                    
+                    <!-- Главное фото -->
+                    <div id="prev-main-img" class="w-full h-56 sm:h-72 rounded-2xl bg-slate-200 bg-cover bg-center shadow-sm flex items-center justify-center relative overflow-hidden border border-slate-100">
+                        <div id="prev-no-img" class="text-slate-400 flex flex-col items-center">
+                            <svg class="w-10 h-10 mb-2 opacity-50" fill="currentColor" viewBox="0 0 24 24"><path d="M19.5 21a3 3 0 003-3v-4.5a3 3 0 00-3-3h-15a3 3 0 00-3 3V18a3 3 0 003 3h15zM1.5 10.146V6a3 3 0 013-3h5.379a2.25 2.25 0 011.59.659l2.122 2.121c.14.141.331.22.53.22H19.5a3 3 0 013 3v1.146A4.483 4.483 0 0019.5 9h-15a4.483 4.483 0 00-3 1.146z"></path></svg>
+                            <span class="text-xs font-bold uppercase tracking-wider">Без фото</span>
+                        </div>
+                        <!-- Доп фото -->
+                        <div id="prev-gallery-count" class="absolute bottom-3 right-3 bg-black/60 backdrop-blur text-white text-xs font-bold px-3 py-1.5 rounded-lg hidden items-center gap-1.5 border border-white/20">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                            <span>+<span id="prev-photo-count"></span> фото</span>
+                        </div>
+                    </div>
+
+                    <!-- Заголовок и цена -->
+                    <div class="flex flex-col sm:flex-row justify-between items-start gap-4 border-b border-slate-200 pb-5">
+                        <div class="flex-1">
+                            <div class="flex items-center gap-2 mb-2">
+                                <span id="prev-id-badge" class="hidden text-slate-600 font-bold text-[10px] uppercase tracking-wider bg-white border border-slate-200 shadow-sm px-2 py-1 rounded">ID: <span id="prev-id" class="text-slate-900"></span></span>
+                                <span id="prev-type" class="text-brand-600 font-bold text-[11px] uppercase tracking-wider bg-brand-50 border border-brand-100 px-2.5 py-1 rounded inline-block"></span>
+                            </div>
+                            <h3 id="prev-title" class="text-2xl font-serif font-extrabold text-slate-900 leading-tight"></h3>
+                        </div>
+                        <div class="bg-indigo-900 px-4 py-3 rounded-xl text-center shadow-md shrink-0 w-full sm:w-auto">
+                            <span class="text-white font-extrabold text-2xl" id="prev-price"></span>
+                            <span class="block text-indigo-300 text-[10px] font-bold uppercase tracking-wide mt-0.5">Руб / Сутки</span>
+                        </div>
+                    </div>
+
+                    <!-- Характеристики -->
+                    <div class="flex flex-wrap gap-2 text-sm font-semibold text-slate-700">
+                        <div class="px-3 py-2 bg-white border border-slate-100 shadow-sm rounded-xl flex items-center gap-2">
+                            <svg class="w-4 h-4 text-brand-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                            <span id="prev-guests"></span> Мест
+                        </div>
+                        <div class="px-3 py-2 bg-white border border-slate-100 shadow-sm rounded-xl flex items-center gap-2">
+                            <svg class="w-4 h-4 text-brand-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 001 1h2a1 1 0 001-1v-5a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 001 1h2a1 1 0 001-1V5z"></path></svg>
+                            Комнат: <span id="prev-rooms"></span>
+                        </div>
+                        <div class="px-3 py-2 bg-white border border-slate-100 shadow-sm rounded-xl flex items-center gap-2">
+                            <svg class="w-4 h-4 text-brand-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"></path></svg>
+                            Этаж: <span id="prev-floor"></span>/<span id="prev-total-floors"></span>
+                        </div>
+                    </div>
+
+                    <!-- Описание -->
+                    <div class="bg-white border border-slate-100 shadow-sm rounded-xl p-5">
+                        <h4 class="font-bold text-slate-800 mb-3 flex items-center gap-2">
+                            <svg class="w-5 h-5 text-brand-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7"></path></svg>
+                            Описание
+                        </h4>
+                        <p id="prev-desc" class="text-sm text-slate-600 leading-relaxed whitespace-pre-wrap"></p>
+                    </div>
+
+                    <!-- Контакты -->
+                    <div class="bg-brand-50 object-bottom border border-brand-100 shadow-sm rounded-xl p-5 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 relative overflow-hidden">
+                        <div class="absolute right-0 bottom-0 opacity-10">
+                            <svg class="w-32 h-32 text-brand-500 -mb-8 -mr-8" fill="currentColor" viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"></path></svg>
+                        </div>
+                        <div class="relative z-10">
+                            <h4 class="font-bold text-brand-900 mb-1 text-xs uppercase tracking-wider">Контакты владельца</h4>
+                            <p class="text-lg font-bold text-slate-800" id="prev-contact"></p>
+                        </div>
+                        <a href="#" class="relative z-10 bg-brand-500 hover:bg-brand-600 text-white px-5 py-3 rounded-xl font-bold transition-colors shadow-md flex items-center gap-2 w-full sm:w-auto justify-center">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg>
+                            <span id="prev-phone"></span>
+                        </a>
+                    </div>
+                </aside>
+
+            </div>
+            <!-- Градиент внизу для красоты скролла -->
+            <div class="absolute bottom-0 left-0 w-full h-12 bg-gradient-to-t from-slate-100 to-transparent pointer-events-none"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const form = document.getElementById('registration-form');
+    const photoInput = document.getElementById('photo-input');
+    const uploadText = document.getElementById('upload-text');
+    const submitBtn = document.getElementById('submit-btn');
+
+    const emptyState = document.getElementById('empty-state');
+    const previewPanel = document.getElementById('preview-panel');
+    const downloadBtn = document.getElementById('download-btn');
+    const clearBtn = document.getElementById('clear-btn');
+    const prevIdBadge = document.getElementById('prev-id-badge');
+    const saveToTgBtn = document.getElementById('save-to-tg-btn');
+
+    let currentObjectData = null; // Для сохранения архива
+
+    // Компрессия фото (чтобы память не лопнула)
+    function compressImage(file, maxSize = 1200) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = (e) => {
+                const img = new Image();
+                img.src = e.target.result;
+                img.onload = () => {
+                    let w = img.width, h = img.height;
+                    if (w > h && w > maxSize) { h = Math.round(h * (maxSize / w)); w = maxSize; }
+                    else if (h > maxSize) { w = Math.round(w * (maxSize / h)); h = maxSize; }
+                    const canvas = document.createElement('canvas');
+                    canvas.width = w; canvas.height = h;
+                    canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+                    resolve(canvas.toDataURL('image/jpeg', 0.8)); // 80% качество
+                };
+            };
+        });
+    }
+
+    // Текст при выборе фото
+    photoInput.addEventListener('change', (e) => {
+        if(e.target.files.length > 0) {
+            uploadText.innerHTML = `<span class="text-brand-600 font-bold">Подготовлено фото: ${e.target.files.length}</span><br><span class="text-xs text-brand-400 font-normal mt-1 block">Готово к загрузке</span>`;
+            document.getElementById('drop-zone').classList.add('border-brand-500', 'bg-brand-50/70');
+        } else {
+            uploadText.innerHTML = `Нажмите, чтобы загрузить<br><span class="text-xs text-slate-400 font-normal mt-1 block">Можно выбрать несколько (JPEG, PNG)</span>`;
+            document.getElementById('drop-zone').classList.remove('border-brand-500', 'bg-brand-50/70');
+        }
+    });
+
+    // Генерация превью (Сабмит формы)
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const origText = document.getElementById('submit-text').innerText;
+        document.getElementById('submit-text').innerText = 'Обработка данных...';
+        submitBtn.disabled = true;
+
+        try {
+            const fd = new FormData(form);
+            
+            // Обработка фотографий
+            const photosArray = [];
+            for (let i = 0; i < photoInput.files.length; i++) {
+                if(photoInput.files[i].type.startsWith('image/')) {
+                    photosArray.push(await compressImage(photoInput.files[i]));
+                }
+            }
+
+            // Данные объекта
+            currentObjectData = {
+                object_id: fd.get('object_id') || '',
+                title: fd.get('title'), type: fd.get('type'), price: fd.get('price'),
+                guests: fd.get('guests'), rooms: fd.get('rooms'),
+                floor: fd.get('floor'), total_floors: fd.get('total_floors'),
+                description: fd.get('description'),
+                contact_name: fd.get('contact_name'), phone: fd.get('phone'),
+                photos: photosArray
+            };
+
+            // ЗАПОЛНЕНИЕ ШАБЛОНА ПОЛЕ ЗА ПОЛЕМ
+            if(currentObjectData.object_id.trim() !== '') {
+                document.getElementById('prev-id').innerText = currentObjectData.object_id;
+                prevIdBadge.classList.remove('hidden');
+                prevIdBadge.classList.add('inline-flex');
+            } else {
+                prevIdBadge.classList.add('hidden');
+                prevIdBadge.classList.remove('inline-flex');
+            }
+            document.getElementById('prev-title').innerText = currentObjectData.title;
+            document.getElementById('prev-type').innerText = currentObjectData.type;
+            document.getElementById('prev-price').innerText = Number(currentObjectData.price).toLocaleString('ru-RU');
+            document.getElementById('prev-guests').innerText = currentObjectData.guests;
+            document.getElementById('prev-rooms').innerText = currentObjectData.rooms;
+            document.getElementById('prev-floor').innerText = currentObjectData.floor;
+            document.getElementById('prev-total-floors').innerText = currentObjectData.total_floors;
+            document.getElementById('prev-desc').innerText = currentObjectData.description;
+            document.getElementById('prev-contact').innerText = currentObjectData.contact_name;
+            document.getElementById('prev-phone').innerText = currentObjectData.phone;
+
+            // ЗАПОЛНЕНИЕ КАРТИНОК В ШАБЛОНЕ
+            const mainImg = document.getElementById('prev-main-img');
+            const noImg = document.getElementById('prev-no-img');
+            const countBtn = document.getElementById('prev-gallery-count');
+            
+            if (photosArray.length > 0) {
+                mainImg.style.backgroundImage = `url(${photosArray[0]})`;
+                noImg.classList.add('hidden');
+                mainImg.classList.remove('bg-slate-200');
+                
+                if(photosArray.length > 1) {
+                    document.getElementById('prev-photo-count').innerText = photosArray.length - 1;
+                    countBtn.classList.remove('hidden');
+                    countBtn.classList.add('flex');
+                } else { 
+                    countBtn.classList.add('hidden'); 
+                    countBtn.classList.remove('flex');  
+                }
+            } else {
+                mainImg.style.backgroundImage = 'none';
+                mainImg.classList.add('bg-slate-200');
+                noImg.classList.remove('hidden');
+                countBtn.classList.add('hidden');
+            }
+
+            // Переключаем экраны справа
+            emptyState.classList.add('hidden');
+            previewPanel.classList.remove('hidden');
+            
+            // Показываем кнопки скачивания ZIP, Сохранить и удаления
+            downloadBtn.classList.remove('hidden');
+            downloadBtn.classList.add('flex');
+            clearBtn.classList.remove('hidden');
+            clearBtn.classList.add('flex');
+            if (saveToTgBtn) {
+                saveToTgBtn.classList.remove('hidden');
+                saveToTgBtn.classList.add('flex');
+            }
+
+            // Анимация успеха на кнопке
+            document.getElementById('submit-text').innerText = 'Успешно!';
+            submitBtn.classList.replace('bg-brand-500', 'bg-green-500');
+            submitBtn.classList.replace('hover:bg-brand-600', 'hover:bg-green-600');
+            
+            // Для мобильной версии добавим прокрутку вниз
+            const rightPane = previewPanel.parentElement.parentElement;
+            if(window.innerWidth < 1024) {
+               rightPane.classList.remove('hidden');
+               rightPane.classList.add('flex');
+               rightPane.scrollIntoView({behavior: "smooth"});
+            }
+
+            setTimeout(() => { 
+                document.getElementById('submit-text').innerText = origText; 
+                submitBtn.disabled = false; 
+                submitBtn.classList.replace('bg-green-500', 'bg-brand-500');
+                submitBtn.classList.replace('hover:bg-green-600', 'hover:bg-brand-600');
+            }, 2000);
+
+        } catch (error) {
+            alert('Слишком большие фото. Выберите меньше или сожмите их.');
+            document.getElementById('submit-text').innerText = origText; 
+            submitBtn.disabled = false;
+            console.error(error);
+        }
+    });
+
+    // ==========================================
+    // ЛОГИКА ЗАЩИЩЕННОЙ ВЫГРУЗКИ В .ZIP (Пароль: Andy777)
+    // ==========================================
+    downloadBtn.addEventListener('click', () => {
+        if(!currentObjectData) return;
+        
+        const pwd = prompt('Введите защитный код для скачивания:');
+        
+        if (pwd === 'Andy777') {
+            
+            const btnText = document.getElementById('download-text');
+            const txt = btnText.innerText;
+            btnText.innerText = 'Сборка архива...';
+            downloadBtn.disabled = true;
+
+            setTimeout(() => {
+                const zip = new JSZip();
+                
+                // 1. Формируем красивый текстовый файл с описанием
+                let text = 'ИНФОРМАЦИОННАЯ КАРТОЧКА ОБЪЕКТА\\n';
+                text += '=======================================\\n\\n';
+                if(currentObjectData.object_id) {
+                    text += `ID Объекта: ${currentObjectData.object_id}\\n`;
+                }
+                text += `Название:  ${currentObjectData.title}\\n`;
+                text += `Категория: ${currentObjectData.type}\\n`;
+                text += `Стоимость: ${currentObjectData.price} руб / сутки\\n\\n`;
+                
+                text += 'ОСНОВНЫЕ ПАРАМЕТРЫ\\n';
+                text += '---------------------------------------\\n';
+                text += `- Вместимость: ${currentObjectData.guests} чел.\\n`;
+                text += `- Комнат:      ${currentObjectData.rooms}\\n`;
+                text += `- Этажность:   Этаж ${currentObjectData.floor} из ${currentObjectData.total_floors}\\n\\n`;
+                
+                text += 'ПОЛНОЕ ОПИСАНИЕ ОБЪЕКТА\\n';
+                text += '---------------------------------------\\n';
+                text += `${currentObjectData.description}\\n\\n`;
+                
+                text += 'КОНТАКТНЫЕ ДАННЫЕ\\n';
+                text += '---------------------------------------\\n';
+                text += `Владелец / Агент: ${currentObjectData.contact_name}\\n`;
+                text += `Телефон связи:    ${currentObjectData.phone}\\n`;
+                
+                // Кладем текст в ZIP архив
+                zip.file("1 Описание Объекта.txt", text);
+
+                // 2. Кладем все фотографии в ZIP архив
+                if (currentObjectData.photos && currentObjectData.photos.length > 0) {
+                    currentObjectData.photos.forEach((base64Url, index) => {
+                        // Очищаем префикс base64: "data:image/jpeg;base64,"
+                        const base64Data = base64Url.split(',')[1];
+                        zip.file(`Фото ${index + 1}.jpg`, base64Data, {base64: true});
+                    });
+                }
+
+                // 3. Собираем и отдаем пользователю ZIP
+                // Безопасное имя файла без запрещенных символов
+                const safeName = currentObjectData.title.replace(/[\\/\\\\:*?"<>|]/g, "_");
+                const safeId = currentObjectData.object_id ? `[ID ${currentObjectData.object_id.replace(/[\\/\\\\:*?"<>|]/g, "_")}] ` : "";
+                
+                zip.generateAsync({type:"blob"}).then(function(content) {
+                    const url = URL.createObjectURL(content);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `Объект ${safeId}[${safeName}].zip`; 
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(url);
+                    
+                    btnText.innerText = txt;
+                    downloadBtn.disabled = false;
+                    alert('Доступ разрешен. Скачивание ZIP-архива началось!');
+                });
+            }, 500);
+
+        } else if (pwd !== null) {
+            alert('Ошибка доступа! Неверный пароль.');
+        }
+    });
+
+    // ==========================================
+    // ЛОГИКА ОТПРАВКИ В TELEGRAM
+    // ==========================================
+    function b64toBlob(b64Data, contentType='', sliceSize=512) {
+        const byteCharacters = atob(b64Data);
+        const byteArrays = [];
+        for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+            const slice = byteCharacters.slice(offset, offset + sliceSize);
+            const byteNumbers = new Array(slice.length);
+            for (let i = 0; i < slice.length; i++) {
+                byteNumbers[i] = slice.charCodeAt(i);
+            }
+            const byteArray = new Uint8Array(byteNumbers);
+            byteArrays.push(byteArray);
+        }
+        return new Blob(byteArrays, {type: contentType});
+    }
+
+    if (saveToTgBtn) {
+        saveToTgBtn.addEventListener('click', () => {
+            if(!currentObjectData) return;
+
+            const btnText = document.getElementById('save-tg-text');
+            const originalText = btnText.innerText;
+            btnText.innerText = 'Отправка...';
+            saveToTgBtn.disabled = true;
+
+            const BOT_TOKEN = '8004043910:AAGhP67iPubcPEcvq-cH-NQV0J7QOdVpfI0';
+            const CHAT_ID = '773956172';
+
+            const escapeHtml = (text) => {
+                return text ? text.toString().replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;") : '';
+            };
+
+            let msg = '🏡 <b>НОВОЕ ОБЪЯВЛЕНИЕ</b>\n\n';
+            if(currentObjectData.object_id) msg += '🆔 <b>ID:</b> ' + escapeHtml(currentObjectData.object_id) + '\n';
+            msg += '📌 <b>Название:</b> ' + escapeHtml(currentObjectData.title) + '\n';
+            msg += '🏷 <b>Категория:</b> ' + escapeHtml(currentObjectData.type) + '\n';
+            msg += '💰 <b>Цена:</b> ' + escapeHtml(currentObjectData.price) + ' руб/сутки\n';
+            msg += '👥 <b>Гостей:</b> ' + escapeHtml(currentObjectData.guests) + '\n';
+            msg += '🚪 <b>Комнат:</b> ' + escapeHtml(currentObjectData.rooms) + '\n';
+            msg += '🏢 <b>Этаж:</b> ' + escapeHtml(currentObjectData.floor) + ' из ' + escapeHtml(currentObjectData.total_floors) + '\n\n';
+            msg += '📝 <b>Описание:</b>\n' + escapeHtml(currentObjectData.description) + '\n\n';
+            msg += '👤 <b>Контакт:</b> ' + escapeHtml(currentObjectData.contact_name) + '\n';
+            msg += '📞 <b>Телефон:</b> ' + escapeHtml(currentObjectData.phone) + '\n\n';
+            msg += '🕒 <i>' + new Date().toLocaleString('ru-RU') + '</i>';
+
+            const photosToSend = currentObjectData.photos ? currentObjectData.photos.slice(0, 10) : [];
+
+            let requestPromise;
+
+            if (photosToSend.length > 0) {
+                const formData = new FormData();
+                const mediaGroup = [];
+                
+                photosToSend.forEach((dataUrl, index) => {
+                    const base64Data = dataUrl.split(',')[1];
+                    const blob = b64toBlob(base64Data, 'image/jpeg');
+                    const filename = `photo${index}.jpg`;
+                    
+                    formData.append(filename, blob, filename);
+                    
+                    if(index === 0) {
+                        mediaGroup.push({ type: 'photo', media: `attach://${filename}`, caption: msg, parse_mode: 'HTML' });
+                    } else {
+                        mediaGroup.push({ type: 'photo', media: `attach://${filename}` });
+                    }
+                });
+                
+                formData.append('chat_id', CHAT_ID);
+                formData.append('media', JSON.stringify(mediaGroup));
+
+                requestPromise = fetch('https://api.telegram.org/bot' + BOT_TOKEN + '/sendMediaGroup', {
+                    method: 'POST',
+                    body: formData
+                });
+            } else {
+                requestPromise = fetch('https://api.telegram.org/bot' + BOT_TOKEN + '/sendMessage', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        chat_id: CHAT_ID,
+                        text: msg,
+                        parse_mode: 'HTML'
+                    })
+                });
+            }
+
+            requestPromise.then(response => {
+                if (response.ok) {
+                    alert('Данные успешно сохранены и отправлены в Telegram!');
+                } else {
+                    response.text().then(text => console.error('Telegram error:', text));
+                    alert('Произошла ошибка при отправке данных. Повторите попытку позже.');
+                }
+            }).catch(err => {
+                console.error(err);
+                alert('Ошибка сети при отправке данных в Telegram.');
+            }).finally(() => {
+                btnText.innerText = originalText;
+                saveToTgBtn.disabled = false;
+            });
+        });
+    }
+
+    // ==========================================
+    // ЛОГИКА УДАЛЕНИЯ (Пароль: Andy777)
+    // ==========================================
+    clearBtn.addEventListener('click', () => {
+        const pwd = prompt('Введите защитный код для удаления:');
+        if (pwd === 'Andy777') {
+            // Сдаем значения
+            form.reset();
+            currentObjectData = null;
+            
+            // Сброс загрузки файлов
+            photoInput.value = '';
+            uploadText.innerHTML = `Нажмите, чтобы загрузить<br><span class="text-xs text-slate-400 font-normal mt-1 block">Можно выбрать несколько (JPEG, PNG)</span>`;
+            document.getElementById('drop-zone').classList.remove('border-brand-500', 'bg-brand-50/70');
+            
+            // Скрываем превью и кнопки
+            previewPanel.classList.add('hidden');
+            emptyState.classList.remove('hidden');
+            downloadBtn.classList.remove('flex');
+            downloadBtn.classList.add('hidden');
+            clearBtn.classList.remove('flex');
+            clearBtn.classList.add('hidden');
+            if (saveToTgBtn) {
+                saveToTgBtn.classList.remove('flex');
+                saveToTgBtn.classList.add('hidden');
+            }
+            
+            alert('Данные успешно очищены!');
+        } else if (pwd !== null) {
+            alert('Ошибка доступа! Неверный пароль.');
+        }
+    });
+
+</script>
+</body>
+</html>
