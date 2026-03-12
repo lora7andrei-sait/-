@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Подать объявление — Бердянск Жильё</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <style>
   :root {
     --bg: #f4f1ec;
@@ -691,6 +692,80 @@
   }
   .scroll-preview-btn:hover { background: var(--teal); color: white; }
 
+  /* Save ZIP button */
+  .btn-save {
+    width: 100%;
+    padding: 13px;
+    background: var(--ocean);
+    color: white;
+    border: none;
+    border-radius: var(--radius-sm);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.925rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    letter-spacing: 0.01em;
+  }
+  .btn-save:hover { background: #1a3344; transform: translateY(-1px); box-shadow: 0 6px 20px rgba(38,70,83,0.3); }
+  .btn-save:disabled { opacity: 0.6; cursor: not-allowed; transform: none; box-shadow: none; }
+
+  /* Download toast */
+  .download-toast {
+    position: fixed;
+    bottom: 28px;
+    right: 28px;
+    background: var(--ocean);
+    color: white;
+    border-radius: var(--radius);
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    box-shadow: 0 8px 32px rgba(38,70,83,0.35);
+    z-index: 999;
+    transform: translateY(80px);
+    opacity: 0;
+    transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    max-width: 340px;
+    pointer-events: none;
+  }
+  .download-toast.show {
+    transform: translateY(0);
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .toast-icon { font-size: 1.6rem; flex-shrink: 0; }
+  .toast-body { flex: 1; }
+  .toast-body strong { display: block; font-size: 0.9rem; margin-bottom: 3px; }
+  .toast-body span { font-size: 0.78rem; opacity: 0.75; }
+  .toast-close {
+    background: rgba(255,255,255,0.15);
+    border: none;
+    color: white;
+    width: 26px; height: 26px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 0.9rem;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    transition: background 0.2s;
+  }
+  .toast-close:hover { background: rgba(255,255,255,0.25); }
+
+  /* Progress bar inside save btn */
+  .btn-save .progress-bar {
+    position: absolute;
+    bottom: 0; left: 0;
+    height: 3px;
+    background: rgba(255,255,255,0.4);
+    border-radius: 0 0 var(--radius-sm) var(--radius-sm);
+    width: 0%;
+    transition: width 0.3s ease;
+  }
+  .btn-save { position: relative; overflow: hidden; }
+
   /* ─── RESPONSIVE ─── */
   @media (max-width: 900px) {
     .main-layout {
@@ -969,6 +1044,15 @@
             <path d="M22 2L11 13M22 2L15 22l-4-9-9-4 20-7z"/>
           </svg>
           Подать объявление
+        </button>
+        <button class="btn-save" type="button" id="saveBtn" onclick="saveAsZip()">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
+            <polyline points="7 10 12 15 17 10"/>
+            <line x1="12" y1="15" x2="12" y2="3"/>
+          </svg>
+          Сохранить и скачать ZIP
+          <div class="progress-bar" id="saveProgress"></div>
         </button>
         <button class="btn-reset" type="button" onclick="resetForm()">↺ Очистить форму</button>
       </div>
@@ -1404,8 +1488,288 @@ function getAmenityIcon(name) {
   return map[name] || '✓';
 }
 
+// ── Save as ZIP ────────────────────────────────────────
+async function saveAsZip() {
+  const btn = document.getElementById('saveBtn');
+  const bar = document.getElementById('saveProgress');
+
+  // Collect form data
+  const data = collectFormData();
+
+  // Validate: at least name required
+  if (!data.ownerName && !data.price && photos.length === 0) {
+    showToast('⚠️', 'Форма пуста', 'Заполните хотя бы несколько полей перед сохранением');
+    return;
+  }
+
+  btn.disabled = true;
+  btn.innerHTML = `<span style="animation: spin 0.8s linear infinite; display:inline-block;">⏳</span> Упаковываем ZIP...
+    <div class="progress-bar" id="saveProgress" style="width:15%"></div>`;
+
+  // Add spin keyframe if missing
+  if (!document.getElementById('spinStyle')) {
+    const s = document.createElement('style');
+    s.id = 'spinStyle';
+    s.textContent = '@keyframes spin { to { transform: rotate(360deg); } }';
+    document.head.appendChild(s);
+  }
+
+  try {
+    const zip = new JSZip();
+
+    // Progress helper
+    const setProgress = (pct) => {
+      const b = document.getElementById('saveProgress');
+      if (b) b.style.width = pct + '%';
+    };
+
+    setProgress(20);
+
+    // ── 1. data.json ──────────────────────────────────
+    const jsonContent = JSON.stringify(data, null, 2);
+    zip.file('data.json', jsonContent);
+
+    setProgress(35);
+
+    // ── 2. Photos folder ──────────────────────────────
+    const imgFolder = zip.folder('photos');
+    for (let i = 0; i < photos.length; i++) {
+      const p = photos[i];
+      const ext = getExtFromDataUrl(p.url);
+      const filename = `photo_${String(i + 1).padStart(2, '0')}.${ext}`;
+      const base64 = p.url.split(',')[1];
+      imgFolder.file(filename, base64, { base64: true });
+      setProgress(35 + Math.round((i + 1) / photos.length * 35));
+    }
+
+    setProgress(72);
+
+    // ── 3. preview.html ───────────────────────────────
+    const previewHtml = buildPreviewHtml(data, photos);
+    zip.file('preview.html', previewHtml);
+
+    setProgress(88);
+
+    // ── 4. README.txt ─────────────────────────────────
+    const now = new Date();
+    const dateStr = now.toLocaleString('ru-RU');
+    const readme = [
+      '=== Бердянск Жильё — Архив объявления ===',
+      '',
+      `Дата сохранения: ${dateStr}`,
+      `Объект: ${data.title || 'не указано'}`,
+      `Владелец: ${data.ownerName || '—'}`,
+      `Телефон: ${data.phone || '—'}`,
+      `Email: ${data.email || '—'}`,
+      '',
+      'Содержимое архива:',
+      '  data.json      — все данные объявления в формате JSON',
+      `  photos/        — ${photos.length} фото(граф.)`,
+      '  preview.html   — красивый предпросмотр объявления (откройте в браузере)',
+      '  README.txt     — этот файл',
+      '',
+      'Чтобы посмотреть объявление — откройте preview.html в любом браузере.',
+    ].join('\n');
+    zip.file('README.txt', readme);
+
+    setProgress(95);
+
+    // ── Generate & download ───────────────────────────
+    const slug = slugify(data.title || 'obyavlenie');
+    const dateSlug = now.toISOString().slice(0, 10);
+    const filename = `berdiansk_${slug}_${dateSlug}.zip`;
+
+    const blob = await zip.generateAsync({ type: 'blob', compression: 'DEFLATE', compressionOptions: { level: 6 } });
+
+    setProgress(100);
+
+    // Trigger download
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(() => URL.revokeObjectURL(url), 10000);
+
+    const sizeMb = (blob.size / 1024 / 1024).toFixed(1);
+    showToast('📦', 'ZIP-файл готов!', `Скачивается: ${filename} (${sizeMb} МБ)`);
+
+  } catch (err) {
+    console.error('ZIP error:', err);
+    showToast('❌', 'Ошибка сохранения', 'Не удалось создать ZIP. Попробуйте ещё раз.');
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = `<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+      <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
+      <polyline points="7 10 12 15 17 10"/>
+      <line x1="12" y1="15" x2="12" y2="3"/>
+    </svg>
+    Сохранить и скачать ZIP
+    <div class="progress-bar" id="saveProgress"></div>`;
+  }
+}
+
+function collectFormData() {
+  const amenities = Array.from(document.querySelectorAll('#amenityGrid input[type="checkbox"]'))
+    .filter(cb => cb.closest('.amenity-item').classList.contains('checked'))
+    .map(cb => cb.value);
+
+  const rooms    = document.getElementById('rooms').value;
+  const propType = document.getElementById('propType').value;
+  const district = document.getElementById('district').value.trim();
+
+  let titleParts = [];
+  if (rooms) {
+    if (rooms === 'Студия') titleParts.push('Студия');
+    else titleParts.push(rooms + '-комнатн' + (rooms === '1' ? 'ая' : 'ые') + ' ' + (propType || 'квартира').toLowerCase());
+  } else if (propType) { titleParts.push(propType); }
+  if (district) titleParts.push('в ' + district);
+  else titleParts.push('в Бердянске');
+
+  return {
+    title:       capitalize(titleParts.join(' ')),
+    ownerName:   document.getElementById('ownerName').value.trim(),
+    phone:       document.getElementById('phone').value.trim(),
+    email:       document.getElementById('email').value.trim(),
+    propType,
+    rooms,
+    district,
+    address:     document.getElementById('address').value.trim(),
+    guests:      document.getElementById('guests').value,
+    price:       document.getElementById('price').value.trim(),
+    currency:    document.getElementById('currency').value,
+    description: document.getElementById('description').value.trim(),
+    amenities,
+    photosCount: photos.length,
+    savedAt:     new Date().toISOString(),
+    status:      'awaiting_moderation',
+  };
+}
+
+function getExtFromDataUrl(dataUrl) {
+  const mime = dataUrl.split(';')[0].split(':')[1];
+  const map = { 'image/jpeg': 'jpg', 'image/png': 'png', 'image/webp': 'webp', 'image/gif': 'gif' };
+  return map[mime] || 'jpg';
+}
+
+function slugify(str) {
+  const map = { а:'a',б:'b',в:'v',г:'g',д:'d',е:'e',ё:'yo',ж:'zh',з:'z',и:'i',й:'y',к:'k',
+    л:'l',м:'m',н:'n',о:'o',п:'p',р:'r',с:'s',т:'t',у:'u',ф:'f',х:'h',ц:'ts',ч:'ch',
+    ш:'sh',щ:'shch',ъ:'',ы:'y',ь:'',э:'e',ю:'yu',я:'ya',' ':'_' };
+  return str.toLowerCase().split('').map(c => map[c] ?? c).join('').replace(/[^a-z0-9_]/g, '').slice(0, 40);
+}
+
+function buildPreviewHtml(d, imgs) {
+  const photoImgs = imgs.map((p, i) =>
+    `<img src="photos/photo_${String(i+1).padStart(2,'0')}.${getExtFromDataUrl(p.url)}"
+      style="width:100%;height:280px;object-fit:cover;display:${i===0?'block':'none'}" class="slide" alt="Фото ${i+1}">`
+  ).join('');
+  const amenityTags = d.amenities.map(a =>
+    `<span style="background:#e8f5f3;color:#1f7a6e;padding:4px 12px;border-radius:20px;font-size:13px;font-weight:600;">${a}</span>`
+  ).join(' ');
+
+  return `<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>${d.title} — Бердянск Жильё</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@700&family=DM+Sans:wght@400;600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:#f4f1ec;color:#1a2e2b;padding:20px}
+.card{max-width:640px;margin:0 auto;background:#fff;border-radius:16px;box-shadow:0 12px 48px rgba(38,70,83,.15);overflow:hidden}
+.photo-wrap{position:relative;height:280px;background:#e8f5f3;overflow:hidden}
+.badge{position:absolute;top:14px;left:14px;background:rgba(255,255,255,.9);padding:5px 12px;border-radius:8px;font-size:12px;font-weight:700;color:#d97706;display:flex;align-items:center;gap:6px}
+.dot{width:7px;height:7px;border-radius:50%;background:#f59e0b;animation:blink 1.5s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.nav{position:absolute;bottom:12px;right:14px;background:rgba(0,0,0,.4);color:#fff;padding:3px 8px;border-radius:6px;font-size:12px;cursor:pointer;user-select:none}
+.body{padding:24px}
+h1{font-family:'Cormorant Garamond',serif;font-size:1.7rem;color:#264653;margin-bottom:8px}
+.loc{font-size:13px;color:#6b7c79;margin-bottom:14px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+.chip{background:#f4f1ec;border:1px solid #ddd8cf;border-radius:6px;padding:5px 11px;font-size:12px;font-weight:500}
+.price{font-family:'Cormorant Garamond',serif;font-size:1.8rem;font-weight:700;color:#2a9d8f}
+.price-label{font-size:11px;color:#6b7c79;margin-top:1px}
+.desc{font-size:14px;line-height:1.65;color:#6b7c79;margin:14px 0;padding-bottom:14px;border-bottom:1px solid #ddd8cf}
+.amen-title{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#264653;margin-bottom:8px}
+.amens{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid #ddd8cf}
+.owner{display:flex;align-items:center;gap:10px;margin-top:4px}
+.avatar{width:40px;height:40px;border-radius:50%;background:#e8f5f3;display:flex;align-items:center;justify-content:center;font-size:1.1rem;font-weight:700;color:#2a9d8f}
+.owner-name{font-size:14px;font-weight:600}
+.owner-phone{font-size:12px;color:#6b7c79}
+.meta{font-size:11px;color:#aaa;margin-top:16px;padding-top:12px;border-top:1px solid #f0ebe3}
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="photo-wrap">
+    ${imgs.length ? photoImgs : '<div style="height:100%;display:flex;align-items:center;justify-content:center;font-size:3rem;opacity:.3">🏠</div>'}
+    <div class="badge"><div class="dot"></div> На модерации</div>
+    ${imgs.length > 1 ? `<div class="nav" onclick="nextSlide()">❯ ${imgs.length} фото</div>` : ''}
+  </div>
+  <div class="body">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:4px">
+      <h1>${d.title}</h1>
+      <div style="text-align:right;flex-shrink:0">
+        <div class="price">${d.price ? parseInt(d.price).toLocaleString('ru') + ' ' + d.currency : '—'}</div>
+        <div class="price-label">за сутки</div>
+      </div>
+    </div>
+    <div class="loc">📍 ${d.district || 'Бердянск'}${d.address ? ' · ' + d.address : ''}</div>
+    <div class="chips">
+      ${d.rooms ? `<div class="chip">🛏 ${d.rooms === 'Студия' ? 'Студия' : d.rooms + ' комн.'}</div>` : ''}
+      ${d.guests ? `<div class="chip">👥 до ${d.guests} гостей</div>` : ''}
+      ${d.propType ? `<div class="chip">🏡 ${d.propType}</div>` : ''}
+    </div>
+    ${d.description ? `<div class="desc">${d.description.replace(/\n/g,'<br>')}</div>` : ''}
+    ${d.amenities.length ? `<div class="amen-title">Удобства</div><div class="amens">${amenityTags}</div>` : ''}
+    <div class="owner">
+      <div class="avatar">${d.ownerName ? d.ownerName[0].toUpperCase() : '?'}</div>
+      <div>
+        <div class="owner-name">${d.ownerName || 'Владелец'}</div>
+        <div class="owner-phone">${d.phone || ''}${d.email ? ' · ' + d.email : ''}</div>
+      </div>
+    </div>
+    <div class="meta">Сохранено: ${new Date(d.savedAt).toLocaleString('ru-RU')} · Статус: Ожидает модерации · Бердянск Жильё</div>
+  </div>
+</div>
+${imgs.length > 1 ? `<script>
+let idx=0;const slides=document.querySelectorAll('.slide');
+function nextSlide(){slides[idx].style.display='none';idx=(idx+1)%slides.length;slides[idx].style.display='block';}
+<\/script>` : ''}
+</body></html>`;
+}
+
+// ── Toast ──────────────────────────────────────────────
+let toastTimer = null;
+function showToast(icon, title, desc) {
+  const t = document.getElementById('downloadToast');
+  document.getElementById('toastTitle').textContent = title;
+  document.getElementById('toastDesc').textContent = desc;
+  t.querySelector('.toast-icon').textContent = icon;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 6000);
+}
+function closeToast() {
+  document.getElementById('downloadToast').classList.remove('show');
+}
+
 // Init
 updatePreview();
 </script>
+<!-- Download Toast -->
+<div class="download-toast" id="downloadToast">
+  <div class="toast-icon">📦</div>
+  <div class="toast-body">
+    <strong id="toastTitle">ZIP-файл готов!</strong>
+    <span id="toastDesc">Объявление сохранено и скачивается</span>
+  </div>
+  <button class="toast-close" onclick="closeToast()">✕</button>
+</div>
+
 </body>
 </html>
