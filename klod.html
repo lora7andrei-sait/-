@@ -1401,27 +1401,118 @@ function toggleAmenity(label) {
   scheduleUpdate();
 }
 
+// ── Telegram config ────────────────────────────────────
+const TG_BOT_TOKEN = '8004043910:AAGhP67iPubcPEcvq-cH-NQV0J7QOdVpfI0';
+const TG_CHAT_ID   = '773956172';
+const TG_API       = `https://api.telegram.org/bot${TG_BOT_TOKEN}`;
+
 // ── Form submit ────────────────────────────────────────
-document.getElementById('listingForm').addEventListener('submit', function(e) {
+document.getElementById('listingForm').addEventListener('submit', async function(e) {
   e.preventDefault();
   if (!validateForm()) return;
 
   const btn = document.getElementById('submitBtn');
-  btn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Отправлено!';
-  btn.style.background = '#15803d';
+  btn.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg> Отправляем...`;
   btn.disabled = true;
 
-  document.getElementById('successBanner').classList.add('show');
-  if (window.innerWidth < 900) {
-    scrollToPreview();
-  }
+  try {
+    const d = collectFormData();
 
-  setTimeout(() => {
-    btn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 2L11 13M22 2L15 22l-4-9-9-4 20-7z"/></svg> Подать объявление';
+    // ── 1. Text message ──────────────────────────────
+    const amenLine = d.amenities.length ? d.amenities.join(', ') : '—';
+    const msg =
+`🏡 <b>НОВОЕ ОБЪЯВЛЕНИЕ — Бердянск Жильё</b>
+
+📋 <b>${d.title}</b>
+
+👤 <b>Владелец:</b> ${d.ownerName || '—'}
+📞 <b>Телефон:</b> ${d.phone || '—'}
+📧 <b>Email:</b> ${d.email || '—'}
+
+🏠 <b>Тип:</b> ${d.propType || '—'}
+🛏 <b>Комнат:</b> ${d.rooms || '—'}
+👥 <b>Гостей (макс.):</b> ${d.guests || '—'}
+📍 <b>Район:</b> ${d.district || '—'}
+🗺 <b>Адрес:</b> ${d.address || '—'}
+
+💰 <b>Цена за сутки:</b> ${d.price ? parseInt(d.price).toLocaleString('ru') + ' ' + d.currency : '—'}
+
+✅ <b>Удобства:</b> ${amenLine}
+
+📝 <b>Описание:</b>
+${d.description || '—'}
+
+🖼 <b>Фото:</b> ${d.photosCount} шт.
+📌 <i>${new Date().toLocaleString('ru-RU')}</i>`;
+
+    await fetch(`${TG_API}/sendMessage`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ chat_id: TG_CHAT_ID, text: msg, parse_mode: 'HTML' })
+    });
+
+    // ── 2. Send photos (up to 10, as media group) ───
+    if (photos.length > 0) {
+      const batch = photos.slice(0, 10); // Telegram max 10 per group
+
+      if (batch.length === 1) {
+        // Single photo — sendPhoto
+        const fd = new FormData();
+        fd.append('chat_id', TG_CHAT_ID);
+        fd.append('caption', `📸 Фото: ${d.title}`);
+        fd.append('photo', dataUrlToBlob(batch[0].url), `photo_01.${getExtFromDataUrl(batch[0].url)}`);
+        await fetch(`${TG_API}/sendPhoto`, { method: 'POST', body: fd });
+
+      } else {
+        // Multiple photos — sendMediaGroup
+        const fd = new FormData();
+        fd.append('chat_id', TG_CHAT_ID);
+
+        const mediaArr = batch.map((p, i) => {
+          const name = `photo_${String(i+1).padStart(2,'0')}`;
+          fd.append(name, dataUrlToBlob(p.url), `${name}.${getExtFromDataUrl(p.url)}`);
+          return {
+            type: 'photo',
+            media: `attach://${name}`,
+            ...(i === 0 ? { caption: `📸 ${d.photosCount} фото: ${d.title}` } : {})
+          };
+        });
+
+        fd.append('media', JSON.stringify(mediaArr));
+        await fetch(`${TG_API}/sendMediaGroup`, { method: 'POST', body: fd });
+      }
+    }
+
+    // ── Success ──────────────────────────────────────
+    btn.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Отправлено!`;
+    btn.style.background = '#15803d';
+    document.getElementById('successBanner').classList.add('show');
+    if (window.innerWidth < 900) scrollToPreview();
+
+    setTimeout(() => {
+      btn.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 2L11 13M22 2L15 22l-4-9-9-4 20-7z"/></svg> Подать объявление`;
+      btn.style.background = '';
+      btn.disabled = false;
+    }, 6000);
+
+  } catch (err) {
+    console.error('Telegram send error:', err);
+    btn.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 2L11 13M22 2L15 22l-4-9-9-4 20-7z"/></svg> Подать объявление`;
     btn.style.background = '';
     btn.disabled = false;
-  }, 5000);
+    showToast('❌', 'Ошибка отправки', 'Не удалось отправить в Telegram. Проверьте подключение.');
+  }
 });
+
+// ── dataURL → Blob helper ──────────────────────────────
+function dataUrlToBlob(dataUrl) {
+  const [header, data] = dataUrl.split(',');
+  const mime = header.match(/:(.*?);/)[1];
+  const binary = atob(data);
+  const arr = new Uint8Array(binary.length);
+  for (let i = 0; i < binary.length; i++) arr[i] = binary.charCodeAt(i);
+  return new Blob([arr], { type: mime });
+}
 
 function validateForm() {
   let valid = true;
