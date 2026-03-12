@@ -149,6 +149,49 @@
                 </div>
             </div>
 
+            <!-- Удобства -->
+            <div class="space-y-3 bg-slate-50 p-5 rounded-2xl border border-slate-100">
+                <h3 class="text-sm font-bold uppercase tracking-wider text-slate-400">Удобства</h3>
+                <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 cursor-pointer">
+                    <label class="flex items-center gap-2 cursor-pointer bg-white px-3 py-2 border border-slate-200 rounded-xl hover:border-brand-500 transition-colors">
+                        <input type="checkbox" name="amenity_wifi" value="WI-FI" class="w-4 h-4 text-brand-500 rounded border-slate-300 focus:ring-brand-500 cursor-pointer">
+                        <span class="text-sm font-medium text-slate-700 flex items-center gap-1.5"><span class="text-lg">📶</span> WI-FI</span>
+                    </label>
+                    <label class="flex items-center gap-2 cursor-pointer bg-white px-3 py-2 border border-slate-200 rounded-xl hover:border-brand-500 transition-colors">
+                        <input type="checkbox" name="amenity_ac" value="Кондиционер" class="w-4 h-4 text-brand-500 rounded border-slate-300 focus:ring-brand-500 cursor-pointer">
+                        <span class="text-sm font-medium text-slate-700 flex items-center gap-1.5"><span class="text-lg">❄️</span> Кондиционер</span>
+                    </label>
+                    <label class="flex items-center gap-2 cursor-pointer bg-white px-3 py-2 border border-slate-200 rounded-xl hover:border-brand-500 transition-colors">
+                        <input type="checkbox" name="amenity_tv" value="Телевизор" class="w-4 h-4 text-brand-500 rounded border-slate-300 focus:ring-brand-500 cursor-pointer">
+                        <span class="text-sm font-medium text-slate-700 flex items-center gap-1.5"><span class="text-lg">📺</span> Телевизор</span>
+                    </label>
+                    <label class="flex items-center gap-2 cursor-pointer bg-white px-3 py-2 border border-slate-200 rounded-xl hover:border-brand-500 transition-colors">
+                        <input type="checkbox" name="amenity_washer" value="Стиралка" class="w-4 h-4 text-brand-500 rounded border-slate-300 focus:ring-brand-500 cursor-pointer">
+                        <span class="text-sm font-medium text-slate-700 flex items-center gap-1.5"><span class="text-lg">🧺</span> Стиралка</span>
+                    </label>
+                    <label class="flex items-center gap-2 cursor-pointer bg-white px-3 py-2 border border-slate-200 rounded-xl hover:border-brand-500 transition-colors">
+                        <input type="checkbox" name="amenity_kitchen" value="Кухня" class="w-4 h-4 text-brand-500 rounded border-slate-300 focus:ring-brand-500 cursor-pointer">
+                        <span class="text-sm font-medium text-slate-700 flex items-center gap-1.5"><span class="text-lg">🍳</span> Кухня</span>
+                    </label>
+                    <label class="flex items-center gap-2 cursor-pointer bg-white px-3 py-2 border border-slate-200 rounded-xl hover:border-brand-500 transition-colors">
+                        <input type="checkbox" name="amenity_parking" value="Парковка" class="w-4 h-4 text-brand-500 rounded border-slate-300 focus:ring-brand-500 cursor-pointer">
+                        <span class="text-sm font-medium text-slate-700 flex items-center gap-1.5"><span class="text-lg">🚗</span> Парковка</span>
+                    </label>
+                    <label class="flex items-center gap-2 cursor-pointer bg-white px-3 py-2 border border-slate-200 rounded-xl hover:border-brand-500 transition-colors">
+                        <input type="checkbox" name="amenity_balcony" value="Балкон" class="w-4 h-4 text-brand-500 rounded border-slate-300 focus:ring-brand-500 cursor-pointer">
+                        <span class="text-sm font-medium text-slate-700 flex items-center gap-1.5"><span class="text-lg">🌿</span> Балкон</span>
+                    </label>
+                    <label class="flex items-center gap-2 cursor-pointer bg-white px-3 py-2 border border-slate-200 rounded-xl hover:border-brand-500 transition-colors">
+                        <input type="checkbox" name="amenity_seaview" value="Вид на море" class="w-4 h-4 text-brand-500 rounded border-slate-300 focus:ring-brand-500 cursor-pointer">
+                        <span class="text-sm font-medium text-slate-700 flex items-center gap-1.5"><span class="text-lg">🌊</span> Вид на море</span>
+                    </label>
+                    <label class="flex items-center gap-2 cursor-pointer bg-white px-3 py-2 border border-slate-200 rounded-xl hover:border-brand-500 transition-colors">
+                        <input type="checkbox" name="amenity_hotwater" value="Горячая вода" class="w-4 h-4 text-brand-500 rounded border-slate-300 focus:ring-brand-500 cursor-pointer">
+                        <span class="text-sm font-medium text-slate-700 flex items-center gap-1.5"><span class="text-lg">🚿</span> Горячая вода</span>
+                    </label>
+                </div>
+            </div>
+
             <!-- Описание -->
             <div>
                 <label class="block text-sm font-medium text-slate-700 mb-1">Описание объекта</label>
@@ -198,6 +241,10 @@
         <!-- Заголовок панели -->
         <div class="px-8 py-5 flex items-center justify-between border-b border-slate-200/60 bg-slate-100/50 backdrop-blur z-10">
             <h2 class="text-sm font-bold tracking-widest uppercase text-slate-400">Предпросмотр</h2>
+            <button type="button" id="save-to-tg-btn" class="hidden items-center gap-2 bg-brand-500 hover:bg-brand-600 text-white px-4 py-2 rounded-xl font-bold transition-all shadow-sm text-sm border border-brand-600">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"></path></svg>
+                <span id="save-tg-text">Сохранить</span>
+            </button>
         </div>
 
         <div class="flex-1 overflow-y-auto px-8 py-6 relative" style="scrollbar-width: thin;">
@@ -259,6 +306,11 @@
                         </div>
                     </div>
 
+                    <!-- Удобства Пул -->
+                    <div id="prev-amenities-container" class="hidden flex-wrap gap-2">
+                        <!-- Заполняется из JS -->
+                    </div>
+
                     <!-- Описание -->
                     <div class="bg-white border border-slate-100 shadow-sm rounded-xl p-5">
                         <h4 class="font-bold text-slate-800 mb-3 flex items-center gap-2">
@@ -302,6 +354,7 @@
     const downloadBtn = document.getElementById('download-btn');
     const clearBtn = document.getElementById('clear-btn');
     const prevIdBadge = document.getElementById('prev-id-badge');
+    const saveToTgBtn = document.getElementById('save-to-tg-btn');
 
     let currentObjectData = null; // Для сохранения архива
 
@@ -356,6 +409,16 @@
                 }
             }
 
+            // Удобства
+            const amenities = [];
+            const amenityInputs = form.querySelectorAll('input[type="checkbox"][name^="amenity_"]:checked');
+            amenityInputs.forEach(input => {
+                const spanWithIcon = input.nextElementSibling.querySelector('.text-lg');
+                const icon = spanWithIcon ? spanWithIcon.innerText : '';
+                const text = input.value;
+                amenities.push({ icon, text });
+            });
+
             // Данные объекта
             currentObjectData = {
                 object_id: fd.get('object_id') || '',
@@ -364,6 +427,7 @@
                 floor: fd.get('floor'), total_floors: fd.get('total_floors'),
                 description: fd.get('description'),
                 contact_name: fd.get('contact_name'), phone: fd.get('phone'),
+                amenities: amenities,
                 photos: photosArray
             };
 
@@ -386,6 +450,23 @@
             document.getElementById('prev-desc').innerText = currentObjectData.description;
             document.getElementById('prev-contact').innerText = currentObjectData.contact_name;
             document.getElementById('prev-phone').innerText = currentObjectData.phone;
+
+            // ЗАПОЛНЕНИЕ УДОБСТВ
+            const amenitiesContainer = document.getElementById('prev-amenities-container');
+            if (currentObjectData.amenities && currentObjectData.amenities.length > 0) {
+                amenitiesContainer.innerHTML = '';
+                currentObjectData.amenities.forEach(am => {
+                    const amDiv = document.createElement('div');
+                    amDiv.className = 'px-3 py-2 bg-white border border-slate-100 shadow-sm rounded-xl flex items-center gap-2 text-slate-700';
+                    amDiv.innerHTML = `<span class="text-lg leading-none disable-selection">${am.icon}</span> <span class="uppercase text-[11px] font-bold tracking-wide disable-selection">${am.text}</span>`;
+                    amenitiesContainer.appendChild(amDiv);
+                });
+                amenitiesContainer.classList.remove('hidden');
+                amenitiesContainer.classList.add('flex');
+            } else {
+                amenitiesContainer.classList.add('hidden');
+                amenitiesContainer.classList.remove('flex');
+            }
 
             // ЗАПОЛНЕНИЕ КАРТИНОК В ШАБЛОНЕ
             const mainImg = document.getElementById('prev-main-img');
@@ -416,11 +497,15 @@
             emptyState.classList.add('hidden');
             previewPanel.classList.remove('hidden');
             
-            // Показываем кнопки скачивания ZIP и удаления
+            // Показываем кнопки скачивания ZIP, Сохранить и удаления
             downloadBtn.classList.remove('hidden');
             downloadBtn.classList.add('flex');
             clearBtn.classList.remove('hidden');
             clearBtn.classList.add('flex');
+            if (saveToTgBtn) {
+                saveToTgBtn.classList.remove('hidden');
+                saveToTgBtn.classList.add('flex');
+            }
 
             // Анимация успеха на кнопке
             document.getElementById('submit-text').innerText = 'Успешно!';
@@ -484,6 +569,13 @@
                 text += `- Комнат:      ${currentObjectData.rooms}\\n`;
                 text += `- Этажность:   Этаж ${currentObjectData.floor} из ${currentObjectData.total_floors}\\n\\n`;
                 
+                if (currentObjectData.amenities && currentObjectData.amenities.length > 0) {
+                    text += 'УДОБСТВА\\n';
+                    text += '---------------------------------------\\n';
+                    const amList = currentObjectData.amenities.map(a => a.icon + ' ' + a.text).join(' | ');
+                    text += `${amList}\\n\\n`;
+                }
+                
                 text += 'ПОЛНОЕ ОПИСАНИЕ ОБЪЕКТА\\n';
                 text += '---------------------------------------\\n';
                 text += `${currentObjectData.description}\\n\\n`;
@@ -532,11 +624,123 @@
     });
 
     // ==========================================
+    // ЛОГИКА ОТПРАВКИ В TELEGRAM
+    // ==========================================
+    function b64toBlob(b64Data, contentType='', sliceSize=512) {
+        const byteCharacters = atob(b64Data);
+        const byteArrays = [];
+        for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+            const slice = byteCharacters.slice(offset, offset + sliceSize);
+            const byteNumbers = new Array(slice.length);
+            for (let i = 0; i < slice.length; i++) {
+                byteNumbers[i] = slice.charCodeAt(i);
+            }
+            const byteArray = new Uint8Array(byteNumbers);
+            byteArrays.push(byteArray);
+        }
+        return new Blob(byteArrays, {type: contentType});
+    }
+
+    if (saveToTgBtn) {
+        saveToTgBtn.addEventListener('click', () => {
+            if(!currentObjectData) return;
+
+            const btnText = document.getElementById('save-tg-text');
+            const originalText = btnText.innerText;
+            btnText.innerText = 'Отправка...';
+            saveToTgBtn.disabled = true;
+
+            const BOT_TOKEN = '8004043910:AAGhP67iPubcPEcvq-cH-NQV0J7QOdVpfI0';
+            const CHAT_ID = '773956172';
+
+            const escapeHtml = (text) => {
+                return text ? text.toString().replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;") : '';
+            };
+
+            let msg = '🏡 <b>НОВОЕ ОБЪЯВЛЕНИЕ</b>\n\n';
+            if(currentObjectData.object_id) msg += '🆔 <b>ID:</b> ' + escapeHtml(currentObjectData.object_id) + '\n';
+            msg += '📌 <b>Название:</b> ' + escapeHtml(currentObjectData.title) + '\n';
+            msg += '🏷 <b>Категория:</b> ' + escapeHtml(currentObjectData.type) + '\n';
+            msg += '💰 <b>Цена:</b> ' + escapeHtml(currentObjectData.price) + ' руб/сутки\n';
+            msg += '👥 <b>Гостей:</b> ' + escapeHtml(currentObjectData.guests) + '\n';
+            msg += '🚪 <b>Комнат:</b> ' + escapeHtml(currentObjectData.rooms) + '\n';
+            msg += '🏢 <b>Этаж:</b> ' + escapeHtml(currentObjectData.floor) + ' из ' + escapeHtml(currentObjectData.total_floors) + '\n\n';
+            
+            if (currentObjectData.amenities && currentObjectData.amenities.length > 0) {
+                const amList = currentObjectData.amenities.map(a => a.text).join(', ');
+                msg += '✨ <b>Удобства:</b> ' + escapeHtml(amList) + '\n\n';
+            }
+
+            msg += '📝 <b>Описание:</b>\n' + escapeHtml(currentObjectData.description) + '\n\n';
+            msg += '👤 <b>Контакт:</b> ' + escapeHtml(currentObjectData.contact_name) + '\n';
+            msg += '📞 <b>Телефон:</b> ' + escapeHtml(currentObjectData.phone) + '\n\n';
+            msg += '🕒 <i>' + new Date().toLocaleString('ru-RU') + '</i>';
+
+            const photosToSend = currentObjectData.photos ? currentObjectData.photos.slice(0, 10) : [];
+
+            let requestPromise;
+
+            if (photosToSend.length > 0) {
+                const formData = new FormData();
+                const mediaGroup = [];
+                
+                photosToSend.forEach((dataUrl, index) => {
+                    const base64Data = dataUrl.split(',')[1];
+                    const blob = b64toBlob(base64Data, 'image/jpeg');
+                    const filename = `photo${index}.jpg`;
+                    
+                    formData.append(filename, blob, filename);
+                    
+                    if(index === 0) {
+                        mediaGroup.push({ type: 'photo', media: `attach://${filename}`, caption: msg, parse_mode: 'HTML' });
+                    } else {
+                        mediaGroup.push({ type: 'photo', media: `attach://${filename}` });
+                    }
+                });
+                
+                formData.append('chat_id', CHAT_ID);
+                formData.append('media', JSON.stringify(mediaGroup));
+
+                requestPromise = fetch('https://api.telegram.org/bot' + BOT_TOKEN + '/sendMediaGroup', {
+                    method: 'POST',
+                    body: formData
+                });
+            } else {
+                requestPromise = fetch('https://api.telegram.org/bot' + BOT_TOKEN + '/sendMessage', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        chat_id: CHAT_ID,
+                        text: msg,
+                        parse_mode: 'HTML'
+                    })
+                });
+            }
+
+            requestPromise.then(response => {
+                if (response.ok) {
+                    alert('Данные успешно сохранены и отправлены в Telegram!');
+                } else {
+                    response.text().then(text => console.error('Telegram error:', text));
+                    alert('Произошла ошибка при отправке данных. Повторите попытку позже.');
+                }
+            }).catch(err => {
+                console.error(err);
+                alert('Ошибка сети при отправке данных в Telegram.');
+            }).finally(() => {
+                btnText.innerText = originalText;
+                saveToTgBtn.disabled = false;
+            });
+        });
+    }
+
+    // ==========================================
     // ЛОГИКА УДАЛЕНИЯ (Пароль: Andy777)
     // ==========================================
     clearBtn.addEventListener('click', () => {
         const pwd = prompt('Введите защитный код для удаления:');
         if (pwd === 'Andy777') {
+            // Сдаем значения
             form.reset();
             currentObjectData = null;
             
@@ -552,6 +756,10 @@
             downloadBtn.classList.add('hidden');
             clearBtn.classList.remove('flex');
             clearBtn.classList.add('hidden');
+            if (saveToTgBtn) {
+                saveToTgBtn.classList.remove('flex');
+                saveToTgBtn.classList.add('hidden');
+            }
             
             alert('Данные успешно очищены!');
         } else if (pwd !== null) {
