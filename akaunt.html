@@ -60,11 +60,15 @@
 <header class="bg-white border-b border-slate-200 px-6 py-4 flex justify-between items-center shrink-0 z-10 shadow-sm relative">
     <div class="flex items-center gap-3">
         <div class="w-10 h-10 bg-brand-500 text-white rounded-xl flex items-center justify-center font-bold text-xl shadow-md">B</div>
-        <h1 class="text-xl font-bold tracking-tight text-slate-900">Bonjour Generator</h1>
+        <h1 class="text-xl font-bold tracking-tight text-slate-900">Добавление объявления</h1>
     </div>
-    <div class="flex items-center gap-4">
+    <div class="flex items-center gap-3 sm:gap-4">
+        <button type="button" id="clear-btn" class="hidden items-center gap-1.5 bg-red-50 hover:bg-red-100 text-red-600 px-4 py-2 rounded-xl font-semibold transition-all text-sm sm:text-base border border-red-100 shadow-sm leading-none h-[40px]">
+            <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+            <span class="hidden sm:inline">Удалить</span>
+        </button>
         <!-- Кнопка скачивания появится только после генерации -->
-        <button type="button" id="download-btn" class="hidden items-center gap-2 bg-slate-900 hover:bg-slate-800 text-white px-5 py-2.5 rounded-xl font-semibold transition-all shadow-md group">
+        <button type="button" id="download-btn" class="hidden items-center gap-2 bg-slate-900 hover:bg-slate-800 text-white px-5 py-2.5 rounded-xl font-semibold transition-all shadow-md group border border-slate-900 leading-none h-[40px]">
             <svg class="w-5 h-5 text-brand-400 group-hover:text-brand-300 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
             <span id="download-text">Скачать ZIP</span>
         </button>
@@ -76,7 +80,7 @@
     
     <!-- ЛЕВАЯ ЧАСТЬ: ФОРМА -->
     <div class="w-full lg:w-1/2 xl:w-[500px] bg-white border-r border-slate-200 overflow-y-auto shrink-0 relative flex flex-col">
-        <form id="registration-form" class="p-6 pb-24 space-y-6">
+        <form id="registration-form" class="p-6 space-y-6">
             
             <div>
                 <h2 class="text-2xl font-bold font-serif text-slate-900 mb-1">Новый объект</h2>
@@ -95,6 +99,11 @@
                 
                 <div class="grid grid-cols-2 gap-4">
                     <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">ID объекта</label>
+                        <input type="text" name="object_id" placeholder="Например: 1001" 
+                               class="w-full px-4 py-2.5 bg-white border border-slate-300 rounded-xl focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-all">
+                    </div>
+                    <div>
                         <label class="block text-sm font-medium text-slate-700 mb-1">Категория</label>
                         <select name="type" required class="w-full px-4 py-2.5 bg-white border border-slate-300 rounded-xl focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-all appearance-none">
                             <option value="Гостевой дом">Гостевой дом</option>
@@ -104,11 +113,11 @@
                             <option value="Апартаменты">Апартаменты</option>
                         </select>
                     </div>
-                    <div>
-                        <label class="block text-sm font-medium text-slate-700 mb-1">Цена за сутки (₽)</label>
-                        <input type="number" name="price" required placeholder="3000" 
-                               class="w-full px-4 py-2.5 bg-white border border-slate-300 rounded-xl focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-all">
-                    </div>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-1">Цена за сутки (₽)</label>
+                    <input type="number" name="price" required placeholder="3000" 
+                           class="w-full px-4 py-2.5 bg-white border border-slate-300 rounded-xl focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-all">
                 </div>
             </div>
 
@@ -173,15 +182,14 @@
                 </label>
             </div>
 
+            <!-- Кнопка генерации -->
+            <div class="pt-4 mt-2 border-t border-slate-200">
+                <button type="submit" id="submit-btn" class="w-full bg-brand-500 hover:bg-brand-600 text-white py-3.5 rounded-xl font-bold text-lg transition-all shadow-md flex items-center justify-center gap-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                    <span id="submit-text">Сгенерировать карточку</span>
+                </button>
+            </div>
         </form>
-
-        <!-- Кнопка фиксации внизу -->
-        <div class="absolute bottom-0 left-0 w-full bg-white border-t border-slate-200 p-4 shrink-0 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
-            <button type="submit" form="registration-form" id="submit-btn" class="w-full bg-slate-900 hover:bg-slate-800 text-white py-3.5 rounded-xl font-bold text-lg transition-all shadow-lg flex items-center justify-center gap-2">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
-                <span id="submit-text">Сгенерировать карточку</span>
-            </button>
-        </div>
     </div>
 
     <!-- ПРАВАЯ ЧАСТЬ: ПРЕВЬЮ -->
@@ -223,7 +231,10 @@
                     <!-- Заголовок и цена -->
                     <div class="flex flex-col sm:flex-row justify-between items-start gap-4 border-b border-slate-200 pb-5">
                         <div class="flex-1">
-                            <p id="prev-type" class="text-brand-600 font-bold text-[11px] uppercase tracking-wider bg-brand-50 border border-brand-100 px-2.5 py-1 rounded inline-block mb-2"></p>
+                            <div class="flex items-center gap-2 mb-2">
+                                <span id="prev-id-badge" class="hidden text-slate-600 font-bold text-[10px] uppercase tracking-wider bg-white border border-slate-200 shadow-sm px-2 py-1 rounded">ID: <span id="prev-id" class="text-slate-900"></span></span>
+                                <span id="prev-type" class="text-brand-600 font-bold text-[11px] uppercase tracking-wider bg-brand-50 border border-brand-100 px-2.5 py-1 rounded inline-block"></span>
+                            </div>
                             <h3 id="prev-title" class="text-2xl font-serif font-extrabold text-slate-900 leading-tight"></h3>
                         </div>
                         <div class="bg-indigo-900 px-4 py-3 rounded-xl text-center shadow-md shrink-0 w-full sm:w-auto">
@@ -289,6 +300,8 @@
     const emptyState = document.getElementById('empty-state');
     const previewPanel = document.getElementById('preview-panel');
     const downloadBtn = document.getElementById('download-btn');
+    const clearBtn = document.getElementById('clear-btn');
+    const prevIdBadge = document.getElementById('prev-id-badge');
 
     let currentObjectData = null; // Для сохранения архива
 
@@ -345,6 +358,7 @@
 
             // Данные объекта
             currentObjectData = {
+                object_id: fd.get('object_id') || '',
                 title: fd.get('title'), type: fd.get('type'), price: fd.get('price'),
                 guests: fd.get('guests'), rooms: fd.get('rooms'),
                 floor: fd.get('floor'), total_floors: fd.get('total_floors'),
@@ -354,6 +368,14 @@
             };
 
             // ЗАПОЛНЕНИЕ ШАБЛОНА ПОЛЕ ЗА ПОЛЕМ
+            if(currentObjectData.object_id.trim() !== '') {
+                document.getElementById('prev-id').innerText = currentObjectData.object_id;
+                prevIdBadge.classList.remove('hidden');
+                prevIdBadge.classList.add('inline-flex');
+            } else {
+                prevIdBadge.classList.add('hidden');
+                prevIdBadge.classList.remove('inline-flex');
+            }
             document.getElementById('prev-title').innerText = currentObjectData.title;
             document.getElementById('prev-type').innerText = currentObjectData.type;
             document.getElementById('prev-price').innerText = Number(currentObjectData.price).toLocaleString('ru-RU');
@@ -394,18 +416,18 @@
             emptyState.classList.add('hidden');
             previewPanel.classList.remove('hidden');
             
-            // Показываем кнопку скачивания ZIP
+            // Показываем кнопки скачивания ZIP и удаления
             downloadBtn.classList.remove('hidden');
             downloadBtn.classList.add('flex');
+            clearBtn.classList.remove('hidden');
+            clearBtn.classList.add('flex');
 
             // Анимация успеха на кнопке
             document.getElementById('submit-text').innerText = 'Успешно!';
-            submitBtn.classList.replace('bg-slate-900', 'bg-brand-500');
+            submitBtn.classList.replace('bg-brand-500', 'bg-green-500');
+            submitBtn.classList.replace('hover:bg-brand-600', 'hover:bg-green-600');
             
-            // Для мобильной версии добавим прокрутку вниз, если экран узкий и правая часть не показана (хотя сейчас она hidden on mobile)
-            // Но мы сделали правую часть flex-1 только на lg (lg:flex). На мобилках она бы скрыта.
-            // Сделаем так, чтобы превью показывалось и на мобильных.
-            
+            // Для мобильной версии добавим прокрутку вниз
             const rightPane = previewPanel.parentElement.parentElement;
             if(window.innerWidth < 1024) {
                rightPane.classList.remove('hidden');
@@ -416,7 +438,8 @@
             setTimeout(() => { 
                 document.getElementById('submit-text').innerText = origText; 
                 submitBtn.disabled = false; 
-                submitBtn.classList.replace('bg-brand-500', 'bg-slate-900');
+                submitBtn.classList.replace('bg-green-500', 'bg-brand-500');
+                submitBtn.classList.replace('hover:bg-green-600', 'hover:bg-brand-600');
             }, 2000);
 
         } catch (error) {
@@ -448,6 +471,9 @@
                 // 1. Формируем красивый текстовый файл с описанием
                 let text = 'ИНФОРМАЦИОННАЯ КАРТОЧКА ОБЪЕКТА\\n';
                 text += '=======================================\\n\\n';
+                if(currentObjectData.object_id) {
+                    text += `ID Объекта: ${currentObjectData.object_id}\\n`;
+                }
                 text += `Название:  ${currentObjectData.title}\\n`;
                 text += `Категория: ${currentObjectData.type}\\n`;
                 text += `Стоимость: ${currentObjectData.price} руб / сутки\\n\\n`;
@@ -482,12 +508,13 @@
                 // 3. Собираем и отдаем пользователю ZIP
                 // Безопасное имя файла без запрещенных символов
                 const safeName = currentObjectData.title.replace(/[\\/\\\\:*?"<>|]/g, "_");
+                const safeId = currentObjectData.object_id ? `[ID ${currentObjectData.object_id.replace(/[\\/\\\\:*?"<>|]/g, "_")}] ` : "";
                 
                 zip.generateAsync({type:"blob"}).then(function(content) {
                     const url = URL.createObjectURL(content);
                     const a = document.createElement('a');
                     a.href = url;
-                    a.download = `Объект [${safeName}].zip`; 
+                    a.download = `Объект ${safeId}[${safeName}].zip`; 
                     document.body.appendChild(a);
                     a.click();
                     document.body.removeChild(a);
@@ -499,6 +526,34 @@
                 });
             }, 500);
 
+        } else if (pwd !== null) {
+            alert('Ошибка доступа! Неверный пароль.');
+        }
+    });
+
+    // ==========================================
+    // ЛОГИКА УДАЛЕНИЯ (Пароль: Andy777)
+    // ==========================================
+    clearBtn.addEventListener('click', () => {
+        const pwd = prompt('Введите защитный код для удаления (Andy777):');
+        if (pwd === 'Andy777') {
+            form.reset();
+            currentObjectData = null;
+            
+            // Сброс загрузки файлов
+            photoInput.value = '';
+            uploadText.innerHTML = `Нажмите, чтобы загрузить<br><span class="text-xs text-slate-400 font-normal mt-1 block">Можно выбрать несколько (JPEG, PNG)</span>`;
+            document.getElementById('drop-zone').classList.remove('border-brand-500', 'bg-brand-50/70');
+            
+            // Скрываем превью и кнопки
+            previewPanel.classList.add('hidden');
+            emptyState.classList.remove('hidden');
+            downloadBtn.classList.remove('flex');
+            downloadBtn.classList.add('hidden');
+            clearBtn.classList.remove('flex');
+            clearBtn.classList.add('hidden');
+            
+            alert('Данные успешно очищены!');
         } else if (pwd !== null) {
             alert('Ошибка доступа! Неверный пароль.');
         }
