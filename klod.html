@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Подать объявление — Бердянск Жильё</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <style>
   :root {
     --bg: #f4f1ec;
@@ -692,79 +691,34 @@
   }
   .scroll-preview-btn:hover { background: var(--teal); color: white; }
 
-  /* Save ZIP button */
-  .btn-save {
-    width: 100%;
-    padding: 13px;
-    background: var(--ocean);
-    color: white;
-    border: none;
-    border-radius: var(--radius-sm);
-    font-family: 'DM Sans', sans-serif;
-    font-size: 0.925rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s;
-    display: flex; align-items: center; justify-content: center; gap: 8px;
-    letter-spacing: 0.01em;
-  }
-  .btn-save:hover { background: #1a3344; transform: translateY(-1px); box-shadow: 0 6px 20px rgba(38,70,83,0.3); }
-  .btn-save:disabled { opacity: 0.6; cursor: not-allowed; transform: none; box-shadow: none; }
-
-  /* Download toast */
-  .download-toast {
+  /* Notification toast */
+  .notif-toast {
     position: fixed;
-    bottom: 28px;
-    right: 28px;
+    bottom: 28px; right: 28px;
     background: var(--ocean);
     color: white;
     border-radius: var(--radius);
-    padding: 16px 20px;
-    display: flex;
-    align-items: center;
-    gap: 14px;
+    padding: 14px 18px;
+    display: flex; align-items: center; gap: 12px;
     box-shadow: 0 8px 32px rgba(38,70,83,0.35);
     z-index: 999;
     transform: translateY(80px);
     opacity: 0;
     transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
-    max-width: 340px;
+    max-width: 320px;
     pointer-events: none;
   }
-  .download-toast.show {
-    transform: translateY(0);
-    opacity: 1;
-    pointer-events: auto;
+  .notif-toast.show { transform: translateY(0); opacity: 1; pointer-events: auto; }
+  .notif-toast .t-icon { font-size: 1.4rem; flex-shrink: 0; }
+  .notif-toast .t-body { flex: 1; }
+  .notif-toast .t-body strong { display: block; font-size: 0.88rem; margin-bottom: 2px; }
+  .notif-toast .t-body span { font-size: 0.76rem; opacity: 0.75; }
+  .notif-toast .t-close {
+    background: rgba(255,255,255,0.15); border: none; color: white;
+    width: 24px; height: 24px; border-radius: 50%; cursor: pointer;
+    font-size: 0.85rem; display: flex; align-items: center; justify-content: center;
   }
-  .toast-icon { font-size: 1.6rem; flex-shrink: 0; }
-  .toast-body { flex: 1; }
-  .toast-body strong { display: block; font-size: 0.9rem; margin-bottom: 3px; }
-  .toast-body span { font-size: 0.78rem; opacity: 0.75; }
-  .toast-close {
-    background: rgba(255,255,255,0.15);
-    border: none;
-    color: white;
-    width: 26px; height: 26px;
-    border-radius: 50%;
-    cursor: pointer;
-    font-size: 0.9rem;
-    display: flex; align-items: center; justify-content: center;
-    flex-shrink: 0;
-    transition: background 0.2s;
-  }
-  .toast-close:hover { background: rgba(255,255,255,0.25); }
-
-  /* Progress bar inside save btn */
-  .btn-save .progress-bar {
-    position: absolute;
-    bottom: 0; left: 0;
-    height: 3px;
-    background: rgba(255,255,255,0.4);
-    border-radius: 0 0 var(--radius-sm) var(--radius-sm);
-    width: 0%;
-    transition: width 0.3s ease;
-  }
-  .btn-save { position: relative; overflow: hidden; }
+  .notif-toast .t-close:hover { background: rgba(255,255,255,0.28); }
 
   /* ─── RESPONSIVE ─── */
   @media (max-width: 900px) {
@@ -1044,15 +998,6 @@
             <path d="M22 2L11 13M22 2L15 22l-4-9-9-4 20-7z"/>
           </svg>
           Подать объявление
-        </button>
-        <button class="btn-save" type="button" id="saveBtn" onclick="saveAsZip()">
-          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-            <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
-            <polyline points="7 10 12 15 17 10"/>
-            <line x1="12" y1="15" x2="12" y2="3"/>
-          </svg>
-          Сохранить и скачать ZIP
-          <div class="progress-bar" id="saveProgress"></div>
         </button>
         <button class="btn-reset" type="button" onclick="resetForm()">↺ Очистить форму</button>
       </div>
@@ -1406,84 +1351,96 @@ const TG_BOT_TOKEN = '8004043910:AAGhP67iPubcPEcvq-cH-NQV0J7QOdVpfI0';
 const TG_CHAT_ID   = '773956172';
 const TG_API       = `https://api.telegram.org/bot${TG_BOT_TOKEN}`;
 
+// Amenity icons for Telegram caption
+const AMEN_ICONS = {
+  'Wi-Fi':'📶','Кондиционер':'❄️','Телевизор':'📺',
+  'Стиральная машина':'🫧','Кухня':'🍳','Парковка':'🚗',
+  'Балкон':'🌿','Вид на море':'🌊','Горячая вода':'🚿'
+};
+
 // ── Form submit ────────────────────────────────────────
 document.getElementById('listingForm').addEventListener('submit', async function(e) {
   e.preventDefault();
   if (!validateForm()) return;
 
   const btn = document.getElementById('submitBtn');
-  btn.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg> Отправляем...`;
+  btn.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg> Отправляем...`;
   btn.disabled = true;
 
   try {
     const d = collectFormData();
 
-    // ── 1. Text message ──────────────────────────────
-    const amenLine = d.amenities.length ? d.amenities.join(', ') : '—';
-    const msg =
-`🏡 <b>НОВОЕ ОБЪЯВЛЕНИЕ — Бердянск Жильё</b>
+    // ── Build caption (Telegram limit = 1024 chars) ──
+    const amenLine = d.amenities.length
+      ? d.amenities.map(a => (AMEN_ICONS[a] || '✔') + ' ' + a).join('  ')
+      : '—';
 
-📋 <b>${d.title}</b>
+    // Truncate description to fit within caption budget
+    const header =
+`🏡 НОВОЕ ОБЪЯВЛЕНИЕ — Бердянск Жильё
 
-👤 <b>Владелец:</b> ${d.ownerName || '—'}
-📞 <b>Телефон:</b> ${d.phone || '—'}
-📧 <b>Email:</b> ${d.email || '—'}
+📋 ${d.title}
 
-🏠 <b>Тип:</b> ${d.propType || '—'}
-🛏 <b>Комнат:</b> ${d.rooms || '—'}
-👥 <b>Гостей (макс.):</b> ${d.guests || '—'}
-📍 <b>Район:</b> ${d.district || '—'}
-🗺 <b>Адрес:</b> ${d.address || '—'}
+👤 ${d.ownerName || '—'}
+📞 ${d.phone || '—'}${d.email ? '\n📧 ' + d.email : ''}
 
-💰 <b>Цена за сутки:</b> ${d.price ? parseInt(d.price).toLocaleString('ru') + ' ' + d.currency : '—'}
+🏠 ${d.propType || '—'} · 🛏 ${d.rooms || '—'} комн. · 👥 до ${d.guests || '—'} гостей
+📍 ${d.district || '—'}${d.address ? ' — ' + d.address : ''}
+💰 ${d.price ? parseInt(d.price).toLocaleString('ru') + ' ' + d.currency + ' / сутки' : '—'}
 
-✅ <b>Удобства:</b> ${amenLine}
+✅ Удобства:
+${amenLine}`;
 
-📝 <b>Описание:</b>
-${d.description || '—'}
+    const footer = `\n\n🖼 Фото: ${d.photosCount} шт.\n📌 ${new Date().toLocaleString('ru-RU')}`;
 
-🖼 <b>Фото:</b> ${d.photosCount} шт.
-📌 <i>${new Date().toLocaleString('ru-RU')}</i>`;
-
-    await fetch(`${TG_API}/sendMessage`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ chat_id: TG_CHAT_ID, text: msg, parse_mode: 'HTML' })
-    });
-
-    // ── 2. Send photos (up to 10, as media group) ───
-    if (photos.length > 0) {
-      const batch = photos.slice(0, 10); // Telegram max 10 per group
-
-      if (batch.length === 1) {
-        // Single photo — sendPhoto
-        const fd = new FormData();
-        fd.append('chat_id', TG_CHAT_ID);
-        fd.append('caption', `📸 Фото: ${d.title}`);
-        fd.append('photo', dataUrlToBlob(batch[0].url), `photo_01.${getExtFromDataUrl(batch[0].url)}`);
-        await fetch(`${TG_API}/sendPhoto`, { method: 'POST', body: fd });
-
-      } else {
-        // Multiple photos — sendMediaGroup
-        const fd = new FormData();
-        fd.append('chat_id', TG_CHAT_ID);
-
-        const mediaArr = batch.map((p, i) => {
-          const name = `photo_${String(i+1).padStart(2,'0')}`;
-          fd.append(name, dataUrlToBlob(p.url), `${name}.${getExtFromDataUrl(p.url)}`);
-          return {
-            type: 'photo',
-            media: `attach://${name}`,
-            ...(i === 0 ? { caption: `📸 ${d.photosCount} фото: ${d.title}` } : {})
-          };
-        });
-
-        fd.append('media', JSON.stringify(mediaArr));
-        await fetch(`${TG_API}/sendMediaGroup`, { method: 'POST', body: fd });
-      }
+    // Fill description into remaining space
+    let caption = header + footer;
+    if (d.description) {
+      const budget = 1020 - header.length - footer.length - 14; // "\n\n📝 \n" overhead
+      const descPart = budget > 30
+        ? '\n\n📝 ' + (d.description.length > budget ? d.description.slice(0, budget) + '…' : d.description)
+        : '';
+      caption = header + descPart + footer;
     }
 
-    // ── Success ──────────────────────────────────────
+    // ── Send to Telegram ─────────────────────────────
+    if (photos.length === 0) {
+      // No photos — plain text message
+      await fetch(`${TG_API}/sendMessage`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ chat_id: TG_CHAT_ID, text: caption })
+      });
+
+    } else if (photos.length === 1) {
+      // Single photo → sendPhoto with caption
+      const fd = new FormData();
+      fd.append('chat_id', TG_CHAT_ID);
+      fd.append('caption', caption);
+      fd.append('photo', dataUrlToBlob(photos[0].url), `photo_01.${getExtFromDataUrl(photos[0].url)}`);
+      await fetch(`${TG_API}/sendPhoto`, { method: 'POST', body: fd });
+
+    } else {
+      // Multiple photos → sendMediaGroup, caption on first item
+      const batch = photos.slice(0, 10);
+      const fd = new FormData();
+      fd.append('chat_id', TG_CHAT_ID);
+
+      const mediaArr = batch.map((p, i) => {
+        const name = `photo_${String(i + 1).padStart(2, '0')}`;
+        fd.append(name, dataUrlToBlob(p.url), `${name}.${getExtFromDataUrl(p.url)}`);
+        return {
+          type: 'photo',
+          media: `attach://${name}`,
+          ...(i === 0 ? { caption } : {})
+        };
+      });
+
+      fd.append('media', JSON.stringify(mediaArr));
+      await fetch(`${TG_API}/sendMediaGroup`, { method: 'POST', body: fd });
+    }
+
+    // ── Success state ────────────────────────────────
     btn.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Отправлено!`;
     btn.style.background = '#15803d';
     document.getElementById('successBanner').classList.add('show');
@@ -1496,7 +1453,7 @@ ${d.description || '—'}
     }, 6000);
 
   } catch (err) {
-    console.error('Telegram send error:', err);
+    console.error('Telegram error:', err);
     btn.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 2L11 13M22 2L15 22l-4-9-9-4 20-7z"/></svg> Подать объявление`;
     btn.style.background = '';
     btn.disabled = false;
@@ -1504,7 +1461,7 @@ ${d.description || '—'}
   }
 });
 
-// ── dataURL → Blob helper ──────────────────────────────
+// ── dataURL → Blob ─────────────────────────────────────
 function dataUrlToBlob(dataUrl) {
   const [header, data] = dataUrl.split(',');
   const mime = header.match(/:(.*?);/)[1];
@@ -1579,154 +1536,25 @@ function getAmenityIcon(name) {
   return map[name] || '✓';
 }
 
-// ── Save as ZIP ────────────────────────────────────────
-async function saveAsZip() {
-  const btn = document.getElementById('saveBtn');
-  const bar = document.getElementById('saveProgress');
-
-  // Collect form data
-  const data = collectFormData();
-
-  // Validate: at least name required
-  if (!data.ownerName && !data.price && photos.length === 0) {
-    showToast('⚠️', 'Форма пуста', 'Заполните хотя бы несколько полей перед сохранением');
-    return;
-  }
-
-  btn.disabled = true;
-  btn.innerHTML = `<span style="animation: spin 0.8s linear infinite; display:inline-block;">⏳</span> Упаковываем ZIP...
-    <div class="progress-bar" id="saveProgress" style="width:15%"></div>`;
-
-  // Add spin keyframe if missing
-  if (!document.getElementById('spinStyle')) {
-    const s = document.createElement('style');
-    s.id = 'spinStyle';
-    s.textContent = '@keyframes spin { to { transform: rotate(360deg); } }';
-    document.head.appendChild(s);
-  }
-
-  try {
-    const zip = new JSZip();
-
-    // Progress helper
-    const setProgress = (pct) => {
-      const b = document.getElementById('saveProgress');
-      if (b) b.style.width = pct + '%';
-    };
-
-    setProgress(20);
-
-    // ── 1. data.json ──────────────────────────────────
-    const jsonContent = JSON.stringify(data, null, 2);
-    zip.file('data.json', jsonContent);
-
-    setProgress(35);
-
-    // ── 2. Photos folder ──────────────────────────────
-    const imgFolder = zip.folder('photos');
-    for (let i = 0; i < photos.length; i++) {
-      const p = photos[i];
-      const ext = getExtFromDataUrl(p.url);
-      const filename = `photo_${String(i + 1).padStart(2, '0')}.${ext}`;
-      const base64 = p.url.split(',')[1];
-      imgFolder.file(filename, base64, { base64: true });
-      setProgress(35 + Math.round((i + 1) / photos.length * 35));
-    }
-
-    setProgress(72);
-
-    // ── 3. preview.html ───────────────────────────────
-    const previewHtml = buildPreviewHtml(data, photos);
-    zip.file('preview.html', previewHtml);
-
-    setProgress(88);
-
-    // ── 4. README.txt ─────────────────────────────────
-    const now = new Date();
-    const dateStr = now.toLocaleString('ru-RU');
-    const readme = [
-      '=== Бердянск Жильё — Архив объявления ===',
-      '',
-      `Дата сохранения: ${dateStr}`,
-      `Объект: ${data.title || 'не указано'}`,
-      `Владелец: ${data.ownerName || '—'}`,
-      `Телефон: ${data.phone || '—'}`,
-      `Email: ${data.email || '—'}`,
-      '',
-      'Содержимое архива:',
-      '  data.json      — все данные объявления в формате JSON',
-      `  photos/        — ${photos.length} фото(граф.)`,
-      '  preview.html   — красивый предпросмотр объявления (откройте в браузере)',
-      '  README.txt     — этот файл',
-      '',
-      'Чтобы посмотреть объявление — откройте preview.html в любом браузере.',
-    ].join('\n');
-    zip.file('README.txt', readme);
-
-    setProgress(95);
-
-    // ── Generate & download ───────────────────────────
-    const slug = slugify(data.title || 'obyavlenie');
-    const dateSlug = now.toISOString().slice(0, 10);
-    const filename = `berdiansk_${slug}_${dateSlug}.zip`;
-
-    const blob = await zip.generateAsync({ type: 'blob', compression: 'DEFLATE', compressionOptions: { level: 6 } });
-
-    setProgress(100);
-
-    // Trigger download
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = filename;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    setTimeout(() => URL.revokeObjectURL(url), 10000);
-
-    const sizeMb = (blob.size / 1024 / 1024).toFixed(1);
-    showToast('📦', 'ZIP-файл готов!', `Скачивается: ${filename} (${sizeMb} МБ)`);
-
-  } catch (err) {
-    console.error('ZIP error:', err);
-    showToast('❌', 'Ошибка сохранения', 'Не удалось создать ZIP. Попробуйте ещё раз.');
-  } finally {
-    btn.disabled = false;
-    btn.innerHTML = `<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-      <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
-      <polyline points="7 10 12 15 17 10"/>
-      <line x1="12" y1="15" x2="12" y2="3"/>
-    </svg>
-    Сохранить и скачать ZIP
-    <div class="progress-bar" id="saveProgress"></div>`;
-  }
-}
-
 function collectFormData() {
   const amenities = Array.from(document.querySelectorAll('#amenityGrid input[type="checkbox"]'))
     .filter(cb => cb.closest('.amenity-item').classList.contains('checked'))
     .map(cb => cb.value);
-
   const rooms    = document.getElementById('rooms').value;
   const propType = document.getElementById('propType').value;
   const district = document.getElementById('district').value.trim();
-
   let titleParts = [];
   if (rooms) {
     if (rooms === 'Студия') titleParts.push('Студия');
     else titleParts.push(rooms + '-комнатн' + (rooms === '1' ? 'ая' : 'ые') + ' ' + (propType || 'квартира').toLowerCase());
   } else if (propType) { titleParts.push(propType); }
-  if (district) titleParts.push('в ' + district);
-  else titleParts.push('в Бердянске');
-
+  titleParts.push(district ? 'в ' + district : 'в Бердянске');
   return {
     title:       capitalize(titleParts.join(' ')),
     ownerName:   document.getElementById('ownerName').value.trim(),
     phone:       document.getElementById('phone').value.trim(),
     email:       document.getElementById('email').value.trim(),
-    propType,
-    rooms,
-    district,
+    propType, rooms, district,
     address:     document.getElementById('address').value.trim(),
     guests:      document.getElementById('guests').value,
     price:       document.getElementById('price').value.trim(),
@@ -1735,7 +1563,6 @@ function collectFormData() {
     amenities,
     photosCount: photos.length,
     savedAt:     new Date().toISOString(),
-    status:      'awaiting_moderation',
   };
 }
 
@@ -1745,121 +1572,33 @@ function getExtFromDataUrl(dataUrl) {
   return map[mime] || 'jpg';
 }
 
-function slugify(str) {
-  const map = { а:'a',б:'b',в:'v',г:'g',д:'d',е:'e',ё:'yo',ж:'zh',з:'z',и:'i',й:'y',к:'k',
-    л:'l',м:'m',н:'n',о:'o',п:'p',р:'r',с:'s',т:'t',у:'u',ф:'f',х:'h',ц:'ts',ч:'ch',
-    ш:'sh',щ:'shch',ъ:'',ы:'y',ь:'',э:'e',ю:'yu',я:'ya',' ':'_' };
-  return str.toLowerCase().split('').map(c => map[c] ?? c).join('').replace(/[^a-z0-9_]/g, '').slice(0, 40);
-}
-
-function buildPreviewHtml(d, imgs) {
-  const photoImgs = imgs.map((p, i) =>
-    `<img src="photos/photo_${String(i+1).padStart(2,'0')}.${getExtFromDataUrl(p.url)}"
-      style="width:100%;height:280px;object-fit:cover;display:${i===0?'block':'none'}" class="slide" alt="Фото ${i+1}">`
-  ).join('');
-  const amenityTags = d.amenities.map(a =>
-    `<span style="background:#e8f5f3;color:#1f7a6e;padding:4px 12px;border-radius:20px;font-size:13px;font-weight:600;">${a}</span>`
-  ).join(' ');
-
-  return `<!DOCTYPE html>
-<html lang="ru">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>${d.title} — Бердянск Жильё</title>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@700&family=DM+Sans:wght@400;600&display=swap" rel="stylesheet">
-<style>
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'DM Sans',sans-serif;background:#f4f1ec;color:#1a2e2b;padding:20px}
-.card{max-width:640px;margin:0 auto;background:#fff;border-radius:16px;box-shadow:0 12px 48px rgba(38,70,83,.15);overflow:hidden}
-.photo-wrap{position:relative;height:280px;background:#e8f5f3;overflow:hidden}
-.badge{position:absolute;top:14px;left:14px;background:rgba(255,255,255,.9);padding:5px 12px;border-radius:8px;font-size:12px;font-weight:700;color:#d97706;display:flex;align-items:center;gap:6px}
-.dot{width:7px;height:7px;border-radius:50%;background:#f59e0b;animation:blink 1.5s infinite}
-@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
-.nav{position:absolute;bottom:12px;right:14px;background:rgba(0,0,0,.4);color:#fff;padding:3px 8px;border-radius:6px;font-size:12px;cursor:pointer;user-select:none}
-.body{padding:24px}
-h1{font-family:'Cormorant Garamond',serif;font-size:1.7rem;color:#264653;margin-bottom:8px}
-.loc{font-size:13px;color:#6b7c79;margin-bottom:14px}
-.chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
-.chip{background:#f4f1ec;border:1px solid #ddd8cf;border-radius:6px;padding:5px 11px;font-size:12px;font-weight:500}
-.price{font-family:'Cormorant Garamond',serif;font-size:1.8rem;font-weight:700;color:#2a9d8f}
-.price-label{font-size:11px;color:#6b7c79;margin-top:1px}
-.desc{font-size:14px;line-height:1.65;color:#6b7c79;margin:14px 0;padding-bottom:14px;border-bottom:1px solid #ddd8cf}
-.amen-title{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#264653;margin-bottom:8px}
-.amens{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid #ddd8cf}
-.owner{display:flex;align-items:center;gap:10px;margin-top:4px}
-.avatar{width:40px;height:40px;border-radius:50%;background:#e8f5f3;display:flex;align-items:center;justify-content:center;font-size:1.1rem;font-weight:700;color:#2a9d8f}
-.owner-name{font-size:14px;font-weight:600}
-.owner-phone{font-size:12px;color:#6b7c79}
-.meta{font-size:11px;color:#aaa;margin-top:16px;padding-top:12px;border-top:1px solid #f0ebe3}
-</style>
-</head>
-<body>
-<div class="card">
-  <div class="photo-wrap">
-    ${imgs.length ? photoImgs : '<div style="height:100%;display:flex;align-items:center;justify-content:center;font-size:3rem;opacity:.3">🏠</div>'}
-    <div class="badge"><div class="dot"></div> На модерации</div>
-    ${imgs.length > 1 ? `<div class="nav" onclick="nextSlide()">❯ ${imgs.length} фото</div>` : ''}
-  </div>
-  <div class="body">
-    <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:4px">
-      <h1>${d.title}</h1>
-      <div style="text-align:right;flex-shrink:0">
-        <div class="price">${d.price ? parseInt(d.price).toLocaleString('ru') + ' ' + d.currency : '—'}</div>
-        <div class="price-label">за сутки</div>
-      </div>
-    </div>
-    <div class="loc">📍 ${d.district || 'Бердянск'}${d.address ? ' · ' + d.address : ''}</div>
-    <div class="chips">
-      ${d.rooms ? `<div class="chip">🛏 ${d.rooms === 'Студия' ? 'Студия' : d.rooms + ' комн.'}</div>` : ''}
-      ${d.guests ? `<div class="chip">👥 до ${d.guests} гостей</div>` : ''}
-      ${d.propType ? `<div class="chip">🏡 ${d.propType}</div>` : ''}
-    </div>
-    ${d.description ? `<div class="desc">${d.description.replace(/\n/g,'<br>')}</div>` : ''}
-    ${d.amenities.length ? `<div class="amen-title">Удобства</div><div class="amens">${amenityTags}</div>` : ''}
-    <div class="owner">
-      <div class="avatar">${d.ownerName ? d.ownerName[0].toUpperCase() : '?'}</div>
-      <div>
-        <div class="owner-name">${d.ownerName || 'Владелец'}</div>
-        <div class="owner-phone">${d.phone || ''}${d.email ? ' · ' + d.email : ''}</div>
-      </div>
-    </div>
-    <div class="meta">Сохранено: ${new Date(d.savedAt).toLocaleString('ru-RU')} · Статус: Ожидает модерации · Бердянск Жильё</div>
-  </div>
-</div>
-${imgs.length > 1 ? `<script>
-let idx=0;const slides=document.querySelectorAll('.slide');
-function nextSlide(){slides[idx].style.display='none';idx=(idx+1)%slides.length;slides[idx].style.display='block';}
-<\/script>` : ''}
-</body></html>`;
-}
-
 // ── Toast ──────────────────────────────────────────────
 let toastTimer = null;
 function showToast(icon, title, desc) {
-  const t = document.getElementById('downloadToast');
-  document.getElementById('toastTitle').textContent = title;
-  document.getElementById('toastDesc').textContent = desc;
-  t.querySelector('.toast-icon').textContent = icon;
+  const t = document.getElementById('notifToast');
+  t.querySelector('.t-icon').textContent = icon;
+  t.querySelector('.t-body strong').textContent = title;
+  t.querySelector('.t-body span').textContent = desc;
   t.classList.add('show');
   clearTimeout(toastTimer);
   toastTimer = setTimeout(() => t.classList.remove('show'), 6000);
 }
 function closeToast() {
-  document.getElementById('downloadToast').classList.remove('show');
+  document.getElementById('notifToast').classList.remove('show');
 }
 
 // Init
 updatePreview();
 </script>
-<!-- Download Toast -->
-<div class="download-toast" id="downloadToast">
-  <div class="toast-icon">📦</div>
-  <div class="toast-body">
-    <strong id="toastTitle">ZIP-файл готов!</strong>
-    <span id="toastDesc">Объявление сохранено и скачивается</span>
+
+<!-- Notification Toast -->
+<div class="notif-toast" id="notifToast">
+  <div class="t-icon">❌</div>
+  <div class="t-body">
+    <strong>Ошибка</strong>
+    <span>Что-то пошло не так</span>
   </div>
-  <button class="toast-close" onclick="closeToast()">✕</button>
+  <button class="t-close" onclick="closeToast()">✕</button>
 </div>
 
 </body>
