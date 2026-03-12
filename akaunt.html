@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Управление объектами | Панель</title>
+    <!-- Подключение Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <!-- Современный шрифт Plus Jakarta Sans -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+    
+    <script>
+        // Настройки темы
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0fdfa',
+                            100: '#ccfbf1',
+                            400: '#2dd4bf',
+                            500: '#14b8a6', // Основной акцент
+                            600: '#0d9488',
+                            900: '#134e4a',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                    },
+                    boxShadow: {
+                        'glass': '0 20px 40px -15px rgba(0,0,0,0.05)',
+                        'card': '0 10px 25px -5px rgba(0,0,0,0.02)',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            /* Мягкий градиентный фон */
+            background: linear-gradient(135deg, #e0f2fe 0%, #f0fdfa 50%, #f8fafc 100%);
+            min-height: 100vh;
+        }
+        
+        /* Эффект матового стекла */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+        }
+        
+        /* Кастомный элегантный скроллбар */
+        ::-webkit-scrollbar { width: 5px; height: 5px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        
+        /* Анимация добавления карточки */
+        .listing-card { 
+            animation: slideIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            transition: all 0.3s ease; 
+        }
+        .listing-card:hover { 
+            transform: translateY(-3px); 
+            box-shadow: 0 12px 30px -10px rgba(20, 184, 166, 0.2); 
+            border-color: #ccfbf1;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="font-sans text-slate-800 antialiased p-4 md:p-8 flex items-center justify-center">
+
+<div class="max-w-7xl w-full mx-auto">
+    <!-- Шапка платформы -->
+    <header class="mb-8 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <div>
+            <h1 class="text-3xl md:text-4xl font-bold text-slate-900 tracking-tight">Объекты</h1>
+            <p class="text-slate-500 mt-1 text-sm md:text-base">Управление объявлениями и регистрация новых</p>
+        </div>
+        <div class="flex items-center gap-3 bg-white px-4 py-2 rounded-full shadow-sm border border-slate-100">
+            <div class="w-8 h-8 rounded-full bg-brand-100 flex items-center justify-center text-brand-600 font-bold text-sm">
+                АМ
+            </div>
+            <div class="text-sm font-semibold text-slate-700">Алексей М.</div>
+        </div>
+    </header>
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start">
+        
+        <!-- === ЛЕВАЯ КОЛОНКА: ФОРМА ДОБАВЛЕНИЯ === -->
+        <main class="lg:col-span-7 glass-panel shadow-glass rounded-[2rem] overflow-hidden">
+            <div class="p-6 md:p-8 border-b border-white/50 bg-white/40 flex justify-between items-center">
+                <div>
+                    <h2 class="text-xl font-bold text-slate-800">Новое объявление</h2>
+                    <p class="text-slate-500 text-sm mt-1">Внесите данные о жилье</p>
+                </div>
+                <!-- Индикатор генерации ID -->
+                <div class="flex items-center gap-2">
+                    <span class="relative flex h-3 w-3">
+                      <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-400 opacity-75"></span>
+                      <span class="relative inline-flex rounded-full h-3 w-3 bg-brand-500"></span>
+                    </span>
+                    <span class="text-xs font-semibold text-brand-600 uppercase tracking-wide">Запись</span>
+                </div>
+            </div>
+
+            <form id="registration-form" class="p-6 md:p-8 space-y-8">
+                
+                <!-- Параметры жилья -->
+                <section>
+                    <div class="flex items-center space-x-3 mb-5">
+                        <div class="w-1.5 h-6 bg-brand-500 rounded-full"></div>
+                        <h3 class="text-lg font-bold text-slate-800">Основная информация</h3>
+                    </div>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        <div class="col-span-2 md:col-span-4">
+                            <label class="block text-sm font-semibold text-slate-600 mb-2">Название объекта</label>
+                            <input required name="title" type="text" placeholder="Например: Уютная студия у моря" 
+                                   class="w-full px-4 py-3.5 rounded-xl border-slate-200 bg-white/60 focus:bg-white focus:border-brand-500 focus:ring-brand-500 transition-all shadow-sm"/>
+                        </div>
+                        <div class="col-span-2">
+                            <label class="block text-sm font-semibold text-slate-600 mb-2">Категория</label>
+                            <select name="type" class="w-full px-4 py-3.5 rounded-xl border-slate-200 bg-white/60 focus:bg-white focus:border-brand-500 focus:ring-brand-500 transition-all shadow-sm appearance-none cursor-pointer">
+                                <option>Апартаменты</option>
+                                <option>Студия</option>
+                                <option>Дом для отпуска</option>
+                                <option>Номер в отеле</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-600 mb-2">Гостей</label>
+                            <input required name="guests" type="number" min="1" placeholder="2" 
+                                   class="w-full px-4 py-3.5 rounded-xl border-slate-200 bg-white/60 focus:bg-white focus:border-brand-500 focus:ring-brand-500 transition-all shadow-sm"/>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-600 mb-2">Спален</label>
+                            <input required name="bedrooms" type="number" min="1" placeholder="1" 
+                                   class="w-full px-4 py-3.5 rounded-xl border-slate-200 bg-white/60 focus:bg-white focus:border-brand-500 focus:ring-brand-500 transition-all shadow-sm"/>
+                        </div>
+                        <div class="col-span-2 md:col-span-4 mt-2">
+                            <label class="block text-sm font-semibold text-slate-600 mb-2">Цена за сутки</label>
+                            <div class="relative">
+                                <span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-bold">₽</span>
+                                <input required name="price" type="number" placeholder="4 500" 
+                                       class="w-full pl-9 pr-4 py-3.5 rounded-xl border-slate-200 bg-white/60 focus:bg-white focus:border-brand-500 focus:ring-brand-500 transition-all shadow-sm"/>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Фотографии -->
+                <section>
+                    <div class="flex items-center justify-between mb-5">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-1.5 h-6 bg-brand-500 rounded-full"></div>
+                            <h3 class="text-lg font-bold text-slate-800">Медиа файлы</h3>
+                        </div>
+                    </div>
+                    <div id="drop-zone" class="relative group cursor-pointer border-2 border-dashed border-slate-300 bg-white/40 rounded-2xl p-8 transition-all hover:bg-brand-50/50 hover:border-brand-400 text-center shadow-sm">
+                        <input id="photo-input" type="file" multiple accept="image/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"/>
+                        <div class="flex flex-col items-center">
+                            <div class="w-16 h-16 bg-white shadow-sm rounded-full flex items-center justify-center mb-4 text-slate-400 group-hover:text-brand-500 group-hover:scale-110 transition-transform duration-300">
+                                <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"></path></svg>
+                            </div>
+                            <p id="upload-text" class="text-sm font-semibold text-slate-700">Перетащите фото сюда или нажмите</p>
+                            <p class="text-xs text-slate-400 mt-2 font-medium">JPG, PNG до 10MB</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Контакты -->
+                <section>
+                    <div class="flex items-center space-x-3 mb-5">
+                        <div class="w-1.5 h-6 bg-brand-500 rounded-full"></div>
+                        <h3 class="text-lg font-bold text-slate-800">Контакты для брони</h3>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <input required name="contact_name" type="text" placeholder="Имя владельца/агента" 
+                                   class="w-full px-4 py-3.5 rounded-xl border-slate-200 bg-white/60 focus:bg-white focus:border-brand-500 transition-all shadow-sm"/>
+                        </div>
+                        <div>
+                            <input required name="phone" type="tel" placeholder="+7 (999) 000-00-00" 
+                                   class="w-full px-4 py-3.5 rounded-xl border-slate-200 bg-white/60 focus:bg-white focus:border-brand-500 transition-all shadow-sm"/>
+                        </div>
+                    </div>
+                </section>
+
+                <div class="pt-4 border-t border-slate-200/60">
+                    <button id="submit-btn" type="submit" class="w-full bg-slate-900 hover:bg-brand-600 active:scale-[0.99] text-white font-bold py-4 rounded-xl transition-all duration-300 text-lg flex justify-center items-center gap-2 shadow-lg hover:shadow-brand-500/25">
+                        <span>Сохранить в базу объектов</span>
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3"></path></svg>
+                    </button>
+                </div>
+            </form>
+        </main>
+
+        <!-- === ПРАВАЯ КОЛОНКА: СОХРАНЕННЫЕ ПАПКИ/ОБЪЕКТЫ === -->
+        <aside class="lg:col-span-5 h-[800px] flex flex-col glass-panel shadow-glass rounded-[2rem] p-6 lg:p-8 relative">
+            
+            <!-- Заголовок правой панели -->
+            <div class="flex items-center justify-between mb-8">
+                <div>
+                    <h2 class="text-xl font-bold text-slate-900">База объектов</h2>
+                    <p class="text-slate-500 text-sm mt-1">Организация по папкам</p>
+                </div>
+                <!-- Счетчик -->
+                <div class="bg-slate-100 border border-slate-200 text-slate-700 font-bold px-4 py-2 rounded-xl text-sm shadow-inner flex items-center gap-2">
+                    <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path></svg>
+                    <span id="listings-count">0</span>
+                </div>
+            </div>
+
+            <!-- Контейнер для списка объектов -->
+            <div id="listings-container" class="flex-1 overflow-y-auto pr-2 space-y-4 pb-10" style="scrollbar-width: thin;">
+                
+                <!-- Заглушка, если объектов нет -->
+                <div id="empty-state" class="h-full flex flex-col items-center justify-center text-center px-4">
+                    <div class="w-24 h-24 bg-white/60 rounded-full flex items-center justify-center mb-6 shadow-sm border border-slate-100">
+                        <svg class="w-10 h-10 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 002-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+                    </div>
+                    <h3 class="font-bold text-slate-700 text-lg">Папка пуста</h3>
+                    <p class="text-sm text-slate-500 mt-2 leading-relaxed">Создайте первое объявление слева, и оно 자동으로 (автоматически) появится в вашем архиве.</p>
+                </div>
+
+            </div>
+
+            <!-- Декоративный градиент снизу контейнера для плавного ухода скрытого скролла -->
+            <div class="absolute bottom-0 left-0 w-full h-12 bg-gradient-to-t from-white/90 to-transparent rounded-b-[2rem] pointer-events-none"></div>
+        </aside>
+
+    </div>
+</div>
+
+<script>
+    // === Механизм сохранения (Имитация базы данных в браузере) ===
+
+    const form = document.getElementById('registration-form');
+    const photoInput = document.getElementById('photo-input');
+    const dropZone = document.getElementById('drop-zone');
+    const uploadText = document.getElementById('upload-text');
+    const container = document.getElementById('listings-container');
+    const emptyState = document.getElementById('empty-state');
+    const submitBtn = document.getElementById('submit-btn');
+    const countBadge = document.getElementById('listings-count');
+
+    // Загружаем объекты из памяти браузера при открытии
+    let listings = JSON.parse(localStorage.getItem('my_properties') || '[]');
+
+    // Визуал для поля фото
+    photoInput.addEventListener('change', (e) => {
+        if(e.target.files.length > 0) {
+            dropZone.classList.add('border-brand-500', 'bg-brand-50/70');
+            uploadText.innerText = `Добавлено фото: ${e.target.files.length}`;
+            uploadText.classList.add('text-brand-600');
+        }
+    });
+
+    // Функция рендера карточек
+    function renderListings() {
+        if(listings.length === 0) {
+            emptyState.style.display = 'flex';
+            container.innerHTML = '';
+            container.appendChild(emptyState);
+            countBadge.innerText = '0';
+            return;
+        }
+
+        emptyState.style.display = 'none';
+        container.innerHTML = '';
+        countBadge.innerText = listings.length;
+
+        listings.forEach((item) => {
+            const card = document.createElement('div');
+            card.className = 'listing-card bg-white p-4 sm:p-5 rounded-2xl border border-slate-100 flex gap-4 sm:gap-5 relative group shadow-card pointer-events-auto';
+            
+            // Генерация случайного красивого цвета-мокапа для картинки
+            const hue = (item.id * 89) % 360; 
+            
+            card.innerHTML = `
+                <!-- Боковой акцент -->
+                <div class="absolute top-0 bottom-0 left-0 w-1.5 bg-brand-500 rounded-l-2xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                
+                <!-- Фотография (Заглушка) -->
+                <div class="w-20 h-20 sm:w-24 sm:h-24 rounded-xl flex-shrink-0 shadow-inner" style="background: linear-gradient(135deg, hsl(${hue}, 80%, 90%), hsl(${hue}, 60%, 75%))">
+                    <div class="w-full h-full flex items-center justify-center text-black/10">
+                        <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24"><path d="M19.5 21a3 3 0 003-3v-4.5a3 3 0 00-3-3h-15a3 3 0 00-3 3V18a3 3 0 003 3h15zM1.5 10.146V6a3 3 0 013-3h5.379a2.25 2.25 0 011.59.659l2.122 2.121c.14.141.331.22.53.22H19.5a3 3 0 013 3v1.146A4.483 4.483 0 0019.5 9h-15a4.483 4.483 0 00-3 1.146z"></path></svg>
+                    </div>
+                </div>
+                
+                <!-- Информация об объекте -->
+                <div class="flex-1 min-w-0 py-0.5 flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-start mb-1">
+                            <h4 class="font-bold text-slate-800 text-sm sm:text-base truncate pr-2">${item.title}</h4>
+                            <span class="text-xs sm:text-sm font-bold text-brand-700 bg-brand-50 border border-brand-100 px-2 sm:px-2.5 py-0.5 rounded-lg whitespace-nowrap">
+                                ${item.price} ₽
+                            </span>
+                        </div>
+                        <p class="text-xs text-slate-500 font-medium">${item.type} • ${item.guests} гостя • ${item.bedrooms} спальня</p>
+                    </div>
+                    
+                    <div class="flex items-center justify-between mt-3">
+                        <div class="flex items-center gap-2">
+                            <span class="text-[10px] sm:text-xs font-bold text-slate-400 bg-slate-50 border border-slate-100 px-2 py-1 rounded-md">ID: ${item.id}</span>
+                        </div>
+                        <button onclick="deleteListing(${item.id})" class="text-[11px] sm:text-xs text-red-400 hover:text-red-600 font-semibold opacity-0 group-hover:opacity-100 transition-opacity bg-red-50 hover:bg-red-100 px-2.5 py-1.5 rounded-md">
+                            Удалить
+                        </button>
+                    </div>
+                </div>
+            `;
+            container.appendChild(card);
+        });
+    }
+
+    // Удаление объекта
+    window.deleteListing = function(id) {
+        listings = listings.filter(l => l.id !== id);
+        localStorage.setItem('my_properties', JSON.stringify(listings));
+        renderListings();
+    }
+
+    // Обработка отправки формы
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        
+        // Визуальная анимация кнопки
+        const originalContent = submitBtn.innerHTML;
+        submitBtn.innerHTML = '<svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Обработка...';
+        submitBtn.disabled = true;
+
+        // Имитируем задержку сервера (800мс)
+        setTimeout(() => {
+            const formData = new FormData(form);
+            
+            // Формируем новый объект
+            const newObject = {
+                id: Math.floor(100000 + Math.random() * 900000), // Генерация 6-ти значного ID
+                title: formData.get('title'),
+                type: formData.get('type'),
+                guests: formData.get('guests'),
+                bedrooms: formData.get('bedrooms'),
+                price: Number(formData.get('price')).toLocaleString('ru-RU') // Форматируем цену (разделитель тысяч)
+            };
+
+            // Добавляем в массив и сохраняем в LocalStorage
+            listings.unshift(newObject);
+            localStorage.setItem('my_properties', JSON.stringify(listings));
+            
+            // Сброс формы и стиля дропзоны
+            form.reset();
+            dropZone.classList.remove('border-brand-500', 'bg-brand-50/70');
+            uploadText.innerText = 'Перетащите фото сюда или нажмите';
+            uploadText.classList.remove('text-brand-600');
+            
+            // Обновляем список на экране
+            renderListings();
+
+            // Анимация успешного сохранения
+            submitBtn.innerHTML = '<svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Объявление добавлено!';
+            submitBtn.classList.replace('bg-slate-900', 'bg-brand-500');
+            submitBtn.classList.replace('hover:bg-brand-600', 'hover:bg-brand-400');
+            
+            // Возврат кнопки в исходное состояние
+            setTimeout(() => {
+                submitBtn.innerHTML = originalContent;
+                submitBtn.classList.replace('bg-brand-500', 'bg-slate-900');
+                submitBtn.classList.replace('hover:bg-brand-400', 'hover:bg-brand-600');
+                submitBtn.disabled = false;
+            }, 2000);
+
+        }, 800);
+    });
+
+    // Первичный рендер при загрузке
+    renderListings();
+</script>
+</body>
+</html>
