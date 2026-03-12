@@ -456,7 +456,7 @@
     downloadBtn.addEventListener('click', () => {
         if(!currentObjectData) return;
         
-        const pwd = prompt('Введите защитный код для скачивания (Andy777):');
+        const pwd = prompt('Введите защитный код для скачивания:');
         
         if (pwd === 'Andy777') {
             
@@ -535,7 +535,7 @@
     // ЛОГИКА УДАЛЕНИЯ (Пароль: Andy777)
     // ==========================================
     clearBtn.addEventListener('click', () => {
-        const pwd = prompt('Введите защитный код для удаления (Andy777):');
+        const pwd = prompt('Введите защитный код для удаления:');
         if (pwd === 'Andy777') {
             form.reset();
             currentObjectData = null;
