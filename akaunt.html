@@ -719,7 +719,7 @@
 
             requestPromise.then(response => {
                 if (response.ok) {
-                    alert('Данные успешно сохранены и отправлены в Telegram!');
+                    alert('Данные успешно сохранены и отправлены в на модерацию!');
                 } else {
                     response.text().then(text => console.error('Telegram error:', text));
                     alert('Произошла ошибка при отправке данных. Повторите попытку позже.');
