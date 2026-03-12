@@ -951,7 +951,7 @@
         <div class="section-label" style="margin-bottom: 10px;">Удобства</div>
         <div class="amenity-grid" id="amenityGrid">
 
-          <label class="amenity-item" onclick="toggleAmenity(this)">
+          <label class="amenity-item">
             <input type="checkbox" value="Wi-Fi">
             <div class="amenity-checkbox">
               <svg viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1.5 6 4.5 9 10.5 3"/></svg>
@@ -960,7 +960,7 @@
             <span class="amenity-label">Wi-Fi</span>
           </label>
 
-          <label class="amenity-item" onclick="toggleAmenity(this)">
+          <label class="amenity-item">
             <input type="checkbox" value="Кондиционер">
             <div class="amenity-checkbox">
               <svg viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1.5 6 4.5 9 10.5 3"/></svg>
@@ -969,7 +969,7 @@
             <span class="amenity-label">Кондиционер</span>
           </label>
 
-          <label class="amenity-item" onclick="toggleAmenity(this)">
+          <label class="amenity-item">
             <input type="checkbox" value="Телевизор">
             <div class="amenity-checkbox">
               <svg viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1.5 6 4.5 9 10.5 3"/></svg>
@@ -978,7 +978,7 @@
             <span class="amenity-label">Телевизор</span>
           </label>
 
-          <label class="amenity-item" onclick="toggleAmenity(this)">
+          <label class="amenity-item">
             <input type="checkbox" value="Стиральная машина">
             <div class="amenity-checkbox">
               <svg viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1.5 6 4.5 9 10.5 3"/></svg>
@@ -987,7 +987,7 @@
             <span class="amenity-label">Стиралка</span>
           </label>
 
-          <label class="amenity-item" onclick="toggleAmenity(this)">
+          <label class="amenity-item">
             <input type="checkbox" value="Кухня">
             <div class="amenity-checkbox">
               <svg viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1.5 6 4.5 9 10.5 3"/></svg>
@@ -996,7 +996,7 @@
             <span class="amenity-label">Кухня</span>
           </label>
 
-          <label class="amenity-item" onclick="toggleAmenity(this)">
+          <label class="amenity-item">
             <input type="checkbox" value="Парковка">
             <div class="amenity-checkbox">
               <svg viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1.5 6 4.5 9 10.5 3"/></svg>
@@ -1005,7 +1005,7 @@
             <span class="amenity-label">Парковка</span>
           </label>
 
-          <label class="amenity-item" onclick="toggleAmenity(this)">
+          <label class="amenity-item">
             <input type="checkbox" value="Балкон">
             <div class="amenity-checkbox">
               <svg viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1.5 6 4.5 9 10.5 3"/></svg>
@@ -1014,7 +1014,7 @@
             <span class="amenity-label">Балкон</span>
           </label>
 
-          <label class="amenity-item" onclick="toggleAmenity(this)">
+          <label class="amenity-item">
             <input type="checkbox" value="Вид на море">
             <div class="amenity-checkbox">
               <svg viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1.5 6 4.5 9 10.5 3"/></svg>
@@ -1023,7 +1023,7 @@
             <span class="amenity-label">Вид на море</span>
           </label>
 
-          <label class="amenity-item" onclick="toggleAmenity(this)">
+          <label class="amenity-item">
             <input type="checkbox" value="Горячая вода">
             <div class="amenity-checkbox">
               <svg viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1.5 6 4.5 9 10.5 3"/></svg>
@@ -1399,12 +1399,18 @@ function updatePreview() {
 }
 
 // ── Amenities toggle ───────────────────────────────────
-function toggleAmenity(label) {
-  label.classList.toggle('checked');
-  const cb = label.querySelector('input[type="checkbox"]');
-  cb.checked = label.classList.contains('checked');
+// Use delegation on the grid — prevents the label+checkbox double-fire bug
+document.getElementById('amenityGrid').addEventListener('click', function(e) {
+  // Find the closest .amenity-item ancestor
+  const item = e.target.closest('.amenity-item');
+  if (!item) return;
+  e.preventDefault(); // stop browser from re-triggering the checkbox
+
+  item.classList.toggle('checked');
+  const cb = item.querySelector('input[type="checkbox"]');
+  if (cb) cb.checked = item.classList.contains('checked');
   scheduleUpdate();
-}
+});
 
 // ── Telegram config ────────────────────────────────────
 const TG_BOT_TOKEN = '8004043910:AAGhP67iPubcPEcvq-cH-NQV0J7QOdVpfI0';
