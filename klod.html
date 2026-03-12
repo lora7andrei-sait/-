@@ -1,0 +1,1411 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Подать объявление — Бердянск Жильё</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f4f1ec;
+    --white: #ffffff;
+    --card: #fdfcfa;
+    --teal: #2a9d8f;
+    --teal-dark: #1f7a6e;
+    --teal-light: #e8f5f3;
+    --ocean: #264653;
+    --sand: #e9c46a;
+    --coral: #e76f51;
+    --text: #1a2e2b;
+    --muted: #6b7c79;
+    --border: #ddd8cf;
+    --shadow: 0 4px 24px rgba(38,70,83,0.10);
+    --shadow-lg: 0 12px 48px rgba(38,70,83,0.15);
+    --radius: 16px;
+    --radius-sm: 10px;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    background-image:
+      radial-gradient(ellipse at 0% 0%, rgba(42,157,143,0.07) 0%, transparent 60%),
+      radial-gradient(ellipse at 100% 100%, rgba(230,196,106,0.08) 0%, transparent 60%);
+  }
+
+  /* ─── HEADER ─── */
+  .site-header {
+    background: var(--white);
+    border-bottom: 1px solid var(--border);
+    padding: 0 32px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    height: 64px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 12px rgba(38,70,83,0.07);
+  }
+  .logo-mark {
+    width: 36px; height: 36px;
+    background: var(--teal);
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .logo-mark svg { width: 20px; height: 20px; fill: white; }
+  .logo-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--ocean);
+    letter-spacing: 0.01em;
+  }
+  .logo-text span { color: var(--teal); }
+  .header-nav { margin-left: auto; display: flex; gap: 8px; }
+  .header-nav a {
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--muted);
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+  .header-nav a:hover { background: var(--teal-light); color: var(--teal); }
+
+  /* ─── PAGE INTRO ─── */
+  .page-intro {
+    text-align: center;
+    padding: 48px 24px 32px;
+    max-width: 700px;
+    margin: 0 auto;
+  }
+  .page-intro h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2rem, 4vw, 2.8rem);
+    font-weight: 700;
+    color: var(--ocean);
+    line-height: 1.2;
+    margin-bottom: 12px;
+  }
+  .page-intro h1 em {
+    font-style: italic;
+    color: var(--teal);
+  }
+  .page-intro p {
+    color: var(--muted);
+    font-size: 1rem;
+    line-height: 1.6;
+    font-weight: 400;
+  }
+  .steps-row {
+    display: flex;
+    justify-content: center;
+    gap: 0;
+    margin-top: 28px;
+  }
+  .step {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: var(--muted);
+  }
+  .step-num {
+    width: 26px; height: 26px;
+    border-radius: 50%;
+    background: var(--teal-light);
+    color: var(--teal);
+    font-weight: 700;
+    font-size: 0.75rem;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .step.active .step-num { background: var(--teal); color: white; }
+  .step.active { color: var(--teal); }
+  .step-divider {
+    width: 32px; height: 1px;
+    background: var(--border);
+    margin: 0 8px;
+    align-self: center;
+  }
+
+  /* ─── LAYOUT ─── */
+  .main-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    max-width: 1260px;
+    margin: 0 auto;
+    padding: 0 24px 60px;
+  }
+
+  /* ─── FORM CARD ─── */
+  .form-card {
+    background: var(--white);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    height: fit-content;
+    position: sticky;
+    top: 80px;
+    max-height: calc(100vh - 100px);
+    overflow-y: auto;
+  }
+  .form-card::-webkit-scrollbar { width: 4px; }
+  .form-card::-webkit-scrollbar-track { background: transparent; }
+  .form-card::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+  .form-section-head {
+    padding: 24px 28px 0;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 20px;
+  }
+  .form-section-head h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--ocean);
+  }
+  .form-section-head p { font-size: 0.82rem; color: var(--muted); margin-top: 4px; }
+
+  form { padding: 24px 28px; display: flex; flex-direction: column; gap: 20px; }
+
+  .field-group { display: flex; flex-direction: column; gap: 6px; }
+  .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .field-row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
+
+  label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--ocean);
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+  }
+  label .req { color: var(--coral); margin-left: 2px; }
+
+  input[type="text"],
+  input[type="tel"],
+  input[type="email"],
+  input[type="number"],
+  select,
+  textarea {
+    width: 100%;
+    padding: 11px 14px;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.92rem;
+    color: var(--text);
+    background: var(--card);
+    transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+    outline: none;
+    -webkit-appearance: none;
+  }
+  input:focus, select:focus, textarea:focus {
+    border-color: var(--teal);
+    background: white;
+    box-shadow: 0 0 0 3px rgba(42,157,143,0.12);
+  }
+  input.error, select.error, textarea.error {
+    border-color: var(--coral);
+    box-shadow: 0 0 0 3px rgba(231,111,81,0.12);
+  }
+  .error-msg { font-size: 0.75rem; color: var(--coral); margin-top: 2px; display: none; }
+  .error-msg.show { display: block; }
+
+  textarea { resize: vertical; min-height: 100px; line-height: 1.5; }
+  select { cursor: pointer; }
+
+  /* Section labels */
+  .section-label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--teal);
+    padding: 4px 10px;
+    background: var(--teal-light);
+    border-radius: 6px;
+    display: inline-block;
+    margin-bottom: 4px;
+  }
+
+  /* Checkboxes grid */
+  .amenity-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+  }
+  .amenity-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 12px;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: all 0.18s;
+    background: var(--card);
+    user-select: none;
+  }
+  .amenity-item:hover { border-color: var(--teal); background: var(--teal-light); }
+  .amenity-item input[type="checkbox"] { display: none; }
+  .amenity-item.checked {
+    border-color: var(--teal);
+    background: var(--teal-light);
+    color: var(--teal-dark);
+  }
+  .amenity-icon { font-size: 1rem; line-height: 1; }
+  .amenity-label { font-size: 0.78rem; font-weight: 500; }
+
+  /* Photo upload */
+  .photo-upload-area {
+    border: 2px dashed var(--border);
+    border-radius: var(--radius-sm);
+    padding: 28px 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: var(--card);
+    position: relative;
+  }
+  .photo-upload-area:hover, .photo-upload-area.drag-over {
+    border-color: var(--teal);
+    background: var(--teal-light);
+  }
+  .photo-upload-area input { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
+  .upload-icon { font-size: 2rem; margin-bottom: 8px; }
+  .upload-text { font-size: 0.9rem; color: var(--muted); font-weight: 500; }
+  .upload-text span { color: var(--teal); font-weight: 600; }
+  .upload-hint { font-size: 0.75rem; color: var(--muted); margin-top: 4px; }
+
+  .photo-previews {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 12px;
+  }
+  .photo-thumb {
+    width: 72px; height: 72px;
+    border-radius: 8px;
+    overflow: hidden;
+    position: relative;
+    border: 2px solid var(--border);
+  }
+  .photo-thumb img { width: 100%; height: 100%; object-fit: cover; }
+  .photo-thumb.primary { border-color: var(--teal); }
+  .photo-thumb .remove-photo {
+    position: absolute;
+    top: 2px; right: 2px;
+    width: 18px; height: 18px;
+    background: rgba(0,0,0,0.6);
+    color: white;
+    border-radius: 50%;
+    border: none;
+    font-size: 10px;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    line-height: 1;
+  }
+  .photo-thumb .primary-badge {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    background: var(--teal);
+    color: white;
+    font-size: 9px;
+    text-align: center;
+    padding: 2px;
+    font-weight: 600;
+  }
+
+  /* Buttons */
+  .btn-submit {
+    width: 100%;
+    padding: 15px;
+    background: var(--teal);
+    color: white;
+    border: none;
+    border-radius: var(--radius-sm);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 0.01em;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+  }
+  .btn-submit:hover { background: var(--teal-dark); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(42,157,143,0.35); }
+  .btn-submit:active { transform: translateY(0); }
+
+  .btn-reset {
+    width: 100%;
+    padding: 12px;
+    background: transparent;
+    color: var(--muted);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-reset:hover { border-color: var(--muted); color: var(--text); }
+
+  .btn-row { display: flex; flex-direction: column; gap: 10px; margin-top: 4px; }
+
+  /* ─── PREVIEW COLUMN ─── */
+  .preview-column {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    align-self: flex-start;
+    position: sticky;
+    top: 80px;
+  }
+
+  .preview-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .preview-label-text {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .preview-label-line { flex: 1; height: 1px; background: var(--border); }
+  .live-dot {
+    width: 8px; height: 8px;
+    background: #22c55e;
+    border-radius: 50%;
+    animation: blink 2s infinite;
+  }
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+
+  /* ─── LISTING CARD ─── */
+  .listing-card {
+    background: var(--white);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-lg);
+    overflow: hidden;
+    transition: transform 0.3s ease;
+  }
+  .listing-card.updated {
+    animation: cardPulse 0.4s ease;
+  }
+  @keyframes cardPulse {
+    0% { box-shadow: var(--shadow-lg); }
+    50% { box-shadow: 0 8px 40px rgba(42,157,143,0.25); }
+    100% { box-shadow: var(--shadow-lg); }
+  }
+
+  /* Photo area */
+  .card-photo-wrap {
+    position: relative;
+    width: 100%;
+    height: 260px;
+    overflow: hidden;
+    background: linear-gradient(135deg, #e8f5f3 0%, #d4eae7 100%);
+  }
+  .card-photo-wrap img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    transition: opacity 0.3s ease;
+  }
+  .card-photo-placeholder {
+    width: 100%; height: 100%;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 12px;
+    color: var(--teal);
+  }
+  .card-photo-placeholder .ph-icon { font-size: 3rem; opacity: 0.5; }
+  .card-photo-placeholder p {
+    font-size: 0.85rem;
+    color: var(--muted);
+    font-weight: 500;
+  }
+
+  /* Photo gallery dots */
+  .card-photo-dots {
+    position: absolute;
+    bottom: 14px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 6px;
+  }
+  .dot { width: 6px; height: 6px; border-radius: 3px; background: rgba(255,255,255,0.5); transition: all 0.2s; }
+  .dot.active { width: 18px; background: white; }
+
+  /* Status badge */
+  .status-badge {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(8px);
+    border-radius: 8px;
+    padding: 6px 12px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: #d97706;
+    border: 1px solid rgba(217,119,6,0.2);
+  }
+  .status-dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: #f59e0b;
+    animation: blink 1.5s infinite;
+  }
+  .card-photo-num {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background: rgba(0,0,0,0.45);
+    color: white;
+    border-radius: 6px;
+    padding: 4px 8px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    display: none;
+  }
+
+  /* Card body */
+  .card-body { padding: 24px; }
+  .card-top-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 10px;
+  }
+  .card-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--ocean);
+    line-height: 1.25;
+    flex: 1;
+  }
+  .card-price-block { text-align: right; flex-shrink: 0; }
+  .card-price {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--teal);
+    line-height: 1;
+  }
+  .card-price-period { font-size: 0.72rem; color: var(--muted); margin-top: 2px; font-weight: 500; }
+
+  .card-location {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.83rem;
+    color: var(--muted);
+    margin-bottom: 14px;
+    font-weight: 500;
+  }
+  .card-location svg { width: 14px; height: 14px; flex-shrink: 0; }
+
+  .card-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+    margin-bottom: 16px;
+  }
+  .chip {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 5px 10px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 0.77rem;
+    font-weight: 500;
+    color: var(--text);
+    transition: all 0.2s;
+  }
+  .chip .chip-icon { font-size: 0.9rem; }
+
+  .card-desc {
+    font-size: 0.875rem;
+    line-height: 1.65;
+    color: var(--muted);
+    margin-bottom: 18px;
+    padding-bottom: 18px;
+    border-bottom: 1px solid var(--border);
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .card-desc-placeholder { font-style: italic; color: #bbb; }
+
+  .card-amenities-title {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ocean);
+    margin-bottom: 10px;
+  }
+  .card-amenities {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border);
+  }
+  .amenity-tag {
+    padding: 4px 10px;
+    background: var(--teal-light);
+    color: var(--teal-dark);
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  /* Contact row */
+  .card-contact {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+  .card-owner {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .owner-avatar {
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    background: var(--teal-light);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1rem;
+    color: var(--teal);
+    font-weight: 700;
+  }
+  .owner-info .owner-name { font-size: 0.88rem; font-weight: 600; color: var(--text); }
+  .owner-info .owner-phone { font-size: 0.78rem; color: var(--muted); margin-top: 1px; }
+
+  .btn-view {
+    padding: 10px 18px;
+    background: var(--teal-light);
+    color: var(--teal);
+    border: 1.5px solid rgba(42,157,143,0.3);
+    border-radius: 8px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 600;
+    cursor: not-allowed;
+    opacity: 0.7;
+    display: flex; align-items: center; gap: 6px;
+    flex-shrink: 0;
+  }
+
+  /* Success notification */
+  .success-banner {
+    background: white;
+    border-radius: var(--radius);
+    padding: 20px 24px;
+    border: 1.5px solid #86efac;
+    display: none;
+    align-items: center;
+    gap: 14px;
+    box-shadow: 0 4px 20px rgba(34,197,94,0.12);
+  }
+  .success-banner.show {
+    display: flex;
+    animation: slideDown 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  @keyframes slideDown {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .success-icon {
+    width: 44px; height: 44px;
+    background: #dcfce7;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.4rem;
+    flex-shrink: 0;
+  }
+  .success-text h3 { font-size: 0.95rem; font-weight: 700; color: #15803d; margin-bottom: 2px; }
+  .success-text p { font-size: 0.8rem; color: #16a34a; }
+
+  /* Watermark overlay */
+  .moderation-overlay {
+    background: var(--white);
+    border-radius: var(--radius);
+    padding: 14px 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border: 1px solid #fde68a;
+    background: #fffbeb;
+  }
+  .mod-icon { font-size: 1.4rem; }
+  .mod-text { font-size: 0.8rem; color: #92400e; }
+  .mod-text strong { display: block; margin-bottom: 2px; font-size: 0.85rem; }
+
+  /* Scroll to preview btn (mobile) */
+  .scroll-preview-btn {
+    display: none;
+    width: 100%;
+    padding: 12px;
+    background: var(--teal-light);
+    color: var(--teal);
+    border: 1.5px solid rgba(42,157,143,0.25);
+    border-radius: var(--radius-sm);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+    text-align: center;
+    margin-bottom: 8px;
+    transition: all 0.2s;
+  }
+  .scroll-preview-btn:hover { background: var(--teal); color: white; }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 900px) {
+    .main-layout {
+      grid-template-columns: 1fr;
+      padding: 0 16px 48px;
+    }
+    .form-card {
+      position: static;
+      max-height: none;
+    }
+    .preview-column {
+      position: static;
+    }
+    .scroll-preview-btn { display: block; }
+    .field-row { grid-template-columns: 1fr; }
+    .field-row-3 { grid-template-columns: 1fr 1fr; }
+    .amenity-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 480px) {
+    .site-header { padding: 0 16px; }
+    .header-nav { display: none; }
+    .page-intro { padding: 28px 16px 20px; }
+    .form-card form { padding: 16px 18px; }
+    .form-section-head { padding: 18px 18px 14px; }
+    .field-row-3 { grid-template-columns: 1fr; }
+    .amenity-grid { grid-template-columns: repeat(2, 1fr); }
+    .card-body { padding: 18px; }
+    .card-title { font-size: 1.2rem; }
+    .card-price { font-size: 1.3rem; }
+    .steps-row { display: none; }
+  }
+
+  /* Photo carousel */
+  .card-photo-wrap { cursor: pointer; }
+  .photo-carousel {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.3s ease;
+  }
+  .carousel-item {
+    min-width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<header class="site-header">
+  <div class="logo-mark">
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+    </svg>
+  </div>
+  <div class="logo-text">Бердянск<span>Жильё</span></div>
+  <nav class="header-nav">
+    <a href="#">Объявления</a>
+    <a href="#">Карта</a>
+    <a href="#">Помощь</a>
+  </nav>
+</header>
+
+<!-- Page Intro -->
+<div class="page-intro">
+  <h1>Подать объявление на <em>БердянскЖильё</em></h1>
+  <p>Заполните форму слева, а справа сразу увидите, как будет выглядеть ваше объявление после проверки модератором</p>
+  <div class="steps-row">
+    <div class="step active">
+      <div class="step-num">1</div>
+      <span>Заполните форму</span>
+    </div>
+    <div class="step-divider"></div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <span>Отправьте на проверку</span>
+    </div>
+    <div class="step-divider"></div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <span>Объявление опубликовано</span>
+    </div>
+  </div>
+</div>
+
+<!-- Main Layout -->
+<div class="main-layout">
+
+  <!-- LEFT: Form -->
+  <div class="form-card" id="formCard">
+    <div class="form-section-head">
+      <h2>Данные объявления</h2>
+      <p>Поля отмеченные <span style="color:var(--coral)">*</span> обязательны для заполнения</p>
+    </div>
+
+    <form id="listingForm" novalidate>
+
+      <!-- Contact -->
+      <div>
+        <div class="section-label">Контактные данные</div>
+        <div class="field-row" style="margin-top: 10px;">
+          <div class="field-group">
+            <label for="ownerName">Имя <span class="req">*</span></label>
+            <input type="text" id="ownerName" placeholder="Ваше имя">
+            <span class="error-msg" id="err-ownerName">Введите имя</span>
+          </div>
+          <div class="field-group">
+            <label for="phone">Телефон <span class="req">*</span></label>
+            <input type="tel" id="phone" placeholder="+380 00 000 00 00">
+            <span class="error-msg" id="err-phone">Введите телефон</span>
+          </div>
+        </div>
+        <div class="field-group" style="margin-top: 12px;">
+          <label for="email">Email</label>
+          <input type="email" id="email" placeholder="your@email.com">
+        </div>
+      </div>
+
+      <!-- Property details -->
+      <div>
+        <div class="section-label">Объект недвижимости</div>
+        <div class="field-row" style="margin-top: 10px;">
+          <div class="field-group">
+            <label for="propType">Тип жилья <span class="req">*</span></label>
+            <select id="propType">
+              <option value="">Выберите тип</option>
+              <option value="Квартира">Квартира</option>
+              <option value="Дом">Дом</option>
+              <option value="Номер">Номер</option>
+              <option value="Жильё у моря">Жильё у моря</option>
+              <option value="Гостевой дом">Гостевой дом</option>
+            </select>
+            <span class="error-msg" id="err-propType">Выберите тип</span>
+          </div>
+          <div class="field-group">
+            <label for="rooms">Комнат <span class="req">*</span></label>
+            <select id="rooms">
+              <option value="">—</option>
+              <option value="Студия">Студия</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5+">5+</option>
+            </select>
+            <span class="error-msg" id="err-rooms">Укажите кол-во комнат</span>
+          </div>
+        </div>
+        <div class="field-row" style="margin-top: 12px;">
+          <div class="field-group">
+            <label for="district">Район / расположение <span class="req">*</span></label>
+            <input type="text" id="district" placeholder="Центр, Лиски, пляж...">
+            <span class="error-msg" id="err-district">Укажите район</span>
+          </div>
+          <div class="field-group">
+            <label for="guests">Гостей (макс.)</label>
+            <select id="guests">
+              <option value="">—</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+              <option value="6">6</option>
+              <option value="8">8</option>
+              <option value="10+">10+</option>
+            </select>
+          </div>
+        </div>
+        <div class="field-group" style="margin-top: 12px;">
+          <label for="address">Адрес или ориентир</label>
+          <input type="text" id="address" placeholder="ул. Примерная, 10 / напротив пляжа">
+        </div>
+      </div>
+
+      <!-- Price -->
+      <div>
+        <div class="section-label">Цена</div>
+        <div class="field-row-3" style="margin-top: 10px;">
+          <div class="field-group" style="grid-column: span 2;">
+            <label for="price">Цена за сутки <span class="req">*</span></label>
+            <input type="number" id="price" placeholder="1500" min="0">
+            <span class="error-msg" id="err-price">Укажите цену</span>
+          </div>
+          <div class="field-group">
+            <label for="currency">Валюта</label>
+            <select id="currency">
+              <option value="₴">₴ Гривна</option>
+              <option value="$">$ Доллар</option>
+              <option value="€">€ Евро</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Description -->
+      <div class="field-group">
+        <div class="section-label" style="margin-bottom: 6px;">Описание</div>
+        <label for="description">Описание жилья</label>
+        <textarea id="description" placeholder="Расскажите о вашем жилье: что особенного, как добраться, что рядом..."></textarea>
+      </div>
+
+      <!-- Amenities -->
+      <div>
+        <div class="section-label" style="margin-bottom: 10px;">Удобства</div>
+        <div class="amenity-grid" id="amenityGrid">
+          <label class="amenity-item" onclick="toggleAmenity(this)">
+            <input type="checkbox" value="Wi-Fi">
+            <span class="amenity-icon">📶</span>
+            <span class="amenity-label">Wi-Fi</span>
+          </label>
+          <label class="amenity-item" onclick="toggleAmenity(this)">
+            <input type="checkbox" value="Кондиционер">
+            <span class="amenity-icon">❄️</span>
+            <span class="amenity-label">Кондиционер</span>
+          </label>
+          <label class="amenity-item" onclick="toggleAmenity(this)">
+            <input type="checkbox" value="Телевизор">
+            <span class="amenity-icon">📺</span>
+            <span class="amenity-label">Телевизор</span>
+          </label>
+          <label class="amenity-item" onclick="toggleAmenity(this)">
+            <input type="checkbox" value="Стиральная машина">
+            <span class="amenity-icon">🫧</span>
+            <span class="amenity-label">Стиралка</span>
+          </label>
+          <label class="amenity-item" onclick="toggleAmenity(this)">
+            <input type="checkbox" value="Кухня">
+            <span class="amenity-icon">🍳</span>
+            <span class="amenity-label">Кухня</span>
+          </label>
+          <label class="amenity-item" onclick="toggleAmenity(this)">
+            <input type="checkbox" value="Парковка">
+            <span class="amenity-icon">🚗</span>
+            <span class="amenity-label">Парковка</span>
+          </label>
+          <label class="amenity-item" onclick="toggleAmenity(this)">
+            <input type="checkbox" value="Балкон">
+            <span class="amenity-icon">🌿</span>
+            <span class="amenity-label">Балкон</span>
+          </label>
+          <label class="amenity-item" onclick="toggleAmenity(this)">
+            <input type="checkbox" value="Вид на море">
+            <span class="amenity-icon">🌊</span>
+            <span class="amenity-label">Вид на море</span>
+          </label>
+          <label class="amenity-item" onclick="toggleAmenity(this)">
+            <input type="checkbox" value="Горячая вода">
+            <span class="amenity-icon">🚿</span>
+            <span class="amenity-label">Горячая вода</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Photos -->
+      <div>
+        <div class="section-label" style="margin-bottom: 10px;">Фотографии <span class="req" style="font-size:0.8rem;">*</span></div>
+        <div class="photo-upload-area" id="uploadArea">
+          <input type="file" id="photoInput" accept="image/*" multiple>
+          <div class="upload-icon">🖼️</div>
+          <div class="upload-text">Перетащите фото или <span>выберите файлы</span></div>
+          <div class="upload-hint">JPG, PNG, WEBP · до 10 МБ · минимум 1 фото</div>
+        </div>
+        <span class="error-msg" id="err-photos">Загрузите хотя бы одно фото</span>
+        <div class="photo-previews" id="photoPreviews"></div>
+      </div>
+
+      <!-- Actions -->
+      <div class="btn-row">
+        <button class="btn-reset" type="button" id="scrollPreviewBtnForm" onclick="scrollToPreview()" style="display:none;">
+          👁 Посмотреть предпросмотр
+        </button>
+        <button class="btn-submit" type="submit" id="submitBtn">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M22 2L11 13M22 2L15 22l-4-9-9-4 20-7z"/>
+          </svg>
+          Подать объявление
+        </button>
+        <button class="btn-reset" type="button" onclick="resetForm()">↺ Очистить форму</button>
+      </div>
+
+    </form>
+  </div>
+
+  <!-- RIGHT: Preview -->
+  <div class="preview-column" id="previewColumn">
+    <div class="preview-label">
+      <span class="preview-label-text">Предпросмотр</span>
+      <div class="preview-label-line"></div>
+      <div class="live-dot"></div>
+      <span class="preview-label-text">Обновляется в реальном времени</span>
+    </div>
+
+    <!-- Success banner -->
+    <div class="success-banner" id="successBanner">
+      <div class="success-icon">✅</div>
+      <div class="success-text">
+        <h3>Объявление отправлено на модерацию!</h3>
+        <p>Мы проверим его в течение 2–4 часов и опубликуем на сайте</p>
+      </div>
+    </div>
+
+    <!-- Listing card -->
+    <div class="listing-card" id="listingCard">
+      <!-- Photo -->
+      <div class="card-photo-wrap" id="cardPhotoWrap" onclick="nextPhoto()">
+        <div id="cardPhotoPlaceholder" class="card-photo-placeholder">
+          <div class="ph-icon">🏠</div>
+          <p>Здесь появится ваше фото</p>
+        </div>
+        <div id="cardPhotoCarousel" style="display:none; width:100%; height:100%; position:relative; overflow:hidden;">
+          <div class="photo-carousel" id="photoCarousel"></div>
+        </div>
+        <span class="status-badge">
+          <span class="status-dot"></span>
+          На модерации
+        </span>
+        <div class="card-photo-num" id="cardPhotoNum"></div>
+        <div class="card-photo-dots" id="cardPhotoDots"></div>
+      </div>
+
+      <!-- Body -->
+      <div class="card-body">
+        <div class="card-top-row">
+          <div class="card-title" id="cardTitle">Ваше объявление появится здесь</div>
+          <div class="card-price-block">
+            <div class="card-price" id="cardPrice">—</div>
+            <div class="card-price-period">за сутки</div>
+          </div>
+        </div>
+
+        <div class="card-location" id="cardLocation">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/>
+            <circle cx="12" cy="10" r="3"/>
+          </svg>
+          <span id="cardLocationText">Район появится здесь</span>
+        </div>
+
+        <div class="card-chips" id="cardChips">
+          <div class="chip"><span class="chip-icon">🛏</span><span id="chipRooms">— комн.</span></div>
+          <div class="chip"><span class="chip-icon">👥</span><span id="chipGuests">— гостей</span></div>
+          <div class="chip" id="chipType" style="display:none;"><span class="chip-icon">🏡</span><span id="chipTypeText"></span></div>
+        </div>
+
+        <div class="card-desc" id="cardDesc">
+          <span class="card-desc-placeholder">Описание объекта появится здесь...</span>
+        </div>
+
+        <div id="amenitiesBlock" style="display:none;">
+          <div class="card-amenities-title">Удобства</div>
+          <div class="card-amenities" id="cardAmenities"></div>
+        </div>
+
+        <div class="card-contact">
+          <div class="card-owner">
+            <div class="owner-avatar" id="ownerAvatar">?</div>
+            <div class="owner-info">
+              <div class="owner-name" id="ownerNameCard">Имя владельца</div>
+              <div class="owner-phone" id="ownerPhoneCard">Телефон</div>
+            </div>
+          </div>
+          <button class="btn-view" disabled>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+              <circle cx="12" cy="12" r="3"/>
+            </svg>
+            Смотреть
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Moderation notice -->
+    <div class="moderation-overlay">
+      <div class="mod-icon">⏳</div>
+      <div class="mod-text">
+        <strong>Ожидает проверки модератором</strong>
+        Объявление будет опубликовано после проверки. Обычно это занимает 2–4 часа.
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ── State ──────────────────────────────────────────────
+const photos = []; // {url, file}
+let currentPhotoIdx = 0;
+let updateTimer = null;
+
+// ── Init ───────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  // Bind all inputs
+  const inputs = document.querySelectorAll('input[type="text"], input[type="tel"], input[type="email"], input[type="number"], select, textarea');
+  inputs.forEach(el => el.addEventListener('input', scheduleUpdate));
+
+  // Photo input
+  document.getElementById('photoInput').addEventListener('change', handlePhotoUpload);
+
+  // Drag and drop
+  const uploadArea = document.getElementById('uploadArea');
+  uploadArea.addEventListener('dragover', e => { e.preventDefault(); uploadArea.classList.add('drag-over'); });
+  uploadArea.addEventListener('dragleave', () => uploadArea.classList.remove('drag-over'));
+  uploadArea.addEventListener('drop', e => {
+    e.preventDefault();
+    uploadArea.classList.remove('drag-over');
+    const files = Array.from(e.dataTransfer.files).filter(f => f.type.startsWith('image/'));
+    addPhotos(files);
+  });
+
+  // Show scroll btn on mobile
+  checkMobile();
+  window.addEventListener('resize', checkMobile);
+});
+
+function checkMobile() {
+  const isSmall = window.innerWidth < 900;
+  document.getElementById('scrollPreviewBtnForm').style.display = isSmall ? 'block' : 'none';
+}
+
+function scrollToPreview() {
+  document.getElementById('previewColumn').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// ── Photo handling ─────────────────────────────────────
+function handlePhotoUpload(e) {
+  const files = Array.from(e.target.files);
+  addPhotos(files);
+}
+
+function addPhotos(files) {
+  files.forEach(file => {
+    if (!file.type.startsWith('image/')) return;
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      photos.push({ url: ev.target.result, file });
+      renderThumbs();
+      renderCardPhotos();
+      scheduleUpdate();
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+function removePhoto(idx) {
+  photos.splice(idx, 1);
+  if (currentPhotoIdx >= photos.length) currentPhotoIdx = Math.max(0, photos.length - 1);
+  renderThumbs();
+  renderCardPhotos();
+  scheduleUpdate();
+}
+
+function renderThumbs() {
+  const container = document.getElementById('photoPreviews');
+  container.innerHTML = '';
+  photos.forEach((p, i) => {
+    const div = document.createElement('div');
+    div.className = 'photo-thumb' + (i === 0 ? ' primary' : '');
+    div.innerHTML = `
+      <img src="${p.url}" alt="Фото ${i+1}">
+      <button class="remove-photo" onclick="removePhoto(${i})" type="button">×</button>
+      ${i === 0 ? '<div class="primary-badge">Главное</div>' : ''}
+    `;
+    container.appendChild(div);
+  });
+  // error
+  document.getElementById('err-photos').classList.toggle('show', photos.length === 0);
+}
+
+function renderCardPhotos() {
+  const placeholder = document.getElementById('cardPhotoPlaceholder');
+  const carousel = document.getElementById('cardPhotoCarousel');
+  const track = document.getElementById('photoCarousel');
+  const dotsEl = document.getElementById('cardPhotoDots');
+  const numEl = document.getElementById('cardPhotoNum');
+
+  if (photos.length === 0) {
+    placeholder.style.display = 'flex';
+    carousel.style.display = 'none';
+    dotsEl.innerHTML = '';
+    numEl.style.display = 'none';
+    return;
+  }
+
+  placeholder.style.display = 'none';
+  carousel.style.display = 'block';
+
+  track.innerHTML = '';
+  dotsEl.innerHTML = '';
+  photos.forEach((p, i) => {
+    const img = document.createElement('img');
+    img.src = p.url;
+    img.className = 'carousel-item';
+    img.alt = 'Фото ' + (i+1);
+    track.appendChild(img);
+
+    const dot = document.createElement('div');
+    dot.className = 'dot' + (i === currentPhotoIdx ? ' active' : '');
+    dotsEl.appendChild(dot);
+  });
+
+  goToPhoto(currentPhotoIdx);
+
+  if (photos.length > 1) {
+    numEl.style.display = 'block';
+    numEl.textContent = `${currentPhotoIdx + 1} / ${photos.length}`;
+  } else {
+    numEl.style.display = 'none';
+  }
+}
+
+function goToPhoto(idx) {
+  const track = document.getElementById('photoCarousel');
+  const dots = document.querySelectorAll('#cardPhotoDots .dot');
+  const numEl = document.getElementById('cardPhotoNum');
+  if (photos.length === 0) return;
+  currentPhotoIdx = ((idx % photos.length) + photos.length) % photos.length;
+  track.style.transform = `translateX(-${currentPhotoIdx * 100}%)`;
+  dots.forEach((d, i) => d.classList.toggle('active', i === currentPhotoIdx));
+  if (photos.length > 1) numEl.textContent = `${currentPhotoIdx + 1} / ${photos.length}`;
+}
+
+function nextPhoto() {
+  if (photos.length > 1) goToPhoto(currentPhotoIdx + 1);
+}
+
+// ── Update preview ─────────────────────────────────────
+function scheduleUpdate() {
+  clearTimeout(updateTimer);
+  updateTimer = setTimeout(updatePreview, 80);
+}
+
+function updatePreview() {
+  const name     = document.getElementById('ownerName').value.trim();
+  const phone    = document.getElementById('phone').value.trim();
+  const propType = document.getElementById('propType').value;
+  const rooms    = document.getElementById('rooms').value;
+  const district = document.getElementById('district').value.trim();
+  const guests   = document.getElementById('guests').value;
+  const price    = document.getElementById('price').value.trim();
+  const currency = document.getElementById('currency').value;
+  const desc     = document.getElementById('description').value.trim();
+
+  // Title
+  let titleParts = [];
+  if (rooms && rooms !== '') {
+    if (rooms === 'Студия') titleParts.push('Студия');
+    else titleParts.push(rooms + '-комнатн' + (rooms === '1' ? 'ая' : 'ые') + ' ' + (propType || 'квартира').toLowerCase());
+  } else if (propType) {
+    titleParts.push(propType);
+  }
+  if (district) titleParts.push('в ' + district);
+  else titleParts.push('в Бердянске');
+  const title = titleParts.length ? capitalize(titleParts.join(' ')) : 'Ваше объявление появится здесь';
+  document.getElementById('cardTitle').textContent = title;
+
+  // Price
+  if (price) {
+    document.getElementById('cardPrice').textContent = formatPrice(price) + ' ' + currency;
+  } else {
+    document.getElementById('cardPrice').textContent = '—';
+  }
+
+  // Location
+  document.getElementById('cardLocationText').textContent = district || 'Район появится здесь';
+
+  // Chips
+  document.getElementById('chipRooms').textContent = rooms ? (rooms === 'Студия' ? 'Студия' : rooms + ' комн.') : '— комн.';
+  document.getElementById('chipGuests').textContent = guests ? 'до ' + guests + ' гостей' : '— гостей';
+  const chipType = document.getElementById('chipType');
+  if (propType) {
+    chipType.style.display = 'flex';
+    document.getElementById('chipTypeText').textContent = propType;
+  } else {
+    chipType.style.display = 'none';
+  }
+
+  // Description
+  const descEl = document.getElementById('cardDesc');
+  if (desc) {
+    descEl.innerHTML = '';
+    descEl.textContent = desc;
+    descEl.style.color = 'var(--muted)';
+    descEl.style.fontStyle = 'normal';
+  } else {
+    descEl.innerHTML = '<span class="card-desc-placeholder">Описание объекта появится здесь...</span>';
+  }
+
+  // Amenities
+  const checked = Array.from(document.querySelectorAll('#amenityGrid input[type="checkbox"]'))
+    .filter(cb => cb.closest('.amenity-item').classList.contains('checked'))
+    .map(cb => cb.value);
+  const amenBlock = document.getElementById('amenitiesBlock');
+  const amenContainer = document.getElementById('cardAmenities');
+  if (checked.length > 0) {
+    amenBlock.style.display = 'block';
+    amenContainer.innerHTML = checked.map(a => {
+      const icon = getAmenityIcon(a);
+      return `<span class="amenity-tag">${icon} ${a}</span>`;
+    }).join('');
+  } else {
+    amenBlock.style.display = 'none';
+  }
+
+  // Owner
+  document.getElementById('ownerNameCard').textContent = name || 'Имя владельца';
+  document.getElementById('ownerPhoneCard').textContent = phone || 'Телефон';
+  document.getElementById('ownerAvatar').textContent = name ? name.charAt(0).toUpperCase() : '?';
+
+  // Pulse animation
+  const card = document.getElementById('listingCard');
+  card.classList.remove('updated');
+  void card.offsetWidth; // reflow
+  card.classList.add('updated');
+}
+
+// ── Amenities toggle ───────────────────────────────────
+function toggleAmenity(label) {
+  label.classList.toggle('checked');
+  const cb = label.querySelector('input[type="checkbox"]');
+  cb.checked = label.classList.contains('checked');
+  scheduleUpdate();
+}
+
+// ── Form submit ────────────────────────────────────────
+document.getElementById('listingForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+  if (!validateForm()) return;
+
+  const btn = document.getElementById('submitBtn');
+  btn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Отправлено!';
+  btn.style.background = '#15803d';
+  btn.disabled = true;
+
+  document.getElementById('successBanner').classList.add('show');
+  if (window.innerWidth < 900) {
+    scrollToPreview();
+  }
+
+  setTimeout(() => {
+    btn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 2L11 13M22 2L15 22l-4-9-9-4 20-7z"/></svg> Подать объявление';
+    btn.style.background = '';
+    btn.disabled = false;
+  }, 5000);
+});
+
+function validateForm() {
+  let valid = true;
+  const required = [
+    { id: 'ownerName', err: 'err-ownerName' },
+    { id: 'phone',     err: 'err-phone' },
+    { id: 'propType',  err: 'err-propType' },
+    { id: 'rooms',     err: 'err-rooms' },
+    { id: 'district',  err: 'err-district' },
+    { id: 'price',     err: 'err-price' },
+  ];
+  required.forEach(({ id, err }) => {
+    const el = document.getElementById(id);
+    const errEl = document.getElementById(err);
+    if (!el.value.trim()) {
+      el.classList.add('error');
+      errEl.classList.add('show');
+      valid = false;
+      el.addEventListener('input', () => { el.classList.remove('error'); errEl.classList.remove('show'); }, { once: true });
+    }
+  });
+  if (photos.length === 0) {
+    document.getElementById('err-photos').classList.add('show');
+    valid = false;
+  }
+  if (!valid) {
+    const firstError = document.querySelector('.error, #err-photos.show');
+    if (firstError) firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+  return valid;
+}
+
+// ── Reset ──────────────────────────────────────────────
+function resetForm() {
+  if (!confirm('Очистить форму? Все данные будут сброшены.')) return;
+  document.getElementById('listingForm').reset();
+  document.querySelectorAll('.amenity-item.checked').forEach(el => {
+    el.classList.remove('checked');
+    el.querySelector('input').checked = false;
+  });
+  photos.length = 0;
+  currentPhotoIdx = 0;
+  renderThumbs();
+  renderCardPhotos();
+  document.getElementById('successBanner').classList.remove('show');
+  document.querySelectorAll('.error').forEach(el => el.classList.remove('error'));
+  document.querySelectorAll('.error-msg.show').forEach(el => el.classList.remove('show'));
+  updatePreview();
+}
+
+// ── Helpers ────────────────────────────────────────────
+function capitalize(str) {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}
+function formatPrice(n) {
+  return parseInt(n).toLocaleString('ru-RU');
+}
+function getAmenityIcon(name) {
+  const map = {
+    'Wi-Fi': '📶', 'Кондиционер': '❄️', 'Телевизор': '📺',
+    'Стиральная машина': '🫧', 'Кухня': '🍳', 'Парковка': '🚗',
+    'Балкон': '🌿', 'Вид на море': '🌊', 'Горячая вода': '🚿'
+  };
+  return map[name] || '✓';
+}
+
+// Init
+updatePreview();
+</script>
+</body>
+</html>
