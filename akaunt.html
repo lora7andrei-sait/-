@@ -3,12 +3,12 @@
 <head>
     <meta charset="utf-8"/>
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-    <title>Генератор Карточки Объекта | Панель</title>
-    <!-- Подключение Tailwind CSS -->
+    <title>Генератор Карточки Объекта</title>
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-    <!-- Современный шрифт Plus Jakarta Sans -->
+    <!-- Шрифт Plus Jakarta Sans -->
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
-    <!-- Подключение JSZip для генерации архивов -->
+    <!-- JSZip для создания архивов -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
     
     <script>
@@ -16,14 +16,7 @@
             theme: {
                 extend: {
                     colors: {
-                        brand: {
-                            50: '#f0fdfa',
-                            100: '#ccfbf1',
-                            400: '#2dd4bf',
-                            500: '#14b8a6', 
-                            600: '#0d9488',
-                            900: '#134e4a',
-                        }
+                        brand: { 50: '#f0fdfa', 100: '#ccfbf1', 400: '#2dd4bf', 500: '#14b8a6', 600: '#0d9488', 900: '#134e4a' }
                     },
                     fontFamily: {
                         sans: ['Plus Jakarta Sans', 'sans-serif'],
@@ -37,62 +30,41 @@
         }
     </script>
     <style>
-        body {
-            background: linear-gradient(135deg, #e0f2fe 0%, #f0fdfa 50%, #f8fafc 100%);
-            min-height: 100vh;
-        }
-        .glass-panel {
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.6);
-        }
+        body { background: linear-gradient(135deg, #e0f2fe 0%, #f0fdfa 50%, #f8fafc 100%); min-height: 100vh; }
+        .glass-panel { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.6); }
         ::-webkit-scrollbar { width: 5px; height: 5px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
         ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
         
-        .fade-in { 
-            animation: fadeIn 0.5s ease forwards;
-        }
-        .slide-up {
-            animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-        }
+        .fade-in { animation: fadeIn 0.5s ease forwards; }
+        .slide-up { animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
 
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body class="font-sans text-slate-800 antialiased p-4 md:p-8 flex items-center justify-center">
 
 <div class="max-w-7xl w-full mx-auto">
-    <!-- Шапка платформы -->
+    <!-- Шапка -->
     <header class="mb-8 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
             <h1 class="text-3xl md:text-4xl font-bold text-slate-900 tracking-tight">Генератор страницы</h1>
             <p class="text-slate-500 mt-1 text-sm md:text-base">Внесите данные о жилье и получите готовую карточку-превью</p>
         </div>
         <div class="flex items-center gap-3 bg-white px-4 py-2 rounded-full shadow-sm border border-slate-100">
-            <div class="w-8 h-8 rounded-full bg-brand-100 flex items-center justify-center text-brand-600 font-bold text-sm">
-                АМ
-            </div>
+            <div class="w-8 h-8 rounded-full bg-brand-100 flex items-center justify-center text-brand-600 font-bold text-sm">АМ</div>
             <div class="text-sm font-semibold text-slate-700">Алексей М.</div>
         </div>
     </header>
 
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start">
         
-        <!-- === ЛЕВАЯ КОЛОНКА: ФОРМА === -->
+        <!-- ЛЕВАЯ КОЛОНКА (ФОРМА) -->
         <main class="lg:col-span-6 glass-panel shadow-glass rounded-[2rem] overflow-hidden">
             <div class="p-6 border-b border-white/50 bg-white/40 flex justify-between items-center">
-                <div>
-                    <h2 class="text-xl font-bold text-slate-800">Редактор данных</h2>
-                </div>
+                <h2 class="text-xl font-bold text-slate-800">Редактор данных</h2>
                 <div class="flex items-center gap-2">
                     <span class="relative flex h-3 w-3">
                       <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-400 opacity-75"></span>
@@ -103,7 +75,6 @@
             </div>
 
             <form id="registration-form" class="p-6 md:p-8 space-y-8">
-                
                 <!-- Параметры жилья -->
                 <section>
                     <div class="flex items-center space-x-3 mb-5">
@@ -115,12 +86,12 @@
                         <div class="col-span-2 md:col-span-6">
                             <label class="block text-sm font-semibold text-slate-600 mb-2">Заголовок страницы</label>
                             <input required name="title" type="text" placeholder="Например: Уютная студия с видом на море" 
-                                   class="w-full px-4 py-3.5 rounded-xl border-slate-200 bg-white/60 focus:bg-white focus:border-brand-500 focus:ring-brand-500 transition-all shadow-sm"/>
+                                   class="w-full px-4 py-3.5 rounded-xl border-slate-200 bg-white/60 focus:bg-white focus:border-brand-500 transition-all shadow-sm"/>
                         </div>
                         
                         <div class="col-span-2 md:col-span-3">
                             <label class="block text-sm font-semibold text-slate-600 mb-2">Категория</label>
-                            <select name="type" class="w-full px-4 py-3.5 rounded-xl border-slate-200 bg-white/60 focus:bg-white focus:border-brand-500 focus:ring-brand-500 transition-all shadow-sm appearance-none cursor-pointer">
+                            <select name="type" class="w-full px-4 py-3.5 rounded-xl border-slate-200 bg-white/60 focus:bg-white focus:border-brand-500 transition-all shadow-sm">
                                 <option>Квартира</option>
                                 <option>Апартаменты</option>
                                 <option>Студия</option>
@@ -133,7 +104,7 @@
                             <div class="relative">
                                 <span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-bold">₽</span>
                                 <input required name="price" type="number" placeholder="4 500" 
-                                       class="w-full pl-9 pr-4 py-3.5 rounded-xl border-slate-200 bg-white/60 focus:bg-white focus:border-brand-500 focus:ring-brand-500 transition-all shadow-sm"/>
+                                       class="w-full pl-9 pr-4 py-3.5 rounded-xl border-slate-200 bg-white/60 focus:bg-white focus:border-brand-500 transition-all shadow-sm"/>
                             </div>
                         </div>
                     </div>
@@ -163,12 +134,11 @@
                         </div>
                     </div>
 
-                    <!-- ОПИСАНИЕ ОБЪЕКТА -->
                     <div class="grid grid-cols-1 gap-4 pt-4">
                         <div>
                             <label class="block text-sm font-semibold text-slate-600 mb-2">Полное текстовое описание</label>
-                            <textarea required name="description" rows="5" placeholder="Опишите все удобства, расположение, бытовую технику, спальные места и другие плюсы жилья..." 
-                                   class="w-full px-4 py-3.5 rounded-xl border-slate-200 bg-white/60 focus:bg-white focus:border-brand-500 focus:ring-brand-500 transition-all shadow-sm resize-none"></textarea>
+                            <textarea required name="description" rows="5" placeholder="Опишите все удобства, расположение..." 
+                                   class="w-full px-4 py-3.5 rounded-xl border-slate-200 bg-white/60 focus:bg-white focus:border-brand-500 transition-all shadow-sm resize-none"></textarea>
                         </div>
                     </div>
                 </section>
@@ -211,15 +181,14 @@
                 </section>
 
                 <div class="pt-4 border-t border-slate-200/60">
-                    <button id="submit-btn" type="submit" class="w-full bg-slate-900 hover:bg-brand-600 active:scale-[0.99] text-white font-bold py-4 rounded-xl transition-all duration-300 text-lg flex justify-center items-center gap-2 shadow-lg hover:shadow-brand-500/25">
+                    <button id="submit-btn" type="submit" class="w-full bg-slate-900 hover:bg-brand-600 active:scale-[0.99] text-white font-bold py-4 rounded-xl transition-all duration-300 text-lg flex justify-center items-center gap-2 shadow-lg">
                         <span id="submit-text">Сгенерировать страницу</span>
-                        <svg id="submit-icon" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3"></path></svg>
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3"></path></svg>
                     </button>
                 </div>
             </form>
         </main>
-
-        <!-- === ПРАВАЯ КОЛОНКА: ШАБЛОН ПРЕДПРОСМОТРА СТРАНИЦЫ === -->
+        <!-- ПРАВАЯ КОЛОНКА (ПРЕДПРОСМОТР) -->
         <aside class="lg:col-span-6 h-[850px] flex flex-col glass-panel shadow-glass rounded-[2rem] p-6 lg:p-8 relative border-t-4 border-t-slate-800">
             
             <div class="flex items-center justify-between mb-6 gap-4 flex-wrap">
@@ -228,42 +197,43 @@
                     <p class="text-slate-500 text-sm mt-1">Вид страницы вашего объекта</p>
                 </div>
                 
-                <!-- ЗАЩИЩЕННАЯ КНОПКА СКАЧИВАНИЯ (ПОЯВЛЯЕТСЯ ТОЛЬКО ПОСЛЕ ЗАПОЛНЕНИЯ) -->
-                <button id="download-btn" class="hidden items-center gap-2 bg-slate-800 hover:bg-brand-500 text-white font-semibold px-4 py-2.5 rounded-xl text-sm transition-colors shadow-sm cursor-pointer border border-transparent fade-in">
+                <!-- КНОПКА СКАЧИВАНИЯ (ПОЯВЛЯЕТСЯ ПОСЛЕ ЗАПОЛНЕНИЯ) -->
+                <button id="download-btn" class="hidden items-center gap-2 bg-slate-800 hover:bg-brand-500 text-white font-semibold px-4 py-2.5 rounded-xl text-sm transition-colors shadow-sm cursor-pointer fade-in">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-                    <span class="hidden sm:inline" id="download-text">Скачать страницу с медиа</span>
+                    <span class="hidden sm:inline" id="download-text">Скачать ZIP с медиа</span>
                 </button>
             </div>
 
-            <!-- ПУСТОЕ СОСТОЯНИЕ (ДО ЗАПОЛНЕНИЯ) -->
+            <!-- ПУСТОЕ СОСТОЯНИЕ -->
             <div id="empty-state" class="flex-1 flex flex-col items-center justify-center text-center px-4">
                 <div class="w-24 h-24 bg-white/60 rounded-full flex items-center justify-center mb-6 shadow-sm border border-slate-100">
                     <svg class="w-10 h-10 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122"></path></svg>
                 </div>
                 <h3 class="font-bold text-slate-700 text-lg">Заполните форму слева</h3>
-                <p class="text-sm text-slate-500 mt-2 leading-relaxed max-w-sm">После нажатия кнопки «Сгенерировать», здесь красиво отобразится страница с описанием и фотографиями, готовая к выгрузке.</p>
+                <p class="text-sm text-slate-500 mt-2 leading-relaxed max-w-sm">После нажатия кнопки «Сгенерировать», здесь красиво отобразится страница с описанием и фотографиями.</p>
             </div>
 
             <!-- ШАБЛОН СТРАНИЦЫ (Скрыт по умолчанию) -->
             <div id="preview-panel" class="hidden flex-1 overflow-y-auto pr-2 pb-10 space-y-6 slide-up" style="scrollbar-width: thin;">
                 
-                <!-- Главное фото / Обложка -->
+                <!-- Главное фото -->
                 <div id="prev-main-img" class="w-full h-56 sm:h-64 rounded-2xl bg-slate-200 bg-cover bg-center shadow-sm flex items-center justify-center relative overflow-hidden border border-slate-100">
                     <div id="prev-no-img" class="text-slate-400 flex flex-col items-center">
                         <svg class="w-10 h-10 mb-2 opacity-50" fill="currentColor" viewBox="0 0 24 24"><path d="M19.5 21a3 3 0 003-3v-4.5a3 3 0 00-3-3h-15a3 3 0 00-3 3V18a3 3 0 003 3h15zM1.5 10.146V6a3 3 0 013-3h5.379a2.25 2.25 0 011.59.659l2.122 2.121c.14.141.331.22.53.22H19.5a3 3 0 013 3v1.146A4.483 4.483 0 0019.5 9h-15a4.483 4.483 0 00-3 1.146z"></path></svg>
                         <span class="text-xs font-bold uppercase tracking-wider">Без фото</span>
                     </div>
-                    <div id="prev-gallery-count" class="absolute bottom-3 right-3 bg-black/60 backdrop-blur text-white text-xs font-bold px-3 py-1.5 rounded-lg hidden flex items-center gap-1.5">
+                    <!-- Доп фото -->
+                    <div id="prev-gallery-count" class="absolute bottom-3 right-3 bg-black/60 backdrop-blur text-white text-xs font-bold px-3 py-1.5 rounded-lg hidden items-center gap-1.5 border border-white/20">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                        <span id="prev-photo-count"></span> фото
+                        <span>+<span id="prev-photo-count"></span> фото</span>
                     </div>
                 </div>
 
                 <!-- Заголовок и цена -->
                 <div class="flex flex-col sm:flex-row justify-between items-start gap-4 border-b border-slate-200 pb-5">
                     <div class="flex-1">
-                        <p id="prev-type" class="text-brand-600 font-bold text-[11px] uppercase tracking-wider bg-brand-50 inline-block px-2 py-1 rounded mb-2"></p>
-                        <h3 id="prev-title" class="text-2xl md:text-3xl font-extrabold text-slate-900 leading-tight"></h3>
+                        <p id="prev-type" class="text-brand-600 font-bold text-[11px] uppercase tracking-wider bg-brand-50 border border-brand-100 px-2.5 py-1 rounded inline-block mb-2"></p>
+                        <h3 id="prev-title" class="text-2xl font-extrabold text-slate-900 leading-tight"></h3>
                     </div>
                     <div class="bg-slate-900 px-4 py-2.5 rounded-xl text-center shadow-md shrink-0 w-full sm:w-auto">
                         <span class="text-white font-extrabold text-2xl" id="prev-price"></span>
@@ -271,11 +241,23 @@
                     </div>
                 </div>
 
-                <!-- Плашки характеристик -->
-                <div class="flex flex-wrap gap-2">
-                    <div class="px-3 py-2 bg-white border border-slate-100 shadow-sm text-slate-700 text-sm font-semibold rounded-xl flex items-center gap-2">
+                <!-- Характеристики -->
+                <div class="flex flex-wrap gap-2 text-sm font-semibold text-slate-700">
+                    <div class="px-3 py-2 bg-white border border-slate-100 shadow-sm rounded-xl flex items-center gap-2">
                         <svg class="w-4 h-4 text-brand-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
                         <span id="prev-guests"></span> Мест
                     </div>
-                    <div class="px-3 py-2 bg-white border border-slate-100 shadow-sm text-slate-700 text-sm font-semibold rounded-xl flex items-center gap-2">
-                        <svg class="w-4 h-4 text-brand-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 
+                    <div class="px-3 py-2 bg-white border border-slate-100 shadow-sm rounded-xl flex items-center gap-2">
+                        <svg class="w-4 h-4 text-brand-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 001 1h2a1 1 0 001-1v-5a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 001 1h2a1 1 0 001-1V5z"></path></svg>
+                        Комнат: <span id="prev-rooms"></span>
+                    </div>
+                    <div class="px-3 py-2 bg-white border border-slate-100 shadow-sm rounded-xl flex items-center gap-2">
+                        <svg class="w-4 h-4 text-brand-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"></path></svg>
+                        Этаж: <span id="prev-floor"></span>/<span id="prev-total-floors"></span>
+                    </div>
+                </div>
+
+                <!-- Описание -->
+                <div class="bg-white border border-slate-100 shadow-sm rounded-xl p-5">
+                    <h4 class="font-bold text-slate-800 mb-3 flex items-center gap-2">
+                        <svg class="w-5 h-5 text-brand-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke
