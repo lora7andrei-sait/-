@@ -240,30 +240,53 @@
   /* Checkboxes grid */
   .amenity-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 8px;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
   }
   .amenity-item {
     display: flex;
     align-items: center;
-    gap: 8px;
-    padding: 9px 12px;
+    gap: 11px;
+    padding: 13px 14px;
     border: 1.5px solid var(--border);
     border-radius: var(--radius-sm);
     cursor: pointer;
     transition: all 0.18s;
-    background: var(--card);
+    background: #fff;
     user-select: none;
+    box-shadow: 0 1px 4px rgba(38,70,83,0.05);
   }
   .amenity-item:hover { border-color: var(--teal); background: var(--teal-light); }
   .amenity-item input[type="checkbox"] { display: none; }
-  .amenity-item.checked {
-    border-color: var(--teal);
-    background: var(--teal-light);
-    color: var(--teal-dark);
+
+  /* Custom square checkbox */
+  .amenity-checkbox {
+    width: 20px; height: 20px;
+    border: 2px solid #c8d3d1;
+    border-radius: 5px;
+    flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.15s;
+    background: #fff;
   }
-  .amenity-icon { font-size: 1rem; line-height: 1; }
-  .amenity-label { font-size: 0.78rem; font-weight: 500; }
+  .amenity-checkbox svg { display: none; width: 12px; height: 12px; }
+  .amenity-item.checked .amenity-checkbox {
+    background: var(--teal);
+    border-color: var(--teal);
+  }
+  .amenity-item.checked .amenity-checkbox svg { display: block; }
+  .amenity-item.checked { border-color: var(--teal); background: var(--teal-light); }
+
+  /* Icon circle */
+  .amenity-icon-wrap {
+    width: 36px; height: 36px;
+    border-radius: 9px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.2rem;
+    flex-shrink: 0;
+  }
+  .amenity-label { font-size: 0.88rem; font-weight: 500; color: var(--text); }
+  .amenity-item.checked .amenity-label { color: var(--teal-dark); }
 
   /* Photo upload */
   .photo-upload-area {
@@ -736,7 +759,7 @@
     .scroll-preview-btn { display: block; }
     .field-row { grid-template-columns: 1fr; }
     .field-row-3 { grid-template-columns: 1fr 1fr; }
-    .amenity-grid { grid-template-columns: repeat(2, 1fr); }
+    .amenity-grid { grid-template-columns: 1fr 1fr; }
   }
   @media (max-width: 480px) {
     .site-header { padding: 0 16px; }
@@ -745,7 +768,7 @@
     .form-card form { padding: 16px 18px; }
     .form-section-head { padding: 18px 18px 14px; }
     .field-row-3 { grid-template-columns: 1fr; }
-    .amenity-grid { grid-template-columns: repeat(2, 1fr); }
+    .amenity-grid { grid-template-columns: 1fr 1fr; }
     .card-body { padding: 18px; }
     .card-title { font-size: 1.2rem; }
     .card-price { font-size: 1.3rem; }
@@ -927,51 +950,88 @@
       <div>
         <div class="section-label" style="margin-bottom: 10px;">Удобства</div>
         <div class="amenity-grid" id="amenityGrid">
+
           <label class="amenity-item" onclick="toggleAmenity(this)">
             <input type="checkbox" value="Wi-Fi">
-            <span class="amenity-icon">📶</span>
+            <div class="amenity-checkbox">
+              <svg viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1.5 6 4.5 9 10.5 3"/></svg>
+            </div>
+            <div class="amenity-icon-wrap" style="background:#e8f0fe;">📶</div>
             <span class="amenity-label">Wi-Fi</span>
           </label>
+
           <label class="amenity-item" onclick="toggleAmenity(this)">
             <input type="checkbox" value="Кондиционер">
-            <span class="amenity-icon">❄️</span>
+            <div class="amenity-checkbox">
+              <svg viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1.5 6 4.5 9 10.5 3"/></svg>
+            </div>
+            <div class="amenity-icon-wrap" style="background:#e0f2fe;">❄️</div>
             <span class="amenity-label">Кондиционер</span>
           </label>
+
           <label class="amenity-item" onclick="toggleAmenity(this)">
             <input type="checkbox" value="Телевизор">
-            <span class="amenity-icon">📺</span>
+            <div class="amenity-checkbox">
+              <svg viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1.5 6 4.5 9 10.5 3"/></svg>
+            </div>
+            <div class="amenity-icon-wrap" style="background:#fef3c7;">📺</div>
             <span class="amenity-label">Телевизор</span>
           </label>
+
           <label class="amenity-item" onclick="toggleAmenity(this)">
             <input type="checkbox" value="Стиральная машина">
-            <span class="amenity-icon">🫧</span>
+            <div class="amenity-checkbox">
+              <svg viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1.5 6 4.5 9 10.5 3"/></svg>
+            </div>
+            <div class="amenity-icon-wrap" style="background:#ede9fe;">🫧</div>
             <span class="amenity-label">Стиралка</span>
           </label>
+
           <label class="amenity-item" onclick="toggleAmenity(this)">
             <input type="checkbox" value="Кухня">
-            <span class="amenity-icon">🍳</span>
+            <div class="amenity-checkbox">
+              <svg viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1.5 6 4.5 9 10.5 3"/></svg>
+            </div>
+            <div class="amenity-icon-wrap" style="background:#fff7ed;">🍳</div>
             <span class="amenity-label">Кухня</span>
           </label>
+
           <label class="amenity-item" onclick="toggleAmenity(this)">
             <input type="checkbox" value="Парковка">
-            <span class="amenity-icon">🚗</span>
+            <div class="amenity-checkbox">
+              <svg viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1.5 6 4.5 9 10.5 3"/></svg>
+            </div>
+            <div class="amenity-icon-wrap" style="background:#fce7f3;">🚗</div>
             <span class="amenity-label">Парковка</span>
           </label>
+
           <label class="amenity-item" onclick="toggleAmenity(this)">
             <input type="checkbox" value="Балкон">
-            <span class="amenity-icon">🌿</span>
+            <div class="amenity-checkbox">
+              <svg viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1.5 6 4.5 9 10.5 3"/></svg>
+            </div>
+            <div class="amenity-icon-wrap" style="background:#dcfce7;">🌿</div>
             <span class="amenity-label">Балкон</span>
           </label>
+
           <label class="amenity-item" onclick="toggleAmenity(this)">
             <input type="checkbox" value="Вид на море">
-            <span class="amenity-icon">🌊</span>
+            <div class="amenity-checkbox">
+              <svg viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1.5 6 4.5 9 10.5 3"/></svg>
+            </div>
+            <div class="amenity-icon-wrap" style="background:#cffafe;">🌊</div>
             <span class="amenity-label">Вид на море</span>
           </label>
+
           <label class="amenity-item" onclick="toggleAmenity(this)">
             <input type="checkbox" value="Горячая вода">
-            <span class="amenity-icon">🚿</span>
+            <div class="amenity-checkbox">
+              <svg viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1.5 6 4.5 9 10.5 3"/></svg>
+            </div>
+            <div class="amenity-icon-wrap" style="background:#ffedd5;">🚿</div>
             <span class="amenity-label">Горячая вода</span>
           </label>
+
         </div>
       </div>
 
