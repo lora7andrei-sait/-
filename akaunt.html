@@ -9,6 +9,9 @@
     <!-- Современный шрифт Plus Jakarta Sans -->
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
     
+    <!-- Подключение JSZip для генерации архивов -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    
     <script>
         tailwind.config = {
             theme: {
@@ -170,13 +173,14 @@
                         </div>
                     </div>
                     <div id="drop-zone" class="relative group cursor-pointer border-2 border-dashed border-slate-300 bg-white/40 rounded-2xl p-8 transition-all hover:bg-brand-50/50 hover:border-brand-400 text-center shadow-sm">
+                        <!-- accept="image/*" ограничивает выбор только до картинок -->
                         <input id="photo-input" type="file" multiple accept="image/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"/>
                         <div class="flex flex-col items-center">
                             <div class="w-16 h-16 bg-white shadow-sm rounded-full flex items-center justify-center mb-4 text-slate-400 group-hover:text-brand-500 group-hover:scale-110 transition-transform duration-300">
                                 <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"></path></svg>
                             </div>
                             <p id="upload-text" class="text-sm font-semibold text-slate-700">Перетащите фото сюда или нажмите</p>
-                            <p class="text-xs text-slate-400 mt-2 font-medium">JPG, PNG до 10MB</p>
+                            <p class="text-xs text-slate-400 mt-2 font-medium">JPEG, PNG картинки</p>
                         </div>
                     </div>
                 </section>
@@ -201,8 +205,8 @@
 
                 <div class="pt-4 border-t border-slate-200/60">
                     <button id="submit-btn" type="submit" class="w-full bg-slate-900 hover:bg-brand-600 active:scale-[0.99] text-white font-bold py-4 rounded-xl transition-all duration-300 text-lg flex justify-center items-center gap-2 shadow-lg hover:shadow-brand-500/25">
-                        <span>Сохранить в базу объектов</span>
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3"></path></svg>
+                        <span id="submit-text">Сохранить в базу объектов</span>
+                        <svg id="submit-icon" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3"></path></svg>
                     </button>
                 </div>
             </form>
@@ -221,7 +225,7 @@
                     <!-- Защищенная Кнопка Выгрузки -->
                     <button id="download-btn" class="flex items-center gap-2 bg-slate-800 hover:bg-brand-500 text-white font-semibold px-4 py-2.5 rounded-xl text-sm transition-colors shadow-sm cursor-pointer border border-transparent">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-                        <span class="hidden sm:inline">Скачать базу</span>
+                        <span class="hidden sm:inline" id="download-text">Скачать базу</span>
                     </button>
 
                     <!-- Счетчик -->
@@ -253,8 +257,6 @@
 </div>
 
 <script>
-    // === Механизм сохранения, рендера и защищенной выгрузки ===
-
     const form = document.getElementById('registration-form');
     const photoInput = document.getElementById('photo-input');
     const dropZone = document.getElementById('drop-zone');
@@ -265,19 +267,60 @@
     const countBadge = document.getElementById('listings-count');
     const downloadBtn = document.getElementById('download-btn');
 
-    // Хранилище объектов
+    // Хранилище объектов (в памяти браузера)
     let listings = JSON.parse(localStorage.getItem('my_properties') || '[]');
 
-    // Визуал фото
+    // Функция сжатия картинок (чтобы не переполнить LocalStorage)
+    function compressImage(file, maxSize = 1000, quality = 0.7) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = (event) => {
+                const img = new Image();
+                img.src = event.target.result;
+                img.onload = () => {
+                    let width = img.width;
+                    let height = img.height;
+
+                    // Меняем размер пропорционально
+                    if (width > height) {
+                        if (width > maxSize) {
+                            height = Math.round(height * (maxSize / width));
+                            width = maxSize;
+                        }
+                    } else {
+                        if (height > maxSize) {
+                            width = Math.round(width * (maxSize / height));
+                            height = maxSize;
+                        }
+                    }
+
+                    const canvas = document.createElement('canvas');
+                    canvas.width = width;
+                    canvas.height = height;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, width, height);
+
+                    // Конвертируем обратно в изображение JPEG (Base64)
+                    const dataUrl = canvas.toDataURL('image/jpeg', quality);
+                    resolve(dataUrl);
+                };
+                img.onerror = reject;
+            };
+            reader.onerror = reject;
+        });
+    }
+
+    // Визуал при выборе фото
     photoInput.addEventListener('change', (e) => {
         if(e.target.files.length > 0) {
             dropZone.classList.add('border-brand-500', 'bg-brand-50/70');
-            uploadText.innerText = `Добавлено фото: ${e.target.files.length}`;
+            uploadText.innerText = `Подготовлено фото: ${e.target.files.length}`;
             uploadText.classList.add('text-brand-600');
         }
     });
 
-    // Отрисовка
+    // Отрисовка карточек
     function renderListings() {
         if(listings.length === 0) {
             emptyState.style.display = 'flex';
@@ -296,13 +339,29 @@
             card.className = 'listing-card bg-white p-4 sm:p-5 rounded-2xl border border-slate-100 flex gap-4 sm:gap-5 relative group shadow-card pointer-events-auto';
             const hue = (item.id * 89) % 360; 
             
-            card.innerHTML = `
-                <div class="absolute top-0 bottom-0 left-0 w-1.5 bg-brand-500 rounded-l-2xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                
+            // Если есть фото, показываем миниатюру первого
+            let photoMarkup = `
                 <div class="w-20 h-20 sm:w-24 sm:h-24 rounded-xl flex-shrink-0 shadow-inner flex flex-col justify-center items-center" style="background: linear-gradient(135deg, hsl(${hue}, 80%, 90%), hsl(${hue}, 60%, 75%))">
                     <svg class="w-6 h-6 text-black/20 mb-1" fill="currentColor" viewBox="0 0 24 24"><path d="M19.5 21a3 3 0 003-3v-4.5a3 3 0 00-3-3h-15a3 3 0 00-3 3V18a3 3 0 003 3h15zM1.5 10.146V6a3 3 0 013-3h5.379a2.25 2.25 0 011.59.659l2.122 2.121c.14.141.331.22.53.22H19.5a3 3 0 013 3v1.146A4.483 4.483 0 0019.5 9h-15a4.483 4.483 0 00-3 1.146z"></path></svg>
                     <span class="text-[10px] font-bold text-black/30 bg-white/20 px-2 rounded-md">${item.rooms} комн.</span>
                 </div>
+            `;
+            
+            if(item.photos && item.photos.length > 0) {
+                photoMarkup = `
+                    <div class="w-20 h-20 sm:w-24 sm:h-24 rounded-xl flex-shrink-0 shadow-inner overflow-hidden relative border border-slate-100">
+                        <img src="${item.photos[0]}" class="w-full h-full object-cover" />
+                        <div class="absolute bottom-1 right-1 bg-black/60 backdrop-blur text-white text-[9px] font-bold px-1.5 py-0.5 rounded">
+                            <svg class="w-3 h-3 inline pb-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                            ${item.photos.length}
+                        </div>
+                    </div>
+                `;
+            }
+
+            card.innerHTML = `
+                <div class="absolute top-0 bottom-0 left-0 w-1.5 bg-brand-500 rounded-l-2xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                ${photoMarkup}
                 
                 <div class="flex-1 min-w-0 py-0.5 flex flex-col justify-between">
                     <div>
@@ -312,7 +371,7 @@
                                 ${item.price} ₽
                             </span>
                         </div>
-                        <p class="text-[11px] sm:text-xs text-slate-500 font-medium leading-tight">
+                        <p class="text-[11px] sm:text-xs text-slate-500 font-medium leading-tight mt-1">
                             ${item.type} • ${item.guests} гостя<br/>
                             Этаж: ${item.floor}/${item.total_floors}
                         </p>
@@ -338,15 +397,27 @@
     }
 
     // Сабмит формы
-    form.addEventListener('submit', (e) => {
+    form.addEventListener('submit', async (e) => {
         e.preventDefault();
         
         const originalContent = submitBtn.innerHTML;
-        submitBtn.innerHTML = '<svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Обработка...';
+        submitBtn.innerHTML = '<svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Обработка фото...';
         submitBtn.disabled = true;
 
-        setTimeout(() => {
+        try {
             const formData = new FormData(form);
+            
+            // Чтение и сжатие фото
+            const photosArray = [];
+            if (photoInput.files.length > 0) {
+                for (let i = 0; i < photoInput.files.length; i++) {
+                    const file = photoInput.files[i];
+                    if(file.type.startsWith('image/')) {
+                        const base64 = await compressImage(file);
+                        photosArray.push(base64);
+                    }
+                }
+            }
             
             const newObject = {
                 id: Math.floor(100000 + Math.random() * 900000),
@@ -358,12 +429,24 @@
                 total_floors: formData.get('total_floors'),
                 contact_name: formData.get('contact_name'),
                 phone: formData.get('phone'),
-                price: Number(formData.get('price')).toLocaleString('ru-RU')
+                price: Number(formData.get('price')).toLocaleString('ru-RU'),
+                photos: photosArray // сохраняем массив картинок
             };
 
             listings.unshift(newObject);
-            localStorage.setItem('my_properties', JSON.stringify(listings));
             
+            // Если слишком много фото, localStorage может не вместить, ставим try/catch
+            try {
+                localStorage.setItem('my_properties', JSON.stringify(listings));
+            } catch (err) {
+                alert('Лимит памяти браузера исчерпан! Скачайте архив, удалите старые объекты и попробуйте снова.');
+                listings.shift(); // удаляем то, что не влезло
+                submitBtn.innerHTML = originalContent;
+                submitBtn.disabled = false;
+                return;
+            }
+            
+            // Очистка формы
             form.reset();
             dropZone.classList.remove('border-brand-500', 'bg-brand-50/70');
             uploadText.innerText = 'Перетащите фото сюда или нажмите';
@@ -371,6 +454,7 @@
             
             renderListings();
 
+            // Индикация успеха
             submitBtn.innerHTML = '<svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Объявление добавлено!';
             submitBtn.classList.replace('bg-slate-900', 'bg-brand-500');
             submitBtn.classList.replace('hover:bg-brand-600', 'hover:bg-brand-400');
@@ -382,11 +466,16 @@
                 submitBtn.disabled = false;
             }, 2000);
 
-        }, 500);
+        } catch (error) {
+            console.error(error);
+            alert("Ошибка при обработке формы.");
+            submitBtn.innerHTML = originalContent;
+            submitBtn.disabled = false;
+        }
     });
 
     // ==========================================
-    // ЛОГИКА ЗАЩИЩЕННОГО СКАЧИВАНИЯ БАЗЫ (Andy777)
+    // ЛОГИКА ЗАЩИЩЕННОЙ ВЫГРУЗКИ (ARCHIVE .ZIP)
     // ==========================================
     downloadBtn.addEventListener('click', () => {
         if(listings.length === 0) {
@@ -394,47 +483,90 @@
             return;
         }
 
-        // Запрашиваем пароль
-        const pwd = prompt('Введите пароль для скачивания папки/базы:');
+        const pwd = prompt('Введите пароль для скачивания полной базы (Текст + Фото):');
         
         if (pwd === 'Andy777') {
-            // Форматируем данные в красивый текстовый файл для скачивания
-            let report = '=======================================\n';
-            report += '        ВЫГРУЗКА БАЗЫ ОБЪЕКТОВ\n';
-            report += '=======================================\n';
-            report += `Дата: ${new Date().toLocaleDateString('ru-RU')} ${new Date().toLocaleTimeString('ru-RU')}\n`;
-            report += `Всего объектов: ${listings.length}\n\n`;
-
-            listings.forEach((item, index) => {
-                report += `[ ОБЪЕКТ #${index + 1} | ID: ${item.id} ]\n`;
-                report += `- Название: ${item.title}\n`;
-                report += `- Категория: ${item.type}\n`;
-                report += `- Цена: ${item.price} руб/сутки\n`;
-                report += `- Характеристики: \n`;
-                report += `    * Комнат: ${item.rooms}\n`;
-                report += `    * Макс. гостей: ${item.guests}\n`;
-                report += `    * Этаж: ${item.floor} (из ${item.total_floors})\n`;
-                report += `- Контакты:\n`;
-                report += `    * Имя: ${item.contact_name}\n`;
-                report += `    * Тел: ${item.phone}\n`;
-                report += `---------------------------------------\n\n`;
-            });
-
-            // Магия загрузки: создаем Blob-объект и эмулируем скрытое нажатие на ссылку
-            const blob = new Blob([report], { type: 'text/plain;charset=utf-8' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `База_Объектов_${new Date().toISOString().split('T')[0]}.txt`; 
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
             
-            alert('Авторизация успешна! Отчет скачан на ваше устройство.');
+            const btnText = document.getElementById('download-text');
+            const origText = btnText.innerText;
+            btnText.innerText = 'Архивация...';
+            downloadBtn.disabled = true;
+
+            setTimeout(() => {
+                // Создаем ZIP архив
+                const zip = new JSZip();
+                
+                // Главный файл-отчет
+                let report = '=======================================\n';
+                report += '  ОБЩИЙ ОТЧЕТ БАЗЫ ОБЪЕКТОВ (С ФОТО)\n';
+                report += '=======================================\n';
+                report += `Дата: ${new Date().toLocaleDateString('ru-RU')} ${new Date().toLocaleTimeString('ru-RU')}\n`;
+                report += `Всего объектов: ${listings.length}\n\n`;
+
+                listings.forEach((item, index) => {
+                    // Создаем папку под каждый объект (очищаем название от запрещенных знаков)
+                    const safeTitle = item.title.replace(/[\/\\:*?"<>|]/g, "_");
+                    const folderName = `${index + 1}. [ID-${item.id}] ${safeTitle}`;
+                    
+                    // Создаем папку в ZIP
+                    const folder = zip.folder(folderName);
+                    
+                    // Формируем текстовый файл внутри этой папки
+                    let objReport = `ИНФОРМАЦИЯ ОБ ОБЪЕКТЕ\n======================\n`;
+                    objReport += `ID: ${item.id}\n`;
+                    objReport += `Название: ${item.title}\n`;
+                    objReport += `Категория: ${item.type}\n`;
+                    objReport += `Цена: ${item.price} руб/сутки\n`;
+                    objReport += `----------------------\n`;
+                    objReport += `ХАРАКТЕРИСТИКИ:\n`;
+                    objReport += `Комнат: ${item.rooms}\n`;
+                    objReport += `Макс. гостей: ${item.guests}\n`;
+                    objReport += `Этаж: ${item.floor} из ${item.total_floors}\n`;
+                    objReport += `----------------------\n`;
+                    objReport += `ВЛАДЕЛЕЦ/КОНТАКТЫ:\n`;
+                    objReport += `Имя: ${item.contact_name}\n`;
+                    objReport += `Телефон: ${item.phone}\n\n`;
+                    objReport += `Приложенных фото: ${item.photos ? item.photos.length : 0}\n`;
+                    
+                    // Кладем текст в папку
+                    folder.file("Данные_объекта.txt", objReport);
+                    
+                    // Добавляем фотографии в эту же папку
+                    if (item.photos && item.photos.length > 0) {
+                        item.photos.forEach((base64Url, pIndex) => {
+                            // Формат base64Url: "data:image/jpeg;base64,/9j/4AAQ..."
+                            // JSZip нужен только сам код, без префикса
+                            const base64Data = base64Url.split(',')[1];
+                            folder.file(`Фото_${pIndex + 1}.jpg`, base64Data, {base64: true});
+                        });
+                    }
+
+                    // Пишем краткое саммари в общий отчет
+                    report += `[ ОБЪЕКТ #${index + 1} | ID: ${item.id} ] - ${item.title} (${item.price} руб)\n`;
+                });
+                
+                // Кладем общий отчет в корень архива
+                zip.file("Общий_список_объектов.txt", report);
+
+                // Запускаем генерацию и скачивание ZIP
+                zip.generateAsync({type:"blob"}).then(function(content) {
+                    const url = URL.createObjectURL(content);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `База_Объектов_${new Date().toISOString().split('T')[0]}.zip`; 
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(url);
+                    
+                    btnText.innerText = origText;
+                    downloadBtn.disabled = false;
+                    alert('Авторизация успешна! ZIP-Архив скачан.');
+                });
+
+            }, 500); // небольшая задержка чтобы UI успел перерисовать кнопку на "Архивация..."
 
         } else if (pwd !== null) {
-            // Если ввели что-то, но пароль неверный (проверка на null — если нажали "Отмена")
             alert('Доступ запрещен: Неверный пароль!');
         }
     });
